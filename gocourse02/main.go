@@ -2,9 +2,9 @@ package main
 
 func main() {
 	zookeeper := Zookeeper{ID: 1, Name: "Jon Snow"}
-	cageTiger := &Cage{ID: 1, State: "close"}
-	cageCoyote := &Cage{ID: 2, State: "close"}
-	cageBeaver := &Cage{ID: 2, State: "close"}
+	cageTiger := &Cage{ID: 1, State: stateClose}
+	cageCoyote := &Cage{ID: 2, State: stateClose}
+	cageBeaver := &Cage{ID: 2, State: stateClose}
 
 	zookeeper.sleep(cageTiger)
 	zookeeper.sleep(cageCoyote)
