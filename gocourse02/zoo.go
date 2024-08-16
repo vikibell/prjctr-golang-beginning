@@ -48,7 +48,7 @@ func (zk *Zookeeper) sleep(cage *Cage) {
 func (zk *Zookeeper) checkAndCatch(animal *Animal, cage *Cage) {
 	if animal.Condition.Satiety >= 10 {
 		animal.Condition.Status = "caught"
-		cage.close()
+		cage.close(animal)
 
 		fmt.Printf("Animal %s is caught.\n", animal.Name)
 	} else {
@@ -57,19 +57,27 @@ func (zk *Zookeeper) checkAndCatch(animal *Animal, cage *Cage) {
 	}
 }
 
+const (
+	StateOpen  = "open"
+	StateClose = "close"
+)
+
 type Cage struct {
-	ID    int
-	State string
+	ID     int
+	State  string
+	Animal *Animal
 }
 
 func (c *Cage) open() {
-	c.State = "open"
+	c.State = StateOpen
+	c.Animal = nil
 
-	fmt.Println("The cage is opened.")
+	fmt.Printf("The cage is opened. There is no animal in the cage.\n")
 }
 
-func (c *Cage) close() {
-	c.State = "close"
+func (c *Cage) close(animal *Animal) {
+	c.State = StateClose
+	c.Animal = animal
 
-	fmt.Println("The cage is closed.")
+	fmt.Printf("The cage is closed. Animal %s is in the cage.\n", c.Animal.Name)
 }
