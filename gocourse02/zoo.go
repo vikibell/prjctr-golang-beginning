@@ -15,12 +15,12 @@ type AnimalCondition struct {
 	Satiety int
 }
 
-func (an *Animal) eat(food string) {
-	an.Condition.Status = "eating"
-	an.Condition.Mood = "happy"
-	an.Condition.Satiety += 5
+func (a *Animal) eat(food string) {
+	a.Condition.Status = "eating"
+	a.Condition.Mood = "happy"
+	a.Condition.Satiety += 5
 
-	fmt.Printf("Animal %s is eating %s.\n", an.Name, food)
+	fmt.Printf("Animal %s is eating %s.\n", a.Name, food)
 }
 
 func NewAnimal(id int, name string, species string, condition AnimalCondition) *Animal {
@@ -29,6 +29,14 @@ func NewAnimal(id int, name string, species string, condition AnimalCondition) *
 		Name:      name,
 		Species:   species,
 		Condition: condition,
+	}
+}
+
+func (a *Animal) multiply() *Animal {
+	fmt.Printf("Animal %s is multiplying.\n", a.Name)
+
+	return &Animal{
+		Species: a.Species,
 	}
 }
 
@@ -58,8 +66,8 @@ func (zk *Zookeeper) checkAndCatch(animal *Animal, cage *Cage) {
 }
 
 const (
-	StateOpen  = "open"
-	StateClose = "close"
+	stateOpen  = "open"
+	stateClose = "close"
 )
 
 type Cage struct {
@@ -69,14 +77,14 @@ type Cage struct {
 }
 
 func (c *Cage) open() {
-	c.State = StateOpen
+	c.State = stateOpen
 	c.Animal = nil
 
 	fmt.Printf("The cage is opened. There is no animal in the cage.\n")
 }
 
 func (c *Cage) close(animal *Animal) {
-	c.State = StateClose
+	c.State = stateClose
 	c.Animal = animal
 
 	fmt.Printf("The cage is closed. Animal %s is in the cage.\n", c.Animal.Name)
