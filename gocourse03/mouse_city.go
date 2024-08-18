@@ -1,15 +1,18 @@
 package main
 
-import "time"
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
 
 const RodentRat rodentType = "Rat"
+const SectorCenter Sector = "Sector Center"
 
 type (
 	Sector     string
 	rodentType string
 	FromTo     [2]Sector
-
-	//SectorHistory
 
 	DailyMovements struct {
 		RodentMovement []Movement
@@ -23,14 +26,16 @@ type (
 	Rodent struct {
 		ID        int
 		Type      rodentType
-		History   FromTo //find first and last sector in daily movements
+		History   FromTo
 		Movements *DailyMovements
 	}
 )
 
 func NewMovement(from, to Sector) Movement {
 	return Movement{
-		time.Now(),
+		time.Now().Local().Add(
+			time.Minute * time.Duration(rand.Intn(10)),
+		),
 		FromTo{
 			from,
 			to,
@@ -44,6 +49,24 @@ func NewDailyMovements() *DailyMovements {
 	}
 }
 
-func (dm *DailyMovements) addMovement(movement Movement) {
+func (dm *DailyMovements) AddMovement(movement Movement) {
 	dm.RodentMovement = append(dm.RodentMovement, movement)
+}
+
+func (dm *DailyMovements) RemoveMovement(index int) {
+	if index < 0 || index >= len(dm.RodentMovement) {
+		return
+	}
+	dm.RodentMovement = append(dm.RodentMovement[:index], dm.RodentMovement[index+1:]...)
+}
+
+func (dm *DailyMovements) FindMovementByKey(index int) Movement {
+	return dm.RodentMovement[index]
+}
+
+func (dm *DailyMovements) PrintRodentMovements() {
+	fmt.Println("Rodent recorded movements:")
+	for _, movement := range dm.RodentMovement {
+		fmt.Printf("%s: %s - %s\n", movement.Time.Format("15:04:01"), movement.FromTo[0], movement.FromTo[1])
+	}
 }
