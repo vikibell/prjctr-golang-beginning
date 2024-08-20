@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 )
 
 func main() {
@@ -13,11 +13,11 @@ func main() {
 	}
 
 	for _, rodent := range rodents {
-		sector := getRandomSector()
-		rodent.Movements.AddMovement(NewMovement(getRandomSector(), SectorCenter))
+		sector := chooseRandomSector()
+		rodent.Movements.AddMovement(NewMovement(chooseRandomSector(), SectorCenter))
 		rodent.Movements.AddMovement(NewMovement(SectorCenter, sector))
 		rodent.Movements.AddMovement(NewMovement(sector, SectorCenter))
-		rodent.Movements.AddMovement(NewMovement(SectorCenter, getRandomSector()))
+		rodent.Movements.AddMovement(NewMovement(SectorCenter, chooseRandomSector()))
 	}
 
 	for _, rodent := range rodents {
@@ -35,10 +35,10 @@ func main() {
 	}
 }
 
-func getRandomSector() Sector {
+func chooseRandomSector() Sector {
 	sectors := [5]Sector{
 		"Sector A", "Sector B", "Sector C", "Sector D", "Sector E",
 	}
 
-	return sectors[rand.Intn(len(sectors))]
+	return sectors[rand.IntN(len(sectors))]
 }

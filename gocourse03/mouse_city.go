@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 	"time"
 )
 
-const RodentRat rodentType = "Rat"
+const RodentRat RodentType = "Rat"
+
 const SectorCenter Sector = "Sector Center"
 
 type (
 	Sector     string
-	rodentType string
+	RodentType string
 	FromTo     [2]Sector
 
 	DailyMovements struct {
@@ -25,7 +26,7 @@ type (
 
 	Rodent struct {
 		ID        int
-		Type      rodentType
+		Type      RodentType
 		History   FromTo
 		Movements *DailyMovements
 	}
@@ -34,7 +35,7 @@ type (
 func NewMovement(from, to Sector) Movement {
 	return Movement{
 		time.Now().Local().Add(
-			time.Minute * time.Duration(rand.Intn(10)),
+			time.Minute * time.Duration(rand.IntN(10)),
 		),
 		FromTo{
 			from,
