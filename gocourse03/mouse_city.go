@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math/rand/v2"
 	"time"
 )
 
@@ -32,11 +31,18 @@ type (
 	}
 )
 
-func NewMovement(from, to Sector) Movement {
+func NewRodent(id int, Type RodentType, history FromTo, movements *DailyMovements) Rodent {
+	return Rodent{
+		ID:        id,
+		Type:      Type,
+		History:   history,
+		Movements: movements,
+	}
+}
+
+func NewMovement(from, to Sector, time time.Time) Movement {
 	return Movement{
-		time.Now().Local().Add(
-			time.Minute * time.Duration(rand.IntN(10)),
-		),
+		time,
 		FromTo{
 			from,
 			to,

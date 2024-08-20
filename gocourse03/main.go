@@ -3,21 +3,23 @@ package main
 import (
 	"fmt"
 	"math/rand/v2"
+	"time"
 )
 
 func main() {
 	rodents := []Rodent{
-		{ID: 11, Type: RodentRat, History: FromTo{}, Movements: NewDailyMovements()},
-		{ID: 12, Type: RodentRat, History: FromTo{}, Movements: NewDailyMovements()},
-		{ID: 13, Type: RodentRat, History: FromTo{}, Movements: NewDailyMovements()},
+		NewRodent(11, RodentRat, FromTo{}, NewDailyMovements()),
+		NewRodent(12, RodentRat, FromTo{}, NewDailyMovements()),
+		NewRodent(13, RodentRat, FromTo{}, NewDailyMovements()),
 	}
 
+	startMovement := time.Now()
 	for _, rodent := range rodents {
 		sector := chooseRandomSector()
-		rodent.Movements.AddMovement(NewMovement(chooseRandomSector(), SectorCenter))
-		rodent.Movements.AddMovement(NewMovement(SectorCenter, sector))
-		rodent.Movements.AddMovement(NewMovement(sector, SectorCenter))
-		rodent.Movements.AddMovement(NewMovement(SectorCenter, chooseRandomSector()))
+		rodent.Movements.AddMovement(NewMovement(chooseRandomSector(), SectorCenter, startMovement))
+		rodent.Movements.AddMovement(NewMovement(SectorCenter, sector, startMovement.Local().Add(time.Minute*time.Duration(2))))
+		rodent.Movements.AddMovement(NewMovement(sector, SectorCenter, startMovement.Local().Add(time.Minute*time.Duration(6))))
+		rodent.Movements.AddMovement(NewMovement(SectorCenter, chooseRandomSector(), startMovement.Local().Add(time.Minute*time.Duration(11))))
 	}
 
 	for _, rodent := range rodents {
