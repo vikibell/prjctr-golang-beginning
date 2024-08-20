@@ -14,21 +14,27 @@ func main() {
 	}
 
 	startMovement := time.Now()
-	for _, rodent := range rodents {
+	for key, _ := range rodents {
 		sector := chooseRandomSector()
-		rodent.Movements.AddMovement(NewMovement(chooseRandomSector(), SectorCenter, startMovement))
-		rodent.Movements.AddMovement(NewMovement(SectorCenter, sector, startMovement.Local().Add(time.Minute*time.Duration(2))))
-		rodent.Movements.AddMovement(NewMovement(sector, SectorCenter, startMovement.Local().Add(time.Minute*time.Duration(6))))
-		rodent.Movements.AddMovement(NewMovement(SectorCenter, chooseRandomSector(), startMovement.Local().Add(time.Minute*time.Duration(11))))
+		rodents[key].Movements = append(
+			rodents[key].Movements,
+			NewMovement(chooseRandomSector(), SectorCenter, startMovement),
+			NewMovement(SectorCenter, sector, startMovement.Local().Add(time.Minute*time.Duration(2+rand.IntN(10)))),
+			NewMovement(sector, SectorCenter, startMovement.Local().Add(time.Minute*time.Duration(6+rand.IntN(10)))),
+			NewMovement(SectorCenter, chooseRandomSector(), startMovement.Local().Add(time.Minute*time.Duration(11+rand.IntN(10)))),
+		)
 	}
 
-	for _, rodent := range rodents {
-		firstMovement := rodent.Movements.FindMovementByKey(0)
-		lastMovement := rodent.Movements.FindMovementByKey(len(rodent.Movements.RodentMovement) - 1)
-		rodent.History = FromTo{
+	for key, rodent := range rodents {
+		firstMovement := rodent.Movements[0]
+		lastMovement := rodent.Movements[len(rodent.Movements)-1]
+		rodents[key].History = FromTo{
 			firstMovement.FromTo[0],
 			lastMovement.FromTo[1],
 		}
+	}
+
+	for _, rodent := range rodents {
 		fmt.Printf(
 			"Rodent number: %d. Start of the day: %s. End of the day: %s\n",
 			rodent.ID, rodent.History[0], rodent.History[1],
