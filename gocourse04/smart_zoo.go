@@ -21,11 +21,11 @@ type Area struct {
 	Sectors map[string]Sector
 }
 
-func NewArea(id, name, Type string) Area {
+func NewArea(id, name, areaType string) Area {
 	return Area{
 		ID:      id,
 		Name:    name,
-		Type:    Type,
+		Type:    areaType,
 		Sectors: make(map[string]Sector),
 	}
 }

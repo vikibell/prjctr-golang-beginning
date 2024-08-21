@@ -11,14 +11,14 @@ func main() {
 	zoo.AddArea(areaUngulates)
 
 	sectorA := NewSector("sector_1", "Sector A", NewTechnicalRoom("room_1"))
-	sectorB := NewSector("sector_2", "Sector B", NewTechnicalRoom("room_2"))
+	sectorB := NewSector("sector_2", "Sector B", nil)
 	sectorC := NewSector("sector_3", "Sector C", NewTechnicalRoom("room_3"))
 	areaFeathered.AddSector(sectorA)
 	areaFeathered.AddSector(sectorB)
 	areaFeathered.AddSector(sectorC)
 
 	sectorD := NewSector("sector_4", "Sector D", NewTechnicalRoom("room_4"))
-	sectorE := NewSector("sector_5", "Sector E", NewTechnicalRoom("room_5"))
+	sectorE := NewSector("sector_5", "Sector E", nil)
 	areaUngulates.AddSector(sectorD)
 	areaFeathered.AddSector(sectorE)
 
