@@ -9,23 +9,23 @@ import (
 
 func main() {
 	rodents := []Rodent{
-		NewRodent(11, RodentRat, FromTo{}, NewDailyMovements()),
-		NewRodent(12, RodentRat, FromTo{}, NewDailyMovements()),
-		NewRodent(13, RodentRat, FromTo{}, NewDailyMovements()),
-		NewRodent(66, "To delete type", FromTo{}, NewDailyMovements()),
+		NewRodent(11, RodentRat, FromTo{}, nil),
+		NewRodent(12, RodentRat, FromTo{}, nil),
+		NewRodent(13, RodentRat, FromTo{}, nil),
+		NewRodent(66, "To delete type", FromTo{}, nil),
 	}
 
 	rodents = slices.Delete(rodents, 3, 4)
 
 	startMovement := time.Now()
-	for key, _ := range rodents {
+	for key := range rodents {
 		sector := chooseRandomSector()
 		rodents[key].Movements = append(
 			rodents[key].Movements,
 			NewMovement(chooseRandomSector(), SectorCenter, startMovement),
-			NewMovement(SectorCenter, sector, startMovement.Local().Add(time.Minute*time.Duration(2+rand.IntN(10)))),
-			NewMovement(sector, SectorCenter, startMovement.Local().Add(time.Minute*time.Duration(6+rand.IntN(10)))),
-			NewMovement(SectorCenter, chooseRandomSector(), startMovement.Local().Add(time.Minute*time.Duration(11+rand.IntN(10)))),
+			NewMovement(SectorCenter, sector, startMovement.Add(time.Minute*time.Duration(2+rand.IntN(10)))),
+			NewMovement(sector, SectorCenter, startMovement.Add(time.Minute*time.Duration(6+rand.IntN(10)))),
+			NewMovement(SectorCenter, chooseRandomSector(), startMovement.Add(time.Minute*time.Duration(11+rand.IntN(10)))),
 		)
 	}
 

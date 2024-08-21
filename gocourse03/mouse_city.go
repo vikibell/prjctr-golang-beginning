@@ -29,10 +29,10 @@ type (
 	}
 )
 
-func NewRodent(id int, Type RodentType, history FromTo, movements DailyMovements) Rodent {
+func NewRodent(id int, rodentType RodentType, history FromTo, movements DailyMovements) Rodent {
 	return Rodent{
 		ID:        id,
-		Type:      Type,
+		Type:      rodentType,
 		History:   history,
 		Movements: movements,
 	}
@@ -46,10 +46,6 @@ func NewMovement(from, to Sector, time time.Time) Movement {
 			to,
 		},
 	}
-}
-
-func NewDailyMovements() DailyMovements {
-	return make([]Movement, 0)
 }
 
 func (dm DailyMovements) PrintRodentMovements() {
