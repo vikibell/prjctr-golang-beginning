@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/rand/v2"
-	"slices"
 	"time"
 )
 
@@ -15,7 +14,8 @@ func main() {
 		NewRodent(66, "To delete type", FromTo{}, nil),
 	}
 
-	rodents = slices.Delete(rodents, 3, 4)
+	//Delete incorrect rodent
+	rodents = append(rodents[:3], rodents[4:]...)
 
 	startMovement := time.Now()
 	for key := range rodents {
