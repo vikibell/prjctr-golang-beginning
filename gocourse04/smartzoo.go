@@ -18,7 +18,7 @@ type Area struct {
 	ID      string
 	Name    string
 	Type    string
-	Sectors map[string]Sector
+	Sectors map[string]Sector // Index is Sector.ID
 }
 
 func NewArea(id, name, areaType string) Area {
@@ -92,11 +92,11 @@ func (tr *TechnicalRoom) clean(sector Sector) {
 	fmt.Printf("I'm cleaning sector: %s\n", sector.Name)
 }
 
-func (tr *TechnicalRoom) feedAnimal(sector Sector, animalId string) {
-	animal, exists := sector.GetAnimal(animalId)
+func (tr *TechnicalRoom) feedAnimal(sector Sector, animalID string) {
+	animal, exists := sector.GetAnimal(animalID)
 
 	if !exists {
-		fmt.Printf("There is no animal %s in sector: %s\n", animalId, sector.Name)
+		fmt.Printf("There is no animal %s in sector: %s\n", animalID, sector.Name)
 		return
 	}
 
@@ -105,7 +105,7 @@ func (tr *TechnicalRoom) feedAnimal(sector Sector, animalId string) {
 
 type Zoo struct {
 	Name  string
-	Areas map[string]Area
+	Areas map[string]Area // Index is Area.ID
 }
 
 func NewZoo(name string) Zoo {
@@ -174,23 +174,23 @@ loopExit:
 	return foundSector, found
 }
 
-func MoveAnimal(sectorFrom *Sector, sectorTo *Sector, animal Animal) {
-	animalToMove, exists := sectorFrom.GetAnimal(animal.ID)
+func MoveAnimal(from, to *Sector, animal Animal) {
+	animalToMove, exists := from.GetAnimal(animal.ID)
 
 	if !exists {
-		fmt.Printf("There is no animal %s in sector: %s\n", animal.ID, sectorFrom.Name)
+		fmt.Printf("There is no animal %s in sector: %s\n", animal.ID, from.Name)
 		return
 	}
 
-	sectorFrom.DeleteAnimal(animal.ID)
+	from.DeleteAnimal(animal.ID)
 
-	_, exists = sectorTo.GetAnimal(animal.ID)
+	_, exists = to.GetAnimal(animal.ID)
 
 	if exists {
-		fmt.Printf("Animal with id %s already exists in sector: %s.\n", animal.ID, sectorTo.Name)
+		fmt.Printf("Animal with id %s already exists in sector: %s.\n", animal.ID, to.Name)
 		return
 	}
 
-	fmt.Printf("Moving %s from sector %s to sector %s.\n", animal.Name, sectorFrom.Name, sectorTo.Name)
-	sectorTo.AddAnimal(animalToMove)
+	fmt.Printf("Moving %s from sector %s to sector %s.\n", animal.Name, from.Name, to.Name)
+	to.AddAnimal(animalToMove)
 }

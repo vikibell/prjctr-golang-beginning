@@ -3,8 +3,9 @@ package main
 import (
 	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
-import "github.com/stretchr/testify/assert"
 
 func TestAddSector(t *testing.T) {
 	area := NewArea("area_1", "Happy birds", "Feathered")
@@ -187,7 +188,7 @@ func TestFailMoveAnimal(t *testing.T) {
 	sectorFrom.AddAnimal(animal)
 
 	_, ok := sectorTo.GetAnimal("animal_1")
-	assert.True(t, ok, "Animal should exist") //Movement was not made
+	assert.True(t, ok, "Animal should exist") // Movement was not made
 }
 
 func BenchmarkLookupAnimalByID(b *testing.B) {
