@@ -52,7 +52,7 @@ func TestDeleteAnimal(t *testing.T) {
 }
 
 func TestAddArea(t *testing.T) {
-	zoo := NewZoo("Happy zoo")
+	zoo := NewZoo("zoo_1", "Happy zoo")
 	area := NewArea("area_1", "Happy birds", "Feathered")
 	zoo.AddArea(area)
 
@@ -62,7 +62,7 @@ func TestAddArea(t *testing.T) {
 }
 
 func TestDeleteArea(t *testing.T) {
-	zoo := NewZoo("Happy zoo")
+	zoo := NewZoo("zoo_1", "Happy zoo")
 	area := NewArea("area_1", "Happy birds", "Feathered")
 	zoo.AddArea(area)
 
@@ -81,7 +81,7 @@ func TestLookupAnimalByID(t *testing.T) {
 	parrotsSector.AddAnimal(bilbo)
 	area.AddSector(parrotsSector)
 	area.AddSector(ducksSector)
-	zoo := NewZoo("Happy zoo")
+	zoo := NewZoo("zoo_1", "Happy zoo")
 	zoo.AddArea(area)
 
 	sectorFound := zoo.LookupAnimalByID("animal_2")
@@ -99,7 +99,7 @@ func TestFailLookupAnimalByID(t *testing.T) {
 	parrotsSector.AddAnimal(bilbo)
 	area.AddSector(parrotsSector)
 	area.AddSector(ducksSector)
-	zoo := NewZoo("Happy zoo")
+	zoo := NewZoo("zoo_1", "Happy zoo")
 	zoo.AddArea(area)
 
 	sectorFound := zoo.LookupAnimalByID("animal_3")
@@ -119,7 +119,7 @@ func TestLookupAnimalByName(t *testing.T) {
 	ducksSector.AddAnimal(frodo)
 	area.AddSector(parrotsSector)
 	area.AddSector(ducksSector)
-	zoo := NewZoo("Happy zoo")
+	zoo := NewZoo("zoo_1", "Happy zoo")
 	zoo.AddArea(area)
 
 	sectorsFound := zoo.LookupAnimalByName("Frodo")
@@ -139,7 +139,7 @@ func TestFailLookupAnimalByName(t *testing.T) {
 	ducksSector.AddAnimal(frodo)
 	area.AddSector(parrotsSector)
 	area.AddSector(ducksSector)
-	zoo := NewZoo("Happy zoo")
+	zoo := NewZoo("zoo_1", "Happy zoo")
 	zoo.AddArea(area)
 
 	sectorsFound := zoo.LookupAnimalByName("Gaga")
@@ -192,7 +192,7 @@ func BenchmarkLookupAnimalByID(b *testing.B) {
 	ducksSector := NewSector("sector_2", "Ducks", nil)
 	area.AddSector(parrotsSector)
 	area.AddSector(ducksSector)
-	zoo := NewZoo("Happy zoo")
+	zoo := NewZoo("zoo_1", "Happy zoo")
 	zoo.AddArea(area)
 
 	animals := make(map[string]Animal)

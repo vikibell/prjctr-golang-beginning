@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func main() {
-	zoo := NewZoo("Zoo 12")
+	zoo := NewZoo("zoo_1", "Zoo 12")
 
 	areaFeathered := NewArea("area_1", "Fly fly", "feathered")
 	areaUngulates := NewArea("area_2", "Jump jump", "ungulated")

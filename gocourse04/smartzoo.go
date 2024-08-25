@@ -18,7 +18,7 @@ type Area struct {
 	ID      string
 	Name    string
 	Type    string
-	Sectors map[string]Sector // Index is Sector.ID
+	Sectors map[string]Sector // Sectors map index is Sector.ID.
 }
 
 func NewArea(id, name, areaType string) Area {
@@ -46,7 +46,7 @@ func (a *Area) DeleteSector(id string) {
 type Sector struct {
 	ID            string
 	Name          string
-	Animals       map[string]Animal
+	Animals       map[string]Animal // Animals map index is Animal.ID.
 	TechnicalRoom *TechnicalRoom
 }
 
@@ -74,7 +74,7 @@ func (s *Sector) DeleteAnimal(id string) {
 
 type TechnicalRoom struct {
 	ID          string
-	Instruments map[string]int
+	Instruments map[string]int // Instruments map index instrument name.
 }
 
 func NewTechnicalRoom(id string) TechnicalRoom {
@@ -104,12 +104,14 @@ func (tr *TechnicalRoom) feedAnimal(sector Sector, animalID string) {
 }
 
 type Zoo struct {
+	ID    string
 	Name  string
-	Areas map[string]Area // Index is Area.ID
+	Areas map[string]Area // Areas map index is Area.ID.
 }
 
-func NewZoo(name string) Zoo {
+func NewZoo(id, name string) Zoo {
 	return Zoo{
+		ID:    id,
 		Name:  name,
 		Areas: make(map[string]Area),
 	}
