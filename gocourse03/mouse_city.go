@@ -7,8 +7,6 @@ import (
 
 const RodentRat RodentType = "Rat"
 
-const SectorCenter Sector = "Sector Center"
-
 type (
 	Sector     string
 	RodentType string

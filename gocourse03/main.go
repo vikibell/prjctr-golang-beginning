@@ -14,18 +14,19 @@ func main() {
 		NewRodent(66, "To delete type", FromTo{}, nil),
 	}
 
-	//Delete incorrect rodent
+	// Delete incorrect rodent
 	rodents = append(rodents[:3], rodents[4:]...)
 
 	startMovement := time.Now()
+	sectorCenter := Sector("Sector Center")
 	for key := range rodents {
 		sector := chooseRandomSector()
 		rodents[key].Movements = append(
 			rodents[key].Movements,
-			NewMovement(chooseRandomSector(), SectorCenter, startMovement),
-			NewMovement(SectorCenter, sector, startMovement.Add(time.Minute*time.Duration(2+rand.IntN(10)))),
-			NewMovement(sector, SectorCenter, startMovement.Add(time.Minute*time.Duration(6+rand.IntN(10)))),
-			NewMovement(SectorCenter, chooseRandomSector(), startMovement.Add(time.Minute*time.Duration(11+rand.IntN(10)))),
+			NewMovement(chooseRandomSector(), sectorCenter, startMovement),
+			NewMovement(sectorCenter, sector, startMovement.Add(time.Minute*time.Duration(2+rand.IntN(10)))),
+			NewMovement(sector, sectorCenter, startMovement.Add(time.Minute*time.Duration(6+rand.IntN(10)))),
+			NewMovement(sectorCenter, chooseRandomSector(), startMovement.Add(time.Minute*time.Duration(11+rand.IntN(10)))),
 		)
 	}
 
