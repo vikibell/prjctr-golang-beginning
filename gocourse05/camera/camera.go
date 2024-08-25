@@ -27,6 +27,6 @@ func NewProcessedData(time time.Time, animalMovement string) ProcessedData {
 }
 
 type Processor interface {
-	retrieveData() ([]Data, error)
-	ProcessData() (ProcessedData, error)
+	retrieveData() (*[]Data, error)
+	ProcessData() (*ProcessedData, error)
 }

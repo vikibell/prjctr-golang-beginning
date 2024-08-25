@@ -29,23 +29,27 @@ func NewDayCamera(id int, name string, data []Data) DayCamera {
 	}
 }
 
-func (dc DayCamera) retrieveData() ([]Data, error) {
-	// TODO error
-	return dc.Data, nil
+func (dc DayCamera) retrieveData() (*[]Data, error) {
+	if len(dc.Data) == 0 {
+		return nil, fmt.Errorf("no camera data found")
+	}
+	return &dc.Data, nil
 }
 
-func (dc DayCamera) ProcessData() (ProcessedData, error) {
-	// TODO error, change way
-	processedData := NewProcessedData(time.Now(), "")
+func (dc DayCamera) ProcessData() (*ProcessedData, error) {
 	cameraData, err := dc.retrieveData()
 	if err != nil {
-		return ProcessedData{}, err
+		return nil, err
 	}
 
-	for _, data := range cameraData {
+	processedData := NewProcessedData(time.Now(), "")
+	for _, data := range *cameraData {
+		if len(data.Animal) == 0 || len(data.Movement) == 0 {
+			return nil, fmt.Errorf("not enought data for processing")
+		}
 		animalMovement := fmt.Sprintf("%s, %s; ", data.Animal, data.Movement)
 		processedData.AnimalMovement = processedData.AnimalMovement + animalMovement
 	}
 
-	return processedData, nil
+	return &processedData, nil
 }

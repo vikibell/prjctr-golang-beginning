@@ -32,24 +32,29 @@ func NewNightCamera(id int, name string, data []Data) NightCamera {
 	}
 }
 
-func (nc NightCamera) retrieveData() ([]Data, error) {
-	// TODO error
-	return nc.Data, nil
-}
-
-func (nc NightCamera) ProcessData() (ProcessedData, error) {
-	// TODO error
-	processedData := NewProcessedData(time.Now(), "")
-	cameraData, err := nc.retrieveData()
-	if err != nil {
-		return ProcessedData{}, err
+func (nc NightCamera) retrieveData() (*[]Data, error) {
+	if len(nc.Data) == 0 {
+		return nil, fmt.Errorf("no camera data found")
 	}
 
-	for _, data := range cameraData {
+	return &nc.Data, nil
+}
+
+func (nc NightCamera) ProcessData() (*ProcessedData, error) {
+	cameraData, err := nc.retrieveData()
+	if err != nil {
+		return nil, err
+	}
+
+	processedData := NewProcessedData(time.Now(), "")
+	for _, data := range *cameraData {
+		if len(data.Animal) <= len(nightCameraArtifact) || len(data.Movement) <= len(nightCameraArtifact) {
+			return nil, fmt.Errorf("not enought data for processing")
+		}
 		animalMovement := fmt.Sprintf("%s, %s; ", data.Animal, data.Movement)
 		animalMovement = strings.ReplaceAll(animalMovement, nightCameraArtifact, "")
 		processedData.AnimalMovement = processedData.AnimalMovement + animalMovement
 	}
 
-	return processedData, nil
+	return &processedData, nil
 }

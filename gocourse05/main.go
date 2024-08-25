@@ -14,7 +14,7 @@ func main() {
 		camera.NewNightCameraData(2, "Вовк", "Сидить на місці"),
 	})
 
-	dayCamera := camera.NewDayCamera(1, "Canon XY-22", []camera.Data{
+	dayCamera := camera.NewDayCamera(2, "Canon XY-22", []camera.Data{
 		camera.NewDayCameraData(1, "Заєць", "Біжить вперед"),
 		camera.NewDayCameraData(2, "Лисиця", "Біжить вперед"),
 	})
@@ -24,20 +24,23 @@ func main() {
 		camera.NewInfraredCameraData(2, "Білка", "Ість горішок"),
 	})
 
-	err := saveProcessedData(nightCamera, &ramMemory)
+	err := saveProcessedData(&nightCamera, &ramMemory)
 	if err != nil {
-		fmt.Printf("Saving from camera id %d data to memory failed. See details: %v\n", nightCamera.ID, err)
+		fmt.Printf("Saving from camera %d data to memory failed. Error: %v\n", nightCamera.ID, err)
 	}
 
-	err = saveProcessedData(dayCamera, &ramMemory)
+	err = saveProcessedData(&dayCamera, &ramMemory)
 	if err != nil {
-		fmt.Printf("Saving from camera id %d data to memory failed. See details: %v\n", dayCamera.ID, err)
+		fmt.Printf("Saving from camera %d data to memory failed. Error: %v\n", dayCamera.ID, err)
 	}
 
-	err = saveProcessedData(infraredCamera, &ramMemory)
+	err = saveProcessedData(&infraredCamera, &ramMemory)
 	if err != nil {
-		fmt.Printf("Saving from camera id %d data to memory failed. See details: %v\n", infraredCamera.ID, err)
+		fmt.Printf("Saving from camera %d data to memory failed. Error: %v\n", infraredCamera.ID, err)
 	}
 
-	sendProcessedData(ramMemory, serverUrl)
+	err = sendProcessedData(ramMemory, serverUrl)
+	if err != nil {
+		fmt.Printf("Sending data failed: %v\n", err)
+	}
 }
