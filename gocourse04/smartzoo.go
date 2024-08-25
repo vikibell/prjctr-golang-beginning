@@ -77,8 +77,8 @@ type TechnicalRoom struct {
 	Instruments map[string]int
 }
 
-func NewTechnicalRoom(id string) *TechnicalRoom {
-	return &TechnicalRoom{
+func NewTechnicalRoom(id string) TechnicalRoom {
+	return TechnicalRoom{
 		ID: id,
 		Instruments: map[string]int{
 			"shovel":  3,

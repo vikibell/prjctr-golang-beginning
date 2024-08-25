@@ -8,8 +8,9 @@ import (
 )
 
 func TestAddSector(t *testing.T) {
+	tr := NewTechnicalRoom("tr_1")
 	area := NewArea("area_1", "Happy birds", "Feathered")
-	sector := NewSector("sector_1", "Parrots", NewTechnicalRoom("tr_1"))
+	sector := NewSector("sector_1", "Parrots", &tr)
 	area.AddSector(sector)
 
 	s, exists := area.GetSector("sector_1")
@@ -18,8 +19,9 @@ func TestAddSector(t *testing.T) {
 }
 
 func TestDeleteSector(t *testing.T) {
+	tr := NewTechnicalRoom("tr_1")
 	area := NewArea("area_1", "Happy birds", "Feathered")
-	sector := NewSector("sector_1", "Parrots", NewTechnicalRoom("tr_1"))
+	sector := NewSector("sector_1", "Parrots", &tr)
 	area.AddSector(sector)
 
 	area.DeleteSector("sector_1")
@@ -28,7 +30,8 @@ func TestDeleteSector(t *testing.T) {
 }
 
 func TestAddAnimal(t *testing.T) {
-	sector := NewSector("sector_1", "Parrots", NewTechnicalRoom("tr_1"))
+	tr := NewTechnicalRoom("tr_1")
+	sector := NewSector("sector_1", "Parrots", &tr)
 	animal := NewAnimal("animal_1", "Frodo")
 	sector.AddAnimal(animal)
 
@@ -38,7 +41,8 @@ func TestAddAnimal(t *testing.T) {
 }
 
 func TestDeleteAnimal(t *testing.T) {
-	sector := NewSector("sector_1", "Parrots", NewTechnicalRoom("tr_1"))
+	tr := NewTechnicalRoom("tr_1")
+	sector := NewSector("sector_1", "Parrots", &tr)
 	animal := NewAnimal("animal_1", "Frodo")
 	sector.AddAnimal(animal)
 
@@ -144,7 +148,8 @@ func TestFailLookupAnimalByName(t *testing.T) {
 }
 
 func TestMoveAnimal(t *testing.T) {
-	from := NewSector("sector_1", "Parrots", NewTechnicalRoom("tr_1"))
+	tr := NewTechnicalRoom("tr_1")
+	from := NewSector("sector_1", "Parrots", &tr)
 	animal := NewAnimal("animal_1", "Frodo")
 	from.AddAnimal(animal)
 
@@ -161,7 +166,8 @@ func TestMoveAnimal(t *testing.T) {
 }
 
 func TestFailMoveAnimal(t *testing.T) {
-	from := NewSector("sector_1", "Parrots", NewTechnicalRoom("tr_1"))
+	tr := NewTechnicalRoom("tr_1")
+	from := NewSector("sector_1", "Parrots", &tr)
 	animal := NewAnimal("animal_1", "Frodo")
 
 	to := NewSector("sector_2", "Ducks", nil)
@@ -192,11 +198,9 @@ func BenchmarkLookupAnimalByID(b *testing.B) {
 	animals := make(map[string]Animal)
 	for i := 10; i < 100; i++ {
 		id := fmt.Sprintf("animal_%d", i)
-		animals[id] = NewAnimal(id, fmt.Sprintf("Frodo %d", i))
-	}
-
-	for _, a := range animals {
-		parrotsSector.AddAnimal(a)
+		animal := NewAnimal(id, fmt.Sprintf("Frodo %d", i))
+		animals[id] = animal
+		parrotsSector.AddAnimal(animal)
 	}
 
 	b.ResetTimer()
