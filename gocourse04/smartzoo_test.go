@@ -22,11 +22,8 @@ func TestDeleteSector(t *testing.T) {
 	sector := NewSector("sector_1", "Parrots", NewTechnicalRoom("tr_1"))
 	area.AddSector(sector)
 
-	_, exists := area.GetSector("sector_1")
-	assert.True(t, exists, "Sector shouldn't exist")
-
 	area.DeleteSector("sector_1")
-	_, exists = area.GetSector("sector_1")
+	_, exists := area.GetSector("sector_1")
 	assert.False(t, exists, "Sector shouldn't exist")
 }
 
@@ -35,9 +32,9 @@ func TestAddAnimal(t *testing.T) {
 	animal := NewAnimal("animal_1", "Frodo")
 	sector.AddAnimal(animal)
 
-	s, exists := sector.GetAnimal("animal_1")
+	a, exists := sector.GetAnimal("animal_1")
 	assert.True(t, exists, "Animal should exist")
-	assert.Equal(t, animal, s, "Animals should be equal")
+	assert.Equal(t, animal, a, "Animals should be equal")
 }
 
 func TestDeleteAnimal(t *testing.T) {
@@ -45,11 +42,8 @@ func TestDeleteAnimal(t *testing.T) {
 	animal := NewAnimal("animal_1", "Frodo")
 	sector.AddAnimal(animal)
 
-	_, exists := sector.GetAnimal("animal_1")
-	assert.True(t, exists, "Animal should exist")
-
 	sector.DeleteAnimal("animal_1")
-	_, exists = sector.GetAnimal("animal_1")
+	_, exists := sector.GetAnimal("animal_1")
 	assert.False(t, exists, "Animal shouldn't exist")
 }
 
@@ -58,9 +52,9 @@ func TestAddArea(t *testing.T) {
 	area := NewArea("area_1", "Happy birds", "Feathered")
 	zoo.AddArea(area)
 
-	z, exists := zoo.GetArea("area_1")
+	a, exists := zoo.GetArea("area_1")
 	assert.True(t, exists, "Area should exist")
-	assert.Equal(t, area, z, "Areas should be equal")
+	assert.Equal(t, area, a, "Areas should be equal")
 }
 
 func TestDeleteArea(t *testing.T) {
@@ -68,137 +62,130 @@ func TestDeleteArea(t *testing.T) {
 	area := NewArea("area_1", "Happy birds", "Feathered")
 	zoo.AddArea(area)
 
-	_, exists := zoo.GetArea("area_1")
-	assert.True(t, exists, "Area should exist")
-
 	zoo.DeleteArea("area_1")
-	_, exists = zoo.GetArea("area_1")
+	_, exists := zoo.GetArea("area_1")
 	assert.False(t, exists, "Area shouldn't exist")
 }
 
 func TestLookupAnimalByID(t *testing.T) {
 	area := NewArea("area_1", "Happy birds", "Feathered")
-	sector := NewSector("sector_1", "Parrots", nil)
-	sector2 := NewSector("sector_2", "Ducks", nil)
-	animal := NewAnimal("animal_1", "Frodo")
-	animal2 := NewAnimal("animal_2", "Bilbo")
-	sector.AddAnimal(animal)
-	sector.AddAnimal(animal2)
-	area.AddSector(sector)
-	area.AddSector(sector2)
+	parrotsSector := NewSector("sector_1", "Parrots", nil)
+	ducksSector := NewSector("sector_2", "Ducks", nil)
+	frodo := NewAnimal("animal_1", "Frodo")
+	bilbo := NewAnimal("animal_2", "Bilbo")
+	parrotsSector.AddAnimal(frodo)
+	parrotsSector.AddAnimal(bilbo)
+	area.AddSector(parrotsSector)
+	area.AddSector(ducksSector)
 	zoo := NewZoo("Happy zoo")
 	zoo.AddArea(area)
 
-	sectorFound, ok := zoo.LookupAnimalByID("animal_2")
+	sectorFound := zoo.LookupAnimalByID("animal_2")
 
-	assert.True(t, ok, "Animal should be found")
-	assert.Equal(t, sectorFound, sector, "Sectors should be equal")
+	assert.Equal(t, parrotsSector.ID, sectorFound.ID, "Sectors should be equal")
 }
 
 func TestFailLookupAnimalByID(t *testing.T) {
 	area := NewArea("area_1", "Happy birds", "Feathered")
-	sector := NewSector("sector_1", "Parrots", nil)
-	sector2 := NewSector("sector_2", "Ducks", nil)
-	animal := NewAnimal("animal_1", "Frodo")
-	animal2 := NewAnimal("animal_2", "Bilbo")
-	sector.AddAnimal(animal)
-	sector.AddAnimal(animal2)
-	area.AddSector(sector)
-	area.AddSector(sector2)
+	parrotsSector := NewSector("sector_1", "Parrots", nil)
+	ducksSector := NewSector("sector_2", "Ducks", nil)
+	frodo := NewAnimal("animal_1", "Frodo")
+	bilbo := NewAnimal("animal_2", "Bilbo")
+	parrotsSector.AddAnimal(frodo)
+	parrotsSector.AddAnimal(bilbo)
+	area.AddSector(parrotsSector)
+	area.AddSector(ducksSector)
 	zoo := NewZoo("Happy zoo")
 	zoo.AddArea(area)
 
-	sectorFound, ok := zoo.LookupAnimalByID("animal_3")
+	sectorFound := zoo.LookupAnimalByID("animal_3")
 
-	assert.False(t, ok, "Animal should be found")
-	assert.Equal(t, sectorFound, Sector{}, "Sectors should be equal")
+	assert.Nil(t, sectorFound, "Sector should be nil")
 }
 
 func TestLookupAnimalByName(t *testing.T) {
 	area := NewArea("area_1", "Happy birds", "Feathered")
-	sector := NewSector("sector_1", "Parrots", nil)
-	sector2 := NewSector("sector_2", "Ducks", nil)
+	parrotsSector := NewSector("sector_1", "Parrots", nil)
+	ducksSector := NewSector("sector_2", "Ducks", nil)
 	animal := NewAnimal("animal_1", "Frodo")
-	animal2 := NewAnimal("animal_2", "Bilbo")
-	animal3 := NewAnimal("animal_3", "Frodo")
-	sector.AddAnimal(animal)
-	sector.AddAnimal(animal2)
-	sector2.AddAnimal(animal3)
-	area.AddSector(sector)
-	area.AddSector(sector2)
+	bilbo := NewAnimal("animal_2", "Bilbo")
+	frodo := NewAnimal("animal_3", "Frodo")
+	parrotsSector.AddAnimal(animal)
+	parrotsSector.AddAnimal(bilbo)
+	ducksSector.AddAnimal(frodo)
+	area.AddSector(parrotsSector)
+	area.AddSector(ducksSector)
 	zoo := NewZoo("Happy zoo")
 	zoo.AddArea(area)
 
-	sectorsFound, ok := zoo.LookupAnimalByName("Frodo")
+	sectorsFound := zoo.LookupAnimalByName("Frodo")
 
-	assert.True(t, ok, "Animals should be found")
 	assert.Len(t, sectorsFound, 2, "Should be 2 sectors")
 }
 
 func TestFailLookupAnimalByName(t *testing.T) {
 	area := NewArea("area_1", "Happy birds", "Feathered")
-	sector := NewSector("sector_1", "Parrots", nil)
-	sector2 := NewSector("sector_2", "Ducks", nil)
+	parrotsSector := NewSector("sector_1", "Parrots", nil)
+	ducksSector := NewSector("sector_2", "Ducks", nil)
 	animal := NewAnimal("animal_1", "Frodo")
-	animal2 := NewAnimal("animal_2", "Bilbo")
-	animal3 := NewAnimal("animal_3", "Frodo")
-	sector.AddAnimal(animal)
-	sector.AddAnimal(animal2)
-	sector2.AddAnimal(animal3)
-	area.AddSector(sector)
-	area.AddSector(sector2)
+	bilbo := NewAnimal("animal_2", "Bilbo")
+	frodo := NewAnimal("animal_3", "Frodo")
+	parrotsSector.AddAnimal(animal)
+	parrotsSector.AddAnimal(bilbo)
+	ducksSector.AddAnimal(frodo)
+	area.AddSector(parrotsSector)
+	area.AddSector(ducksSector)
 	zoo := NewZoo("Happy zoo")
 	zoo.AddArea(area)
 
-	sectorsFound, ok := zoo.LookupAnimalByName("Gaga")
+	sectorsFound := zoo.LookupAnimalByName("Gaga")
 
-	assert.False(t, ok, "Animals shouldn't be found")
-	assert.Len(t, sectorsFound, 0, "Should be 0 sectors")
+	assert.Empty(t, sectorsFound, "Sectors should be empty")
 }
 
 func TestMoveAnimal(t *testing.T) {
-	sectorFrom := NewSector("sector_1", "Parrots", NewTechnicalRoom("tr_1"))
+	from := NewSector("sector_1", "Parrots", NewTechnicalRoom("tr_1"))
 	animal := NewAnimal("animal_1", "Frodo")
-	sectorFrom.AddAnimal(animal)
+	from.AddAnimal(animal)
 
-	sectorTo := NewSector("sector_2", "Ducks", nil)
+	to := NewSector("sector_2", "Ducks", nil)
 
-	MoveAnimal(&sectorFrom, &sectorTo, animal)
+	MoveAnimal(&from, &to, animal)
 
-	_, exists := sectorFrom.GetAnimal("animal_1")
+	_, exists := from.GetAnimal("animal_1")
 	assert.False(t, exists, "Animal shouldn't exist")
 
-	a, ok := sectorTo.GetAnimal("animal_1")
+	a, ok := to.GetAnimal("animal_1")
 	assert.True(t, ok, "Animal should exist")
 	assert.Equal(t, animal, a, "Animals should be equal")
 }
 
 func TestFailMoveAnimal(t *testing.T) {
-	sectorFrom := NewSector("sector_1", "Parrots", NewTechnicalRoom("tr_1"))
+	from := NewSector("sector_1", "Parrots", NewTechnicalRoom("tr_1"))
 	animal := NewAnimal("animal_1", "Frodo")
 
-	sectorTo := NewSector("sector_2", "Ducks", nil)
+	to := NewSector("sector_2", "Ducks", nil)
 
-	MoveAnimal(&sectorFrom, &sectorTo, animal)
+	MoveAnimal(&from, &to, animal)
 
-	_, exists := sectorFrom.GetAnimal("animal_1")
+	_, exists := from.GetAnimal("animal_1")
 	assert.False(t, exists, "Animal shouldn't exist")
 
-	sectorTo.AddAnimal(animal)
-	sectorFrom.AddAnimal(animal)
+	to.AddAnimal(animal)
+	from.AddAnimal(animal)
 
-	_, ok := sectorTo.GetAnimal("animal_1")
+	_, ok := to.GetAnimal("animal_1")
 	assert.True(t, ok, "Animal should exist") // Movement was not made
 }
 
 func BenchmarkLookupAnimalByID(b *testing.B) {
 	area := NewArea("area_1", "Happy birds", "Feathered")
-	sector := NewSector("sector_1", "Parrots", nil)
+	parrotsSector := NewSector("sector_1", "Parrots", nil)
 	animal := NewAnimal("animal_1", "Frodo")
-	sector.AddAnimal(animal)
-	sector2 := NewSector("sector_2", "Ducks", nil)
-	area.AddSector(sector)
-	area.AddSector(sector2)
+	parrotsSector.AddAnimal(animal)
+	ducksSector := NewSector("sector_2", "Ducks", nil)
+	area.AddSector(parrotsSector)
+	area.AddSector(ducksSector)
 	zoo := NewZoo("Happy zoo")
 	zoo.AddArea(area)
 
@@ -209,7 +196,7 @@ func BenchmarkLookupAnimalByID(b *testing.B) {
 	}
 
 	for _, a := range animals {
-		sector.AddAnimal(a)
+		parrotsSector.AddAnimal(a)
 	}
 
 	b.ResetTimer()
