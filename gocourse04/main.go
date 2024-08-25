@@ -41,31 +41,37 @@ func main() {
 	MoveAnimal(&sectorA, &sectorB, animalA)
 	MoveAnimal(&sectorA, &sectorB, animalA)
 
-	sector, found := zoo.LookupAnimalByID("animal_4")
+	sector := zoo.LookupAnimalByID("animal_4")
 
-	if found {
+	if sector != nil {
 		fmt.Println(sector.Name)
+	} else {
+		fmt.Println("Animal was not found.")
 	}
 
-	sector, found = zoo.LookupAnimalByID("animal_88")
+	sector = zoo.LookupAnimalByID("animal_88")
 
-	if found {
+	if sector != nil {
 		fmt.Println(sector.Name)
+	} else {
+		fmt.Println("Animal was not found.")
 	}
 
-	sectors, found := zoo.LookupAnimalByName("A")
-
-	if found {
+	sectors := zoo.LookupAnimalByName("A")
+	if len(sectors) > 0 {
 		for _, sector := range sectors {
 			fmt.Println(sector.Name)
 		}
+	} else {
+		fmt.Println("Animal was not found.")
 	}
 
-	sectors, found = zoo.LookupAnimalByName("Y")
-
-	if found {
+	sectors = zoo.LookupAnimalByName("Y")
+	if len(sectors) > 0 {
 		for _, sector := range sectors {
 			fmt.Println(sector.Name)
 		}
+	} else {
+		fmt.Println("Animal was not found.")
 	}
 }

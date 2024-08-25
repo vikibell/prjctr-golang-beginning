@@ -128,8 +128,8 @@ func (z *Zoo) DeleteArea(id string) {
 	delete(z.Areas, id)
 }
 
-func (z *Zoo) LookupAnimalByName(name string) ([]Sector, bool) {
-	foundSectors := make([]Sector, 0)
+func (z *Zoo) LookupAnimalByName(name string) []Sector {
+	var foundSectors []Sector
 
 	for _, area := range z.Areas {
 		for key, sector := range area.Sectors {
@@ -141,37 +141,24 @@ func (z *Zoo) LookupAnimalByName(name string) ([]Sector, bool) {
 		}
 	}
 
-	if len(foundSectors) > 0 {
-		return foundSectors, true
-	}
-
-	fmt.Printf("Animal with name %s was not found.\n", name)
-
-	return foundSectors, false
+	return foundSectors
 }
 
-func (z *Zoo) LookupAnimalByID(id string) (Sector, bool) {
+func (z *Zoo) LookupAnimalByID(id string) *Sector {
 	foundSector := Sector{}
-	found := false
 
-loopExit:
 	for _, area := range z.Areas {
 		for key, sector := range area.Sectors {
 			for _, animal := range sector.Animals {
 				if animal.ID == id {
 					foundSector = area.Sectors[key]
-					found = true
-					break loopExit
+					return &foundSector
 				}
 			}
 		}
 	}
 
-	if !found {
-		fmt.Printf("Animal with ID %s was not found.\n", id)
-	}
-
-	return foundSector, found
+	return nil
 }
 
 func MoveAnimal(from, to *Sector, animal Animal) {
