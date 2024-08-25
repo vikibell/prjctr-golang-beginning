@@ -14,14 +14,6 @@ type Data struct {
 	Movement string
 }
 
-func NewCameraData(id int, animal, movement string) Data {
-	return Data{
-		ID:       id,
-		Animal:   animal,
-		Movement: movement,
-	}
-}
-
 type ProcessedData struct {
 	Time           time.Time
 	AnimalMovement string

@@ -5,6 +5,14 @@ import (
 	"time"
 )
 
+func NewDayCameraData(id int, animal, movement string) Data {
+	return Data{
+		ID:       id,
+		Animal:   animal,
+		Movement: movement,
+	}
+}
+
 type DayCamera struct {
 	ID        int
 	Name      string

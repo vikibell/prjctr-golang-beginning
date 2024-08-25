@@ -2,8 +2,19 @@ package camera
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
+
+const nightCameraArtifact = "night"
+
+func NewNightCameraData(id int, animal, movement string) Data {
+	return Data{
+		ID:       id,
+		Animal:   animal + nightCameraArtifact,
+		Movement: movement + nightCameraArtifact,
+	}
+}
 
 type NightCamera struct {
 	ID        int
@@ -36,6 +47,7 @@ func (nc NightCamera) ProcessData() (ProcessedData, error) {
 
 	for _, data := range cameraData {
 		animalMovement := fmt.Sprintf("%s, %s; ", data.Animal, data.Movement)
+		animalMovement = strings.ReplaceAll(animalMovement, nightCameraArtifact, "")
 		processedData.AnimalMovement = processedData.AnimalMovement + animalMovement
 	}
 

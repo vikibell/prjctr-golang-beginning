@@ -10,18 +10,18 @@ func main() {
 	var ramMemory Memory
 
 	nightCamera := camera.NewNightCamera(1, "Canon Z200", []camera.Data{
-		camera.NewCameraData(1, "Тигр", "Біжить ліворуч"),
-		camera.NewCameraData(2, "Вовк", "Сидить на місці"),
+		camera.NewNightCameraData(1, "Тигр", "Біжить ліворуч"),
+		camera.NewNightCameraData(2, "Вовк", "Сидить на місці"),
 	})
 
 	dayCamera := camera.NewDayCamera(1, "Canon XY-22", []camera.Data{
-		camera.NewCameraData(1, "Заєць", "Біжить вперед"),
-		camera.NewCameraData(2, "Лисиця", "Біжить вперед"),
+		camera.NewDayCameraData(1, "Заєць", "Біжить вперед"),
+		camera.NewDayCameraData(2, "Лисиця", "Біжить вперед"),
 	})
 
 	infraredCamera := camera.NewInfraredCamera(1, "Nikon S60", []camera.Data{
-		camera.NewCameraData(1, "Медвідь", "Чешить спину"),
-		camera.NewCameraData(2, "Білка", "Ість горішок"),
+		camera.NewInfraredCameraData(1, "Медвідь", "Чешить спину"),
+		camera.NewInfraredCameraData(2, "Білка", "Ість горішок"),
 	})
 
 	err := saveProcessedData(nightCamera, &ramMemory)
