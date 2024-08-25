@@ -94,7 +94,6 @@ func (tr *TechnicalRoom) clean(sector Sector) {
 
 func (tr *TechnicalRoom) feedAnimal(sector Sector, animalID string) {
 	animal, exists := sector.GetAnimal(animalID)
-
 	if !exists {
 		fmt.Printf("There is no animal %s in sector: %s\n", animalID, sector.Name)
 		return
@@ -131,29 +130,27 @@ func (z *Zoo) DeleteArea(id string) {
 }
 
 func (z *Zoo) LookupAnimalByName(name string) []Sector {
-	var foundSectors []Sector
+	var sectors []Sector
 
 	for _, area := range z.Areas {
 		for key, sector := range area.Sectors {
 			for _, animal := range sector.Animals {
 				if animal.Name == name {
-					foundSectors = append(foundSectors, area.Sectors[key])
+					sectors = append(sectors, area.Sectors[key])
 				}
 			}
 		}
 	}
 
-	return foundSectors
+	return sectors
 }
 
 func (z *Zoo) LookupAnimalByID(id string) *Sector {
-	foundSector := Sector{}
-
 	for _, area := range z.Areas {
 		for key, sector := range area.Sectors {
 			for _, animal := range sector.Animals {
 				if animal.ID == id {
-					foundSector = area.Sectors[key]
+					foundSector := area.Sectors[key]
 					return &foundSector
 				}
 			}
@@ -165,7 +162,6 @@ func (z *Zoo) LookupAnimalByID(id string) *Sector {
 
 func MoveAnimal(from, to *Sector, animal Animal) {
 	animalToMove, exists := from.GetAnimal(animal.ID)
-
 	if !exists {
 		fmt.Printf("There is no animal %s in sector: %s\n", animal.ID, from.Name)
 		return
@@ -174,7 +170,6 @@ func MoveAnimal(from, to *Sector, animal Animal) {
 	from.DeleteAnimal(animal.ID)
 
 	_, exists = to.GetAnimal(animal.ID)
-
 	if exists {
 		fmt.Printf("Animal with id %s already exists in sector: %s.\n", animal.ID, to.Name)
 		return
