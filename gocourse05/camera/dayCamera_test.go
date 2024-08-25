@@ -6,9 +6,9 @@ import (
 
 func TestDayCameraRetrieveData(t *testing.T) {
 	t.Run("Found", func(t *testing.T) {
-		c := NewDayCamera(1, "Canon", []Data{{1, "Коза", "Побігла вліво"}})
-		data, _ := c.retrieveData()
+		c := NewDayCamera(1, "Canon", []Data{NewDayCameraData(1, "Коза", "Побігла вліво")})
 
+		data, _ := c.retrieveData()
 		if len(*data) == 0 {
 			t.Errorf("retrieveData() should not return empty data.")
 		}
@@ -30,4 +30,21 @@ func TestDayCameraRetrieveData(t *testing.T) {
 }
 
 func TestDayCameraProcessData(t *testing.T) {
+	t.Run("Found", func(t *testing.T) {
+		c := NewDayCamera(1, "Canon", []Data{NewDayCameraData(1, "Коза", "Побігла вліво")})
+
+		pd, _ := c.ProcessData()
+		if pd.AnimalMovement != "Коза, Побігла вліво; " {
+			t.Errorf("ProcessData() = %+v", pd)
+		}
+	})
+
+	t.Run("Not found", func(t *testing.T) {
+		c := NewDayCamera(1, "Canon", []Data{})
+
+		_, err := c.retrieveData()
+		if err == nil {
+			t.Errorf("retrieveData() should return error = %v", err)
+		}
+	})
 }
