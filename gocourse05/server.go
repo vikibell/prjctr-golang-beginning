@@ -6,7 +6,7 @@ import (
 	"gocourse05/camera"
 )
 
-const serverUrl = "http://remote.animals.control"
+const serverURL = "http://remote.animals.control"
 
 type Memory []camera.ProcessedData
 
@@ -24,7 +24,7 @@ func saveProcessedData(p camera.Processor, m *Memory) error {
 func sendProcessedData(m Memory, url string) error {
 	dataToSend := ""
 	for _, data := range m {
-		dataToSend = dataToSend + data.AnimalMovement
+		dataToSend += data.AnimalMovement
 	}
 
 	if len(dataToSend) > 0 {

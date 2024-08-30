@@ -24,7 +24,7 @@ func TestDayCameraRetrieveData(t *testing.T) {
 		c := NewDayCamera(1, "Canon", []Data{})
 		_, err := c.retrieveData()
 		if err == nil {
-			t.Errorf("retrieveData() should return error = %v", err)
+			t.Errorf("retrieveData() should return error but got <nil>")
 		}
 	})
 }
@@ -44,7 +44,7 @@ func TestDayCameraProcessData(t *testing.T) {
 
 		_, err := c.retrieveData()
 		if err == nil {
-			t.Errorf("retrieveData() should return error = %v", err)
+			t.Errorf("retrieveData() should return error but got <nil>")
 		}
 	})
 }

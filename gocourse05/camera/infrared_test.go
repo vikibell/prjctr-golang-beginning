@@ -1,12 +1,13 @@
 package camera
 
 import (
+	"fmt"
 	"testing"
 )
 
-func TestNightCameraRetrieveData(t *testing.T) {
+func TestInfraredCameraRetrieveData(t *testing.T) {
 	t.Run("Found", func(t *testing.T) {
-		c := NewNightCamera(1, "Canon", []Data{NewNightCameraData(1, "Коза", "Побігла вліво")})
+		c := NewInfraredCamera(1, "Canon", []Data{NewInfraredCameraData(1, "Коза", "Побігла вліво")})
 
 		data, _ := c.retrieveData()
 		if len(*data) == 0 {
@@ -21,31 +22,32 @@ func TestNightCameraRetrieveData(t *testing.T) {
 	})
 
 	t.Run("Not found", func(t *testing.T) {
-		c := NewNightCamera(1, "Canon", []Data{})
+		c := NewInfraredCamera(1, "Canon", []Data{})
 
 		_, err := c.retrieveData()
 		if err == nil {
-			t.Errorf("retrieveData() should return error = %v", err)
+			t.Errorf("retrieveData() should return error but got <nil>")
 		}
 	})
 }
 
-func TestNightCameraProcessData(t *testing.T) {
+func TestInfraredCameraProcessData(t *testing.T) {
 	t.Run("Found", func(t *testing.T) {
-		c := NewNightCamera(1, "Canon", []Data{NewNightCameraData(1, "Коза", "Побігла вліво")})
+		c := NewInfraredCamera(1, "Canon", []Data{NewInfraredCameraData(1, "Коза", "Побігла вліво")})
 
 		pd, _ := c.ProcessData()
+		fmt.Println(pd.AnimalMovement)
 		if pd.AnimalMovement != "Коза, Побігла вліво; " {
 			t.Errorf("ProcessData() = %+v", pd)
 		}
 	})
 
 	t.Run("Not found", func(t *testing.T) {
-		c := NewNightCamera(1, "Canon", []Data{})
+		c := NewInfraredCamera(1, "Canon", []Data{})
 
 		_, err := c.retrieveData()
 		if err == nil {
-			t.Errorf("retrieveData() should return error = %v", err)
+			t.Errorf("retrieveData() should return error but got <nil>")
 		}
 	})
 }

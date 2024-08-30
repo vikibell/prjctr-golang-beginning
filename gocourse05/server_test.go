@@ -59,7 +59,7 @@ func TestSendProcessedData(t *testing.T) {
 			name: "Success sendProcessedData",
 			args: args{
 				m:   []camera.ProcessedData{camera.NewProcessedData(time.Now(), "Медвідь, побіг вліво")},
-				url: "test",
+				url: "example.com",
 			},
 			wantErr: false,
 		},
@@ -67,7 +67,7 @@ func TestSendProcessedData(t *testing.T) {
 			name: "Fail sendProcessedData",
 			args: args{
 				m:   []camera.ProcessedData{camera.NewProcessedData(time.Now(), "")},
-				url: "test",
+				url: "example.com",
 			},
 			wantErr: true,
 		},

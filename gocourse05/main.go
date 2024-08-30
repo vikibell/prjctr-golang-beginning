@@ -39,7 +39,7 @@ func main() {
 		fmt.Printf("Saving from camera %d data to memory failed. Error: %v\n", infraredCamera.ID, err)
 	}
 
-	err = sendProcessedData(ramMemory, serverUrl)
+	err = sendProcessedData(ramMemory, serverURL)
 	if err != nil {
 		fmt.Printf("Sending data failed: %v\n", err)
 	}

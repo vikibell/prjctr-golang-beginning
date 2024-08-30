@@ -5,7 +5,7 @@ import "time"
 const (
 	noLight       = 0
 	infraredLight = 1
-	sunLight      = 3
+	sunLight      = 2
 )
 
 type Data struct {
