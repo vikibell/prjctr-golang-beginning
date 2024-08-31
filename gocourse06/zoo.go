@@ -6,6 +6,9 @@ import (
 	"time"
 )
 
+const openRequest = "open"
+const closeRequest = "close"
+
 type Logs map[int64]string // Index is timestamp unix nanoseconds
 
 func (logs Logs) printLogs() {
@@ -26,14 +29,41 @@ type Enclosure struct {
 	IsOpen bool
 }
 
+type Request struct {
+	EnclosureID int
+	Request     string
+}
+
 type Feeder struct {
 	ID      int
 	IsEmpty bool
 }
 
-//func manageEnclosures(requests chan<-) {
-//
-//}
+func manageEnclosures(wg *sync.WaitGroup, e *Enclosure, requests <-chan Request, logs chan<- string) {
+	defer wg.Done()
+	time.Sleep(10 * time.Second)
+
+	for request := range requests {
+		if request.EnclosureID == e.ID {
+			switch request.Request {
+			case openRequest:
+				if e.IsOpen {
+					logs <- fmt.Sprintf("[Warning] Enclosure %d is already opened", e.ID)
+				} else {
+					e.IsOpen = true
+					logs <- fmt.Sprintf("[Info] Enclosure %d was opened", e.ID)
+				}
+			case closeRequest:
+				if !e.IsOpen {
+					logs <- fmt.Sprintf("[Warning] Enclosure %d is already closed", e.ID)
+				} else {
+					e.IsOpen = false
+					logs <- fmt.Sprintf("[Info] Enclosure %d was closed", e.ID)
+				}
+			}
+		}
+	}
+}
 
 func collectState(wg *sync.WaitGroup, a Animal, monitorSystem chan<- Animal, logs chan<- string) {
 	defer wg.Done()

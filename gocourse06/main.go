@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 	"sync"
 )
 
@@ -12,9 +12,9 @@ func generateAnimals(n int) []Animal {
 	for i := 0; i < n; i++ {
 		animal := Animal{
 			ID:     i,
-			Health: rand.Intn(100),
-			Hunger: rand.Intn(100),
-			Mood:   rand.Intn(100),
+			Health: rand.IntN(100),
+			Hunger: rand.IntN(100),
+			Mood:   rand.IntN(100),
 		}
 		animals = append(animals, animal)
 	}
@@ -27,7 +27,7 @@ func generateEnclosures(n int) []Enclosure {
 	for i := 0; i < n; i++ {
 		enclosure := Enclosure{
 			ID:     i,
-			IsOpen: rand.Intn(2) == 1,
+			IsOpen: rand.IntN(2) == 1,
 		}
 		enclosures = append(enclosures, enclosure)
 	}
@@ -40,7 +40,7 @@ func generateFeeders(n int) []Feeder {
 	for i := 0; i < n; i++ {
 		feeder := Feeder{
 			ID:      i,
-			IsEmpty: rand.Intn(2) == 1,
+			IsEmpty: rand.IntN(2) == 1,
 		}
 		feeders = append(feeders, feeder)
 	}
@@ -50,13 +50,13 @@ func generateFeeders(n int) []Feeder {
 func main() {
 	animals := generateAnimals(8)
 	feeders := generateFeeders(5)
-	//enclosures := generateEnclosures(5)
+	enclosures := generateEnclosures(5)
 
 	var wg sync.WaitGroup
 
 	logs := make(chan string)
-	monitorSystem := make(chan Animal, len(animals))
 
+	monitorSystem := make(chan Animal, len(animals))
 	for _, animal := range animals {
 		wg.Add(1)
 		go collectState(&wg, animal, monitorSystem, logs)
@@ -68,10 +68,22 @@ func main() {
 		go checkFeeder(&wg, feeder, feedersCh, logs)
 	}
 
+	requests := [2]string{openRequest, closeRequest}
+	requestsCh := make(chan Request, len(enclosures))
+	for _, enclosure := range enclosures {
+		requestsCh <- Request{EnclosureID: enclosure.ID, Request: requests[rand.IntN(len(requests))]}
+	}
+
+	for _, enclosure := range enclosures {
+		wg.Add(1)
+		go manageEnclosures(&wg, &enclosure, requestsCh, logs)
+	}
+
 	go func() {
 		wg.Wait()
 		close(monitorSystem)
 		close(feedersCh)
+		close(requestsCh)
 		close(logs)
 	}()
 
