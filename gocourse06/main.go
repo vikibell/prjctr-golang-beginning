@@ -73,6 +73,7 @@ func main() {
 	for _, enclosure := range enclosures {
 		requestsCh <- Request{EnclosureID: enclosure.ID, Request: requests[rand.IntN(len(requests))]}
 	}
+	close(requestsCh)
 
 	for _, enclosure := range enclosures {
 		wg.Add(1)
@@ -83,7 +84,6 @@ func main() {
 		wg.Wait()
 		close(monitorSystem)
 		close(feedersCh)
-		close(requestsCh)
 		close(logs)
 	}()
 
