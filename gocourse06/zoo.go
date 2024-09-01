@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"sync"
 	"time"
 )
 
@@ -39,9 +38,7 @@ type Feeder struct {
 	IsEmpty bool
 }
 
-func manageEnclosures(wg *sync.WaitGroup, enclosures map[int]Enclosure, requests <-chan Request, logs chan<- string) {
-	defer wg.Done()
-
+func manageEnclosures(enclosures map[int]Enclosure, requests <-chan Request, logs chan<- string) {
 	for request := range requests {
 		e, exists := enclosures[request.EnclosureID]
 		if exists {
@@ -66,8 +63,7 @@ func manageEnclosures(wg *sync.WaitGroup, enclosures map[int]Enclosure, requests
 	}
 }
 
-func collectState(wg *sync.WaitGroup, a Animal, monitorSystem chan<- Animal, logs chan<- string) {
-	defer wg.Done()
+func collectState(a Animal, monitorSystem chan<- Animal, logs chan<- string) {
 	time.Sleep(5 * time.Second)
 
 	if a.Mood < 50 {
@@ -85,8 +81,7 @@ func collectState(wg *sync.WaitGroup, a Animal, monitorSystem chan<- Animal, log
 	monitorSystem <- a
 }
 
-func checkFeeder(wg *sync.WaitGroup, f Feeder, statuses chan<- Feeder, logs chan<- string) {
-	defer wg.Done()
+func checkFeeder(f Feeder, statuses chan<- Feeder, logs chan<- string) {
 	time.Sleep(2 * time.Second)
 
 	if f.IsEmpty {

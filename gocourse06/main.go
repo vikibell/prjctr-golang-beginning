@@ -58,13 +58,19 @@ func main() {
 	monitorSystem := make(chan Animal, len(animals))
 	for _, animal := range animals {
 		wg.Add(1)
-		go collectState(&wg, animal, monitorSystem, logs)
+		go func() {
+			collectState(animal, monitorSystem, logs)
+			wg.Done()
+		}()
 	}
 
 	feedersCh := make(chan Feeder, len(feeders))
 	for _, feeder := range feeders {
 		wg.Add(1)
-		go checkFeeder(&wg, feeder, feedersCh, logs)
+		go func() {
+			checkFeeder(feeder, feedersCh, logs)
+			wg.Done()
+		}()
 	}
 
 	requests := [2]string{openRequest, closeRequest}
@@ -75,7 +81,10 @@ func main() {
 	close(requestsCh)
 
 	wg.Add(1)
-	go manageEnclosures(&wg, enclosures, requestsCh, logs)
+	go func() {
+		manageEnclosures(enclosures, requestsCh, logs)
+		wg.Done()
+	}()
 
 	go func() {
 		wg.Wait()
