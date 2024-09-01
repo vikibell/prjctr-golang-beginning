@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	var ramMemory Memory
+	server := Server{Memory: make([]camera.ProcessedData, 0)}
 
 	nightCamera := camera.NewNightCamera(1, "Canon Z200", []camera.Data{
 		camera.NewNightCameraData(1, "Тигр", "Біжить ліворуч"),
@@ -24,22 +24,22 @@ func main() {
 		camera.NewInfraredCameraData(2, "Білка", "Ість горішок"),
 	})
 
-	err := saveProcessedData(&nightCamera, &ramMemory)
+	err := server.saveProcessedData(&nightCamera)
 	if err != nil {
 		fmt.Printf("Saving from camera %d data to memory failed. Error: %v\n", nightCamera.ID, err)
 	}
 
-	err = saveProcessedData(&dayCamera, &ramMemory)
+	err = server.saveProcessedData(&dayCamera)
 	if err != nil {
 		fmt.Printf("Saving from camera %d data to memory failed. Error: %v\n", dayCamera.ID, err)
 	}
 
-	err = saveProcessedData(&infraredCamera, &ramMemory)
+	err = server.saveProcessedData(&infraredCamera)
 	if err != nil {
 		fmt.Printf("Saving from camera %d data to memory failed. Error: %v\n", infraredCamera.ID, err)
 	}
 
-	err = sendProcessedData(ramMemory, serverURL)
+	err = server.sendProcessedData(serverURL)
 	if err != nil {
 		fmt.Printf("Sending data failed: %v\n", err)
 	}

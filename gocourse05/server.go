@@ -9,22 +9,24 @@ import (
 
 const serverURL = "http://remote.animals.control"
 
-type Memory []camera.ProcessedData
+type Server struct {
+	Memory []camera.ProcessedData
+}
 
-func saveProcessedData(p camera.Processor, m *Memory) error {
+func (s *Server) saveProcessedData(p camera.Processor) error {
 	processedData, err := p.ProcessData()
 	if err != nil {
 		return err
 	}
 
-	*m = append(*m, *processedData)
+	s.Memory = append(s.Memory, *processedData)
 
 	return nil
 }
 
-func sendProcessedData(m Memory, url string) error {
+func (s *Server) sendProcessedData(url string) error {
 	dataToSend := ""
-	for _, data := range m {
+	for _, data := range s.Memory {
 		dataToSend += data.AnimalMovement
 	}
 

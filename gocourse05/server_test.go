@@ -1,17 +1,15 @@
 package main
 
 import (
+	"gocourse05/camera"
 	"testing"
 	"time"
-
-	"gocourse05/camera"
 )
 
 func TestSaveProcessedData(t *testing.T) {
-	var testMemory Memory
+	server := Server{Memory: make([]camera.ProcessedData, 0)}
 	type args struct {
 		p camera.Processor
-		m *Memory
 	}
 	tests := []struct {
 		name    string
@@ -22,7 +20,6 @@ func TestSaveProcessedData(t *testing.T) {
 			name: "Success saveProcessedData",
 			args: args{
 				p: camera.NewDayCamera(1, "test", []camera.Data{{1, "Коза", "Побігла вліво"}}),
-				m: &testMemory,
 			},
 			wantErr: false,
 		},
@@ -30,14 +27,13 @@ func TestSaveProcessedData(t *testing.T) {
 			name: "Fail saveProcessedData",
 			args: args{
 				p: camera.NewDayCamera(1, "test", []camera.Data{}),
-				m: &testMemory,
 			},
 			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := saveProcessedData(tt.args.p, tt.args.m); (err != nil) != tt.wantErr {
+			if err := server.saveProcessedData(tt.args.p); (err != nil) != tt.wantErr {
 				t.Errorf("saveProcessedData() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -46,8 +42,8 @@ func TestSaveProcessedData(t *testing.T) {
 
 func TestSendProcessedData(t *testing.T) {
 	type args struct {
-		m   Memory
-		url string
+		url    string
+		server Server
 	}
 
 	tests := []struct {
@@ -58,23 +54,23 @@ func TestSendProcessedData(t *testing.T) {
 		{
 			name: "Success sendProcessedData",
 			args: args{
-				m:   []camera.ProcessedData{camera.NewProcessedData(time.Now(), "Медвідь, побіг вліво")},
-				url: "example.com",
+				url:    "example.com",
+				server: Server{Memory: []camera.ProcessedData{{time.Now(), "Медвідь пішов"}}},
 			},
 			wantErr: false,
 		},
 		{
 			name: "Fail sendProcessedData",
 			args: args{
-				m:   []camera.ProcessedData{camera.NewProcessedData(time.Now(), "")},
-				url: "example.com",
+				url:    "example.com",
+				server: Server{Memory: []camera.ProcessedData{}},
 			},
 			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := sendProcessedData(tt.args.m, tt.args.url); (err != nil) != tt.wantErr {
+			if err := tt.args.server.sendProcessedData(tt.args.url); (err != nil) != tt.wantErr {
 				t.Errorf("sendProcessedData() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
