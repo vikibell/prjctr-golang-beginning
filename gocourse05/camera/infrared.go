@@ -34,12 +34,12 @@ func NewInfraredCamera(id int, name string, data []Data) InfraredCamera {
 	}
 }
 
-func (ic InfraredCamera) retrieveData() (*[]Data, error) {
+func (ic InfraredCamera) retrieveData() ([]Data, error) {
 	if len(ic.Data) == 0 {
 		return nil, errors.New("no camera data found")
 	}
 
-	return &ic.Data, nil
+	return ic.Data, nil
 }
 
 func (ic InfraredCamera) ProcessData() (*ProcessedData, error) {
@@ -50,7 +50,7 @@ func (ic InfraredCamera) ProcessData() (*ProcessedData, error) {
 
 	processedData := NewProcessedData(time.Now(), "")
 	re := regexp.MustCompile(`[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}`)
-	for _, data := range *cameraData {
+	for _, data := range cameraData {
 		data.Animal = strings.ReplaceAll(re.ReplaceAllString(data.Animal, ""), "_", "")
 		animalMovement := fmt.Sprintf("%s, %s; ", data.Animal, data.Movement)
 		processedData.AnimalMovement = processedData.AnimalMovement + animalMovement

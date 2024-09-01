@@ -33,12 +33,12 @@ func NewNightCamera(id int, name string, data []Data) NightCamera {
 	}
 }
 
-func (nc NightCamera) retrieveData() (*[]Data, error) {
+func (nc NightCamera) retrieveData() ([]Data, error) {
 	if len(nc.Data) == 0 {
 		return nil, errors.New("no camera data found")
 	}
 
-	return &nc.Data, nil
+	return nc.Data, nil
 }
 
 func (nc NightCamera) ProcessData() (*ProcessedData, error) {
@@ -48,7 +48,7 @@ func (nc NightCamera) ProcessData() (*ProcessedData, error) {
 	}
 
 	processedData := NewProcessedData(time.Now(), "")
-	for _, data := range *cameraData {
+	for _, data := range cameraData {
 		if len(data.Animal) <= len(nightCameraArtifact) || len(data.Movement) <= len(nightCameraArtifact) {
 			return nil, errors.New("not enought data for processing")
 		}

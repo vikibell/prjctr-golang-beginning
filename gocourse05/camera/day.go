@@ -30,11 +30,11 @@ func NewDayCamera(id int, name string, data []Data) DayCamera {
 	}
 }
 
-func (dc DayCamera) retrieveData() (*[]Data, error) {
+func (dc DayCamera) retrieveData() ([]Data, error) {
 	if len(dc.Data) == 0 {
 		return nil, errors.New("no camera data found")
 	}
-	return &dc.Data, nil
+	return dc.Data, nil
 }
 
 func (dc DayCamera) ProcessData() (*ProcessedData, error) {
@@ -44,7 +44,7 @@ func (dc DayCamera) ProcessData() (*ProcessedData, error) {
 	}
 
 	processedData := NewProcessedData(time.Now(), "")
-	for _, data := range *cameraData {
+	for _, data := range cameraData {
 		if len(data.Animal) == 0 || len(data.Movement) == 0 {
 			return nil, errors.New("not enought data for processing")
 		}
