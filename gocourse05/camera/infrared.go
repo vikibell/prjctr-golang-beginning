@@ -13,7 +13,7 @@ import (
 func NewInfraredCameraData(id int, animal, movement string) Data {
 	return Data{
 		ID:       id,
-		Animal:   animal + "_" + uuid.New().String(),
+		Animal:   animal + "_" + uuid.NewString(),
 		Movement: movement,
 	}
 }
@@ -53,7 +53,7 @@ func (ic InfraredCamera) ProcessData() (*ProcessedData, error) {
 	for _, data := range cameraData {
 		data.Animal = strings.ReplaceAll(re.ReplaceAllString(data.Animal, ""), "_", "")
 		animalMovement := fmt.Sprintf("%s, %s; ", data.Animal, data.Movement)
-		processedData.AnimalMovement = processedData.AnimalMovement + animalMovement
+		processedData.AnimalMovement += animalMovement
 	}
 
 	return &processedData, nil

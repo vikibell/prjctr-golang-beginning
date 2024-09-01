@@ -49,7 +49,7 @@ func (dc DayCamera) ProcessData() (*ProcessedData, error) {
 			return nil, errors.New("not enought data for processing")
 		}
 		animalMovement := fmt.Sprintf("%s, %s; ", data.Animal, data.Movement)
-		processedData.AnimalMovement = processedData.AnimalMovement + animalMovement
+		processedData.AnimalMovement += animalMovement
 	}
 
 	return &processedData, nil

@@ -54,7 +54,7 @@ func (nc NightCamera) ProcessData() (*ProcessedData, error) {
 		}
 		animalMovement := fmt.Sprintf("%s, %s; ", data.Animal, data.Movement)
 		animalMovement = strings.ReplaceAll(animalMovement, nightCameraArtifact, "")
-		processedData.AnimalMovement = processedData.AnimalMovement + animalMovement
+		processedData.AnimalMovement += animalMovement
 	}
 
 	return &processedData, nil

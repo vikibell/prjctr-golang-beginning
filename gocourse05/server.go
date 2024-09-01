@@ -29,7 +29,7 @@ func sendProcessedData(m Memory, url string) error {
 	}
 
 	if len(dataToSend) > 0 {
-		fmt.Printf("Sending data \"%s\" to %s", dataToSend, url)
+		fmt.Printf("Sending data %q to %s", dataToSend, url)
 		return nil
 	}
 

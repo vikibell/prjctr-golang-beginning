@@ -8,12 +8,16 @@ func TestDayCameraRetrieveData(t *testing.T) {
 	t.Run("Found", func(t *testing.T) {
 		c := NewDayCamera(1, "Canon", []Data{NewDayCameraData(1, "Коза", "Побігла вліво")})
 
-		data, _ := c.retrieveData()
-		if len(*data) == 0 {
+		data, err := c.retrieveData()
+		if err != nil {
+			t.Errorf("retrieveData() should not have error: %s", err)
+		}
+
+		if len(data) == 0 {
 			t.Errorf("retrieveData() should not return empty data.")
 		}
 
-		for _, d := range *data {
+		for _, d := range data {
 			if d.Animal != "Коза" || d.Movement != "Побігла вліво" {
 				t.Errorf("retrieveData() = %+v", d)
 			}
@@ -33,7 +37,11 @@ func TestDayCameraProcessData(t *testing.T) {
 	t.Run("Found", func(t *testing.T) {
 		c := NewDayCamera(1, "Canon", []Data{NewDayCameraData(1, "Коза", "Побігла вліво")})
 
-		pd, _ := c.ProcessData()
+		pd, err := c.ProcessData()
+		if err != nil {
+			t.Errorf("processData() should not have error: %s", err)
+		}
+
 		if pd.AnimalMovement != "Коза, Побігла вліво; " {
 			t.Errorf("ProcessData() = %+v", pd)
 		}
