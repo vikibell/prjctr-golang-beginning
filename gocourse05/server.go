@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 
 	"gocourse05/camera"
@@ -30,7 +31,7 @@ func sendProcessedData(m Memory, url string) error {
 	if len(dataToSend) > 0 {
 		fmt.Printf("Sending data \"%s\" to %s", dataToSend, url)
 		return nil
-	} else {
-		return fmt.Errorf("no data for send")
 	}
+
+	return errors.New("no data for send")
 }

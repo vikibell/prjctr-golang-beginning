@@ -1,6 +1,7 @@
 package camera
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 	"strings"
@@ -35,7 +36,7 @@ func NewInfraredCamera(id int, name string, data []Data) InfraredCamera {
 
 func (ic InfraredCamera) retrieveData() (*[]Data, error) {
 	if len(ic.Data) == 0 {
-		return nil, fmt.Errorf("no camera data found")
+		return nil, errors.New("no camera data found")
 	}
 
 	return &ic.Data, nil

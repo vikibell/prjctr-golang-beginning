@@ -1,6 +1,7 @@
 package camera
 
 import (
+	"errors"
 	"fmt"
 	"time"
 )
@@ -31,7 +32,7 @@ func NewDayCamera(id int, name string, data []Data) DayCamera {
 
 func (dc DayCamera) retrieveData() (*[]Data, error) {
 	if len(dc.Data) == 0 {
-		return nil, fmt.Errorf("no camera data found")
+		return nil, errors.New("no camera data found")
 	}
 	return &dc.Data, nil
 }
@@ -45,7 +46,7 @@ func (dc DayCamera) ProcessData() (*ProcessedData, error) {
 	processedData := NewProcessedData(time.Now(), "")
 	for _, data := range *cameraData {
 		if len(data.Animal) == 0 || len(data.Movement) == 0 {
-			return nil, fmt.Errorf("not enought data for processing")
+			return nil, errors.New("not enought data for processing")
 		}
 		animalMovement := fmt.Sprintf("%s, %s; ", data.Animal, data.Movement)
 		processedData.AnimalMovement = processedData.AnimalMovement + animalMovement
