@@ -39,12 +39,13 @@ type Feeder struct {
 	IsEmpty bool
 }
 
-func manageEnclosures(wg *sync.WaitGroup, e *Enclosure, requests <-chan Request, logs chan<- string) {
+func manageEnclosures(wg *sync.WaitGroup, enclosures map[int]Enclosure, requests <-chan Request, logs chan<- string) {
 	defer wg.Done()
-	time.Sleep(10 * time.Second)
 
 	for request := range requests {
-		if request.EnclosureID == e.ID {
+		e, exists := enclosures[request.EnclosureID]
+		if exists {
+			time.Sleep(1 * time.Second)
 			switch request.Request {
 			case openRequest:
 				if e.IsOpen {

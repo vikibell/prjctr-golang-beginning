@@ -22,14 +22,13 @@ func generateAnimals(n int) []Animal {
 }
 
 // Генерує тестові дані для вольєрів
-func generateEnclosures(n int) []Enclosure {
-	var enclosures []Enclosure
+func generateEnclosures(n int) map[int]Enclosure {
+	enclosures := make(map[int]Enclosure)
 	for i := 0; i < n; i++ {
-		enclosure := Enclosure{
+		enclosures[i] = Enclosure{
 			ID:     i,
 			IsOpen: rand.IntN(2) == 1,
 		}
-		enclosures = append(enclosures, enclosure)
 	}
 	return enclosures
 }
@@ -75,10 +74,8 @@ func main() {
 	}
 	close(requestsCh)
 
-	for _, enclosure := range enclosures {
-		wg.Add(1)
-		go manageEnclosures(&wg, &enclosure, requestsCh, logs)
-	}
+	wg.Add(1)
+	go manageEnclosures(&wg, enclosures, requestsCh, logs)
 
 	go func() {
 		wg.Wait()
