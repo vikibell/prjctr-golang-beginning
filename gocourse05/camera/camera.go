@@ -3,9 +3,9 @@ package camera
 import "time"
 
 const (
-	noLight       = 0
-	infraredLight = 1
-	sunLight      = 2
+	noLight       = iota
+	infraredLight = iota
+	sunLight      = iota
 )
 
 type Data struct {
