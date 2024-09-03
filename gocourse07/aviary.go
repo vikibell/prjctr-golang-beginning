@@ -52,17 +52,16 @@ func NewData(ID int, measurement int) Data {
 func measureSensors(sensors []Sensor, dataCh chan<- Data, stopCh <-chan struct{}, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	for {
-		select {
-		case <-stopCh:
-			return
-		default:
-			for _, sensor := range sensors {
-				dataCh <- sensor.measure()
-			}
-
-			time.Sleep(4 * time.Second)
+	select {
+	case <-stopCh:
+		fmt.Println("Sensor measurement is shutting down.")
+		return
+	default:
+		for _, sensor := range sensors {
+			fmt.Printf("Sensor measure data: %+v\n", sensor.measure())
+			dataCh <- sensor.measure()
 		}
+		time.Sleep(2 * time.Second)
 	}
 }
 
@@ -74,9 +73,12 @@ func centralSystem(dataCh <-chan Data, stopCh <-chan struct{}, wg *sync.WaitGrou
 		case <-stopCh:
 			fmt.Println("Central system is shutting down after processing all data.")
 			return
-		case data := <-dataCh:
+		case data, ok := <-dataCh:
+			if !ok {
+				return
+			}
 			fmt.Printf("Central system processing data: %+v\n", data)
-			time.Sleep(1 * time.Second)
+			time.Sleep(2 * time.Second)
 		}
 	}
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"math/rand/v2"
 	"sync"
+	"time"
 )
 
 func generateLightSensors(n int) []Sensor {
@@ -49,8 +50,8 @@ func main() {
 	var wg sync.WaitGroup
 
 	lightSensors := generateLightSensors(1)
-	wetnessSensors := generateWetnessSensors(1)
-	temperatureSensors := generateTemperatureSensors(1)
+	wetnessSensors := generateWetnessSensors(2)
+	temperatureSensors := generateTemperatureSensors(3)
 
 	wg.Add(3)
 	go measureSensors(lightSensors, dataChannel, sensorStopChannel, &wg)
@@ -60,9 +61,12 @@ func main() {
 	wg.Add(1)
 	go centralSystem(dataChannel, centralStopChannel, &wg)
 
-	close(sensorStopChannel)
-	wg.Wait()
+	time.Sleep(10 * time.Second)
 
-	close(centralStopChannel)
-	wg.Wait()
+	go func() {
+		wg.Wait()
+		close(sensorStopChannel)
+		close(dataChannel)
+		close(centralStopChannel)
+	}()
 }
