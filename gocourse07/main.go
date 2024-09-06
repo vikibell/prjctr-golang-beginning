@@ -1,51 +1,52 @@
 package main
 
 import (
+	"context"
 	"math/rand/v2"
 	"sync"
 	"time"
 )
 
 func generateLightSensors(n int) []Sensor {
-	var lightSensors []Sensor
-	for i := 0; i < n; i++ {
-		lightSensor := LightSensor{
+	lightSensors := make([]Sensor, n)
+	for i := range lightSensors {
+		lightSensors[i] = LightSensor{
 			ID:    i,
 			Light: rand.IntN(100),
 		}
-		lightSensors = append(lightSensors, lightSensor)
 	}
 	return lightSensors
 }
 
 func generateWetnessSensors(n int) []Sensor {
-	var wetnessSensors []Sensor
-	for i := 0; i < n; i++ {
-		wetnessSensor := WetnessSensor{
+	wetnessSensors := make([]Sensor, n)
+	for i := range wetnessSensors {
+		wetnessSensors[i] = WetnessSensor{
 			ID:      i,
 			Wetness: rand.IntN(100),
 		}
-		wetnessSensors = append(wetnessSensors, wetnessSensor)
 	}
 	return wetnessSensors
 }
 
 func generateTemperatureSensors(n int) []Sensor {
-	var temperatureSensors []Sensor
-	for i := 0; i < n; i++ {
-		temperatureSensor := TemperatureSensor{
+	temperatureSensors := make([]Sensor, n)
+	for i := range temperatureSensors {
+		temperatureSensors[i] = TemperatureSensor{
 			ID:          i,
 			Temperature: rand.IntN(100),
 		}
-		temperatureSensors = append(temperatureSensors, temperatureSensor)
 	}
 	return temperatureSensors
 }
 
 func main() {
+
+	deadline := time.Now().Add(100 * time.Millisecond)
+	ctx, cancel := context.WithDeadline(context.Background(), deadline)
+	defer cancel()
+
 	dataChannel := make(chan Data)
-	sensorStopChannel := make(chan struct{})
-	centralStopChannel := make(chan struct{})
 
 	var wg sync.WaitGroup
 
@@ -53,20 +54,16 @@ func main() {
 	wetnessSensors := generateWetnessSensors(2)
 	temperatureSensors := generateTemperatureSensors(3)
 
-	wg.Add(3)
-	go measureSensors(lightSensors, dataChannel, sensorStopChannel, &wg)
-	go measureSensors(wetnessSensors, dataChannel, sensorStopChannel, &wg)
-	go measureSensors(temperatureSensors, dataChannel, sensorStopChannel, &wg)
-
-	wg.Add(1)
-	go centralSystem(dataChannel, centralStopChannel, &wg)
+	wg.Add(4)
+	go measureSensors(lightSensors, dataChannel, ctx, &wg)
+	go measureSensors(wetnessSensors, dataChannel, ctx, &wg)
+	go measureSensors(temperatureSensors, dataChannel, ctx, &wg)
+	go centralSystem(dataChannel, ctx, &wg)
 
 	time.Sleep(10 * time.Second)
 
 	go func() {
 		wg.Wait()
-		close(sensorStopChannel)
 		close(dataChannel)
-		close(centralStopChannel)
 	}()
 }

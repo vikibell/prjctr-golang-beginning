@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"sync"
 	"time"
@@ -42,36 +43,30 @@ type Data struct {
 	Measurement int
 }
 
-func NewData(ID int, measurement int) Data {
+func NewData(id int, measurement int) Data {
 	return Data{
-		SensorID:    ID,
+		SensorID:    id,
 		Measurement: measurement,
 	}
 }
 
-func measureSensors(sensors []Sensor, dataCh chan<- Data, stopCh <-chan struct{}, wg *sync.WaitGroup) {
+func measureSensors(sensors []Sensor, dataCh chan<- Data, ctx context.Context, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	select {
-	case <-stopCh:
-		fmt.Println("Sensor measurement is shutting down.")
-		return
-	default:
-		for _, sensor := range sensors {
-			fmt.Printf("Sensor measure data: %+v\n", sensor.measure())
-			dataCh <- sensor.measure()
-		}
-		time.Sleep(2 * time.Second)
+	for _, sensor := range sensors {
+		fmt.Printf("Sensor measure data: %+v\n", sensor.measure())
+		dataCh <- sensor.measure()
 	}
+	time.Sleep(2 * time.Second)
 }
 
-func centralSystem(dataCh <-chan Data, stopCh <-chan struct{}, wg *sync.WaitGroup) {
+func centralSystem(dataCh <-chan Data, ctx context.Context, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	for {
 		select {
-		case <-stopCh:
-			fmt.Println("Central system is shutting down after processing all data.")
+		case <-ctx.Done():
+			fmt.Println("Central system is shutting down.")
 			return
 		case data, ok := <-dataCh:
 			if !ok {
