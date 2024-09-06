@@ -8,18 +8,18 @@ func TestNightCameraRetrieveData(t *testing.T) {
 	t.Run("Found", func(t *testing.T) {
 		c := NewNightCamera(1, "Canon", []Data{NewNightCameraData(1, "Коза", "Побігла вліво")})
 
-		data, err := c.retrieveData()
+		data, err := c.RetrieveData()
 		if err != nil {
-			t.Errorf("retrieveData() should not have error: %s", err)
+			t.Errorf("RetrieveData() should not have error: %s", err)
 		}
 
 		if len(data) == 0 {
-			t.Errorf("retrieveData() should not return empty data.")
+			t.Errorf("RetrieveData() should not return empty data.")
 		}
 
 		for _, d := range data {
 			if d.Animal != "Коза" || d.Movement != "Побігла вліво" {
-				t.Errorf("retrieveData() = %+v", d)
+				t.Errorf("RetrieveData() = %+v", d)
 			}
 		}
 	})
@@ -27,9 +27,9 @@ func TestNightCameraRetrieveData(t *testing.T) {
 	t.Run("Not found", func(t *testing.T) {
 		c := NewNightCamera(1, "Canon", []Data{})
 
-		_, err := c.retrieveData()
+		_, err := c.RetrieveData()
 		if err == nil {
-			t.Errorf("retrieveData() should return error but got <nil>")
+			t.Errorf("RetrieveData() should return error but got <nil>")
 		}
 	})
 }
@@ -51,9 +51,9 @@ func TestNightCameraProcessData(t *testing.T) {
 	t.Run("Not found", func(t *testing.T) {
 		c := NewNightCamera(1, "Canon", []Data{})
 
-		_, err := c.retrieveData()
+		_, err := c.RetrieveData()
 		if err == nil {
-			t.Errorf("retrieveData() should return error but got <nil>")
+			t.Errorf("RetrieveData() should return error but got <nil>")
 		}
 	})
 }

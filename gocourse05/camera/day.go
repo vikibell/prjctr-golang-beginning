@@ -30,7 +30,7 @@ func NewDayCamera(id int, name string, data []Data) DayCamera {
 	}
 }
 
-func (dc DayCamera) retrieveData() ([]Data, error) {
+func (dc DayCamera) RetrieveData() ([]Data, error) {
 	if len(dc.Data) == 0 {
 		return nil, errors.New("no camera data found")
 	}
@@ -38,7 +38,7 @@ func (dc DayCamera) retrieveData() ([]Data, error) {
 }
 
 func (dc DayCamera) ProcessData() (*ProcessedData, error) {
-	cameraData, err := dc.retrieveData()
+	cameraData, err := dc.RetrieveData()
 	if err != nil {
 		return nil, err
 	}

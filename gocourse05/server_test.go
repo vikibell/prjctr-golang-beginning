@@ -9,7 +9,7 @@ import (
 func TestSaveProcessedData(t *testing.T) {
 	server := Server{Memory: make([]camera.ProcessedData, 0)}
 	type args struct {
-		p camera.Processor
+		p Processor
 	}
 	tests := []struct {
 		name    string
@@ -33,7 +33,8 @@ func TestSaveProcessedData(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := server.saveProcessedData(tt.args.p); (err != nil) != tt.wantErr {
+			server.setProcessor(tt.args.p)
+			if err := server.saveProcessedData(); (err != nil) != tt.wantErr {
 				t.Errorf("saveProcessedData() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

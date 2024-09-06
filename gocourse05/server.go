@@ -9,12 +9,29 @@ import (
 
 const serverURL = "http://remote.animals.control"
 
-type Server struct {
-	Memory []camera.ProcessedData
+type Processor interface {
+	RetrieveData() ([]camera.Data, error)
+	ProcessData() (*camera.ProcessedData, error)
 }
 
-func (s *Server) saveProcessedData(p camera.Processor) error {
-	processedData, err := p.ProcessData()
+type Server struct {
+	Memory    []camera.ProcessedData
+	processor Processor
+}
+
+func NewServer(p Processor) *Server {
+	return &Server{
+		Memory:    make([]camera.ProcessedData, 0),
+		processor: p,
+	}
+}
+
+func (s *Server) setProcessor(p Processor) {
+	s.processor = p
+}
+
+func (s *Server) saveProcessedData() error {
+	processedData, err := s.processor.ProcessData()
 	if err != nil {
 		return err
 	}

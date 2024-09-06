@@ -33,7 +33,7 @@ func NewNightCamera(id int, name string, data []Data) NightCamera {
 	}
 }
 
-func (nc NightCamera) retrieveData() ([]Data, error) {
+func (nc NightCamera) RetrieveData() ([]Data, error) {
 	if len(nc.Data) == 0 {
 		return nil, errors.New("no camera data found")
 	}
@@ -42,7 +42,7 @@ func (nc NightCamera) retrieveData() ([]Data, error) {
 }
 
 func (nc NightCamera) ProcessData() (*ProcessedData, error) {
-	cameraData, err := nc.retrieveData()
+	cameraData, err := nc.RetrieveData()
 	if err != nil {
 		return nil, err
 	}

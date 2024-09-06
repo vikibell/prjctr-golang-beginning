@@ -34,7 +34,7 @@ func NewInfraredCamera(id int, name string, data []Data) InfraredCamera {
 	}
 }
 
-func (ic InfraredCamera) retrieveData() ([]Data, error) {
+func (ic InfraredCamera) RetrieveData() ([]Data, error) {
 	if len(ic.Data) == 0 {
 		return nil, errors.New("no camera data found")
 	}
@@ -43,7 +43,7 @@ func (ic InfraredCamera) retrieveData() ([]Data, error) {
 }
 
 func (ic InfraredCamera) ProcessData() (*ProcessedData, error) {
-	cameraData, err := ic.retrieveData()
+	cameraData, err := ic.RetrieveData()
 	if err != nil {
 		return nil, err
 	}

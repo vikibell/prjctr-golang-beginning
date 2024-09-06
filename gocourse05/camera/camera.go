@@ -3,9 +3,9 @@ package camera
 import "time"
 
 const (
-	noLight       = iota
-	infraredLight = iota
-	sunLight      = iota
+	noLight = iota + 1
+	infraredLight
+	sunLight
 )
 
 type Data struct {
@@ -24,9 +24,4 @@ func NewProcessedData(time time.Time, animalMovement string) ProcessedData {
 		Time:           time,
 		AnimalMovement: animalMovement,
 	}
-}
-
-type Processor interface {
-	retrieveData() ([]Data, error)
-	ProcessData() (*ProcessedData, error)
 }
