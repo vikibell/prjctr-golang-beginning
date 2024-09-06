@@ -59,6 +59,7 @@ func manageEnclosures(enclosures map[int]Enclosure, requests <-chan Request, log
 					logs <- fmt.Sprintf("[Info] Enclosure %d was closed", e.ID)
 				}
 			}
+			enclosures[e.ID] = e
 		}
 	}
 }
