@@ -8,15 +8,14 @@ import (
 
 // Генерує тестові дані для тварин
 func generateAnimals(n int) []Animal {
-	var animals []Animal
-	for i := 0; i < n; i++ {
-		animal := Animal{
+	animals := make([]Animal, n)
+	for i := range animals {
+		animals[i] = Animal{
 			ID:     i,
 			Health: rand.IntN(100),
 			Hunger: rand.IntN(100),
 			Mood:   rand.IntN(100),
 		}
-		animals = append(animals, animal)
 	}
 	return animals
 }
@@ -35,13 +34,12 @@ func generateEnclosures(n int) map[int]Enclosure {
 
 // Генерує тестові дані для кормушок
 func generateFeeders(n int) []Feeder {
-	var feeders []Feeder
-	for i := 0; i < n; i++ {
-		feeder := Feeder{
+	feeders := make([]Feeder, n)
+	for i := range feeders {
+		feeders[i] = Feeder{
 			ID:      i,
 			IsEmpty: rand.IntN(2) == 1,
 		}
-		feeders = append(feeders, feeder)
 	}
 	return feeders
 }
