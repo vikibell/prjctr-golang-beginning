@@ -7,7 +7,6 @@ import (
 )
 
 func TestSaveProcessedData(t *testing.T) {
-	server := Server{Memory: make([]camera.ProcessedData, 0)}
 	type args struct {
 		p Processor
 	}
@@ -33,7 +32,7 @@ func TestSaveProcessedData(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			server.setProcessor(tt.args.p)
+			server := NewServer(tt.args.p)
 			if err := server.saveProcessedData(); (err != nil) != tt.wantErr {
 				t.Errorf("saveProcessedData() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -71,6 +70,7 @@ func TestSendProcessedData(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+
 			if err := tt.args.server.sendProcessedData(tt.args.url); (err != nil) != tt.wantErr {
 				t.Errorf("sendProcessedData() error = %v, wantErr %v", err, tt.wantErr)
 			}
