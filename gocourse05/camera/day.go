@@ -18,7 +18,7 @@ type DayCamera struct {
 	ID        int
 	Name      string
 	Data      []Data
-	lightType int
+	lightType lightType
 }
 
 func NewDayCamera(id int, name string, data []Data) DayCamera {
@@ -45,8 +45,8 @@ func (dc DayCamera) ProcessData() (*ProcessedData, error) {
 
 	processedData := NewProcessedData(time.Now(), "")
 	for _, data := range cameraData {
-		if len(data.Animal) == 0 || len(data.Movement) == 0 {
-			return nil, errors.New("not enought data for processing")
+		if data.Animal == "" || data.Movement == "" {
+			return nil, errors.New("not enough data for processing")
 		}
 		animalMovement := fmt.Sprintf("%s, %s; ", data.Animal, data.Movement)
 		processedData.AnimalMovement += animalMovement

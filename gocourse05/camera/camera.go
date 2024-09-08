@@ -2,8 +2,10 @@ package camera
 
 import "time"
 
+type lightType int
+
 const (
-	noLight = iota + 1
+	noLight lightType = iota
 	infraredLight
 	sunLight
 )

@@ -22,7 +22,7 @@ type InfraredCamera struct {
 	ID        int
 	Name      string
 	Data      []Data
-	lightType int
+	lightType lightType
 }
 
 func NewInfraredCamera(id int, name string, data []Data) InfraredCamera {

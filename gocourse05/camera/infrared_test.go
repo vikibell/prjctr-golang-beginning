@@ -11,7 +11,7 @@ func TestInfraredCameraRetrieveData(t *testing.T) {
 
 		data, err := c.RetrieveData()
 		if err != nil {
-			t.Errorf("RetrieveData() should not have error: %s", err)
+			t.Fatalf("RetrieveData() should not have error: %s", err)
 		}
 
 		if len(data) == 0 {
