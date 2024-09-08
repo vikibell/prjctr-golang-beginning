@@ -17,7 +17,7 @@ type TemperatureSensor struct {
 }
 
 func (t TemperatureSensor) measure() Data {
-	return NewData(t.ID, t.Temperature)
+	return Data{SensorID: t.ID, Measurement: t.Temperature}
 }
 
 type LightSensor struct {
@@ -26,7 +26,7 @@ type LightSensor struct {
 }
 
 func (l LightSensor) measure() Data {
-	return NewData(l.ID, l.Light)
+	return Data{SensorID: l.ID, Measurement: l.Light}
 }
 
 type WetnessSensor struct {
@@ -35,7 +35,7 @@ type WetnessSensor struct {
 }
 
 func (w WetnessSensor) measure() Data {
-	return NewData(w.ID, w.Wetness)
+	return Data{SensorID: w.ID, Measurement: w.Wetness}
 }
 
 type Data struct {
@@ -43,14 +43,7 @@ type Data struct {
 	Measurement int
 }
 
-func NewData(id int, measurement int) Data {
-	return Data{
-		SensorID:    id,
-		Measurement: measurement,
-	}
-}
-
-func measureSensors(sensors []Sensor, dataCh chan<- Data, ctx context.Context, wg *sync.WaitGroup) {
+func measureSensors(sensors []Sensor, dataCh chan<- Data, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	for _, sensor := range sensors {
@@ -60,7 +53,7 @@ func measureSensors(sensors []Sensor, dataCh chan<- Data, ctx context.Context, w
 	time.Sleep(2 * time.Second)
 }
 
-func centralSystem(dataCh <-chan Data, ctx context.Context, wg *sync.WaitGroup) {
+func centralSystem(ctx context.Context, dataCh <-chan Data, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	for {
