@@ -16,7 +16,7 @@ func main() {
 
 	err := server.saveProcessedData()
 	if err != nil {
-		fmt.Printf("Saving from camera %d data to memory failed. Error: %v\n", nightCamera.ID, err)
+		fmt.Printf("Saving from camera %d data to memory failed. Error: %v\n", nightCamera.ID(), err)
 	}
 
 	dayCamera := camera.NewDayCamera(2, "Canon XY-22", []camera.Data{
@@ -27,7 +27,7 @@ func main() {
 	server.setProcessor(dayCamera)
 	err = server.saveProcessedData()
 	if err != nil {
-		fmt.Printf("Saving from camera %d data to memory failed. Error: %v\n", dayCamera.ID, err)
+		fmt.Printf("Saving from camera %d data to memory failed. Error: %v\n", dayCamera.ID(), err)
 	}
 
 	infraredCamera := camera.NewInfraredCamera(1, "Nikon S60", []camera.Data{
@@ -38,7 +38,7 @@ func main() {
 	server.setProcessor(infraredCamera)
 	err = server.saveProcessedData()
 	if err != nil {
-		fmt.Printf("Saving from camera %d data to memory failed. Error: %v\n", infraredCamera.ID, err)
+		fmt.Printf("Saving from camera %d data to memory failed. Error: %v\n", infraredCamera.ID(), err)
 	}
 
 	err = server.sendProcessedData(serverURL)

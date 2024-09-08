@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-const nightCameraArtifact = "night"
+const nightCameraArtifact = " night"
 
 func NewNightCameraData(id int, animal, movement string) Data {
 	return Data{
@@ -18,44 +18,41 @@ func NewNightCameraData(id int, animal, movement string) Data {
 }
 
 type NightCamera struct {
-	ID        int
-	Name      string
-	Data      []Data
+	id        int
+	name      string
+	data      []Data
 	lightType lightType
 }
 
 func NewNightCamera(id int, name string, data []Data) NightCamera {
 	return NightCamera{
-		ID:        id,
-		Name:      name,
-		Data:      data,
+		id:        id,
+		name:      name,
+		data:      data,
 		lightType: noLight,
 	}
 }
 
-func (nc NightCamera) RetrieveData() ([]Data, error) {
-	if len(nc.Data) == 0 {
-		return nil, errors.New("no camera data found")
-	}
-
-	return nc.Data, nil
+func (nc NightCamera) ID() int {
+	return nc.id
 }
 
-func (nc NightCamera) ProcessData() (*ProcessedData, error) {
-	cameraData, err := nc.RetrieveData()
-	if err != nil {
-		return nil, err
+func (nc NightCamera) RetrieveData() []Data {
+	return nc.data
+}
+
+func (nc NightCamera) ProcessData() (ProcessedData, error) {
+	cameraData := nc.RetrieveData()
+	if len(cameraData) == 0 {
+		return ProcessedData{}, errors.New("not enough data for processing")
 	}
 
 	processedData := NewProcessedData(time.Now(), "")
 	for _, data := range cameraData {
-		if len(data.Animal) <= len(nightCameraArtifact) || len(data.Movement) <= len(nightCameraArtifact) {
-			return nil, errors.New("not enough data for processing")
-		}
 		animalMovement := fmt.Sprintf("%s, %s; ", data.Animal, data.Movement)
 		animalMovement = strings.ReplaceAll(animalMovement, nightCameraArtifact, "")
 		processedData.AnimalMovement += animalMovement
 	}
 
-	return &processedData, nil
+	return processedData, nil
 }

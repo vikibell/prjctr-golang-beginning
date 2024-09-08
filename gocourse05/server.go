@@ -10,8 +10,8 @@ import (
 const serverURL = "http://remote.animals.control"
 
 type Processor interface {
-	RetrieveData() ([]camera.Data, error)
-	ProcessData() (*camera.ProcessedData, error)
+	RetrieveData() []camera.Data
+	ProcessData() (camera.ProcessedData, error)
 }
 
 type Server struct {
@@ -36,7 +36,7 @@ func (s *Server) saveProcessedData() error {
 		return err
 	}
 
-	s.Memory = append(s.Memory, *processedData)
+	s.Memory = append(s.Memory, processedData)
 
 	return nil
 }

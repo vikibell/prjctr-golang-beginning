@@ -70,7 +70,6 @@ func TestSendProcessedData(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-
 			if err := tt.args.server.sendProcessedData(tt.args.url); (err != nil) != tt.wantErr {
 				t.Errorf("sendProcessedData() error = %v, wantErr %v", err, tt.wantErr)
 			}

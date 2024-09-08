@@ -6,29 +6,17 @@ import (
 
 func TestDayCameraRetrieveData(t *testing.T) {
 	t.Run("Found", func(t *testing.T) {
-		c := NewDayCamera(1, "Canon", []Data{NewDayCameraData(1, "Коза", "Побігла вліво")})
+		cameraData := NewDayCameraData(1, "Коза", "Побігла вліво")
+		c := NewDayCamera(1, "Canon", []Data{cameraData})
 
-		data, err := c.RetrieveData()
-		if err != nil {
-			t.Fatalf("RetrieveData() should not have error: %s", err)
+		data := c.RetrieveData()
+		if len(data) != 1 {
+			t.Fatalf("RetrieveData() should return 1 item.")
 		}
 
-		if len(data) == 0 {
-			t.Errorf("RetrieveData() should not return empty data.")
-		}
-
-		for _, d := range data {
-			if d.Animal != "Коза" || d.Movement != "Побігла вліво" {
-				t.Errorf("RetrieveData() = %+v", d)
-			}
-		}
-	})
-
-	t.Run("Not found", func(t *testing.T) {
-		c := NewDayCamera(1, "Canon", []Data{})
-		_, err := c.RetrieveData()
-		if err == nil {
-			t.Errorf("RetrieveData() should return error but got <nil>")
+		got := data[0]
+		if got != cameraData {
+			t.Errorf("Unexpected data: got=%+v, want=%+v", got, cameraData)
 		}
 	})
 }
@@ -39,20 +27,22 @@ func TestDayCameraProcessData(t *testing.T) {
 
 		pd, err := c.ProcessData()
 		if err != nil {
-			t.Errorf("processData() should not have error: %s", err)
+			t.Fatalf("processData() should not have error: %s", err)
 		}
 
-		if pd.AnimalMovement != "Коза, Побігла вліво; " {
-			t.Errorf("ProcessData() = %+v", pd)
+		got := pd.AnimalMovement
+		want := "Коза, Побігла вліво; "
+		if got != want {
+			t.Errorf("Unexpected data: got=%+v, want=%+v", got, want)
 		}
 	})
 
 	t.Run("Not found", func(t *testing.T) {
 		c := NewDayCamera(1, "Canon", []Data{})
 
-		_, err := c.RetrieveData()
+		_, err := c.ProcessData()
 		if err == nil {
-			t.Errorf("RetrieveData() should return error but got <nil>")
+			t.Errorf("ProcessData() should return error but got <nil>")
 		}
 	})
 }
