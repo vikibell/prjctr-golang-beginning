@@ -2,11 +2,16 @@ package main
 
 import (
 	"fmt"
+	"math/rand/v2"
 	"time"
 )
 
-const openRequest = "open"
-const closeRequest = "close"
+type request int
+
+const (
+	openRequest request = iota
+	closeRequest
+)
 
 type Logs map[int64]string // Index is timestamp unix nanoseconds
 
@@ -30,7 +35,7 @@ type Enclosure struct {
 
 type Request struct {
 	EnclosureID int
-	Request     string
+	Request     request
 }
 
 type Feeder struct {
@@ -42,7 +47,7 @@ func manageEnclosures(enclosures map[int]Enclosure, requests <-chan Request, log
 	for request := range requests {
 		e, exists := enclosures[request.EnclosureID]
 		if exists {
-			time.Sleep(1 * time.Second)
+			time.Sleep((200 + time.Duration(rand.N(300))) * time.Millisecond)
 			switch request.Request {
 			case openRequest:
 				if e.IsOpen {
@@ -65,7 +70,7 @@ func manageEnclosures(enclosures map[int]Enclosure, requests <-chan Request, log
 }
 
 func collectState(a Animal, monitorSystem chan<- Animal, logs chan<- string) {
-	time.Sleep(5 * time.Second)
+	time.Sleep((200 + time.Duration(rand.N(300))) * time.Millisecond)
 
 	if a.Mood < 50 {
 		logs <- fmt.Sprintf("[Info] Animal %d is not happy", a.ID)
@@ -83,7 +88,7 @@ func collectState(a Animal, monitorSystem chan<- Animal, logs chan<- string) {
 }
 
 func checkFeeder(f Feeder, statuses chan<- Feeder, logs chan<- string) {
-	time.Sleep(2 * time.Second)
+	time.Sleep((200 + time.Duration(rand.N(300))) * time.Millisecond)
 
 	if f.IsEmpty {
 		logs <- fmt.Sprintf("[Info] Feeder %d is empty", f.ID)

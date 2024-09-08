@@ -34,7 +34,7 @@ func TestRaceConditions(t *testing.T) {
 		}()
 	}
 
-	requests := [2]string{openRequest, closeRequest}
+	requests := [2]request{openRequest, closeRequest}
 	requestsCh := make(chan Request, len(enclosures))
 	for _, enclosure := range enclosures {
 		requestsCh <- Request{EnclosureID: enclosure.ID, Request: requests[rand.IntN(len(requests))]}
@@ -84,7 +84,7 @@ func TestDeadlocks(t *testing.T) {
 		}()
 	}
 
-	requests := [2]string{openRequest, closeRequest}
+	requests := [2]request{openRequest, closeRequest}
 	requestsCh := make(chan Request, len(enclosures))
 	for _, enclosure := range enclosures {
 		requestsCh <- Request{EnclosureID: enclosure.ID, Request: requests[rand.IntN(len(requests))]}

@@ -23,7 +23,7 @@ func generateAnimals(n int) []Animal {
 // Генерує тестові дані для вольєрів
 func generateEnclosures(n int) map[int]Enclosure {
 	enclosures := make(map[int]Enclosure)
-	for i := 0; i < n; i++ {
+	for i := range n {
 		enclosures[i] = Enclosure{
 			ID:     i,
 			IsOpen: rand.IntN(2) == 1,
@@ -71,7 +71,7 @@ func main() {
 		}()
 	}
 
-	requests := [2]string{openRequest, closeRequest}
+	requests := [2]request{openRequest, closeRequest}
 	requestsCh := make(chan Request, len(enclosures))
 	for _, enclosure := range enclosures {
 		requestsCh <- Request{EnclosureID: enclosure.ID, Request: requests[rand.IntN(len(requests))]}
