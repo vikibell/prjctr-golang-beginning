@@ -2,20 +2,20 @@ package main
 
 func main() {
 	cow := Animal{
-		ID:     0,
-		Name:   "",
-		Specie: "",
+		ID:     1,
+		Name:   "Milka",
+		Specie: "bull",
 	}
 
 	horse := Animal{
-		ID:     0,
-		Name:   "",
-		Specie: "",
+		ID:     1,
+		Name:   "Okl",
+		Specie: "horse",
 	}
 
 	zone := FeedingZone{
-		ID:      0,
-		Animals: nil,
+		ID:      1,
+		Animals: make([]Animal, 0),
 	}
 	zone.addAnimal(cow)
 	zone.addAnimal(horse)
