@@ -31,18 +31,18 @@ func (fz *FeedingZone) AddAnimal(a Animal) {
 	fz.Animals = append(fz.Animals, a)
 }
 
+type ZoneAnalyzer struct{}
+
 type AnalyzerResult struct {
 	AnimalsInZone bool
 	Species       map[Specie]int // Map with specie type as index and count as key
 }
 
-type ZoneAnalyzer struct{}
-
 func (za ZoneAnalyzer) Analyze(zone Zone) AnalyzerResult {
 	animals := zone.GetAnimals()
 	result := AnalyzerResult{
 		AnimalsInZone: false,
-		Species:       make(map[Specie]int),
+		Species:       nil,
 	}
 
 	if len(animals) == 0 {
@@ -50,9 +50,11 @@ func (za ZoneAnalyzer) Analyze(zone Zone) AnalyzerResult {
 	}
 
 	result.AnimalsInZone = true
+	species := make(map[Specie]int)
 	for _, animal := range animals {
-		result.Species[animal.Specie] += 1
+		species[animal.Specie] += 1
 	}
+	result.Species = species
 
 	return result
 }
@@ -63,12 +65,12 @@ type FoodBracket struct {
 }
 
 type Feeder interface {
-	pourOn(ar AnalyzerResult) []FoodBracket
+	pourOn(ar AnalyzerResult) SortedFoodBrackets
 }
 
 type AutomaticFeeder struct{}
 
-func (f AutomaticFeeder) pourOn(ar AnalyzerResult) []FoodBracket {
+func (f AutomaticFeeder) pourOn(ar AnalyzerResult) SortedFoodBrackets {
 	if !ar.AnimalsInZone {
 		return nil
 	}
@@ -93,4 +95,12 @@ func (f AutomaticFeeder) pourOn(ar AnalyzerResult) []FoodBracket {
 	}
 
 	return brackets
+}
+
+type SortedFoodBrackets []FoodBracket
+
+func (fb SortedFoodBrackets) Len() int      { return len(fb) }
+func (fb SortedFoodBrackets) Swap(i, j int) { fb[i], fb[j] = fb[j], fb[i] }
+func (fb SortedFoodBrackets) Less(i, j int) bool {
+	return fb[i].Amount > fb[j].Amount
 }
