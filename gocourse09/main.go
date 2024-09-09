@@ -1,31 +1,43 @@
 package main
 
+import "fmt"
+
 func main() {
-	cow := Animal{
-		ID:     1,
+	bigCow := Animal{
 		Name:   "Milka",
-		Specie: "bull",
+		Specie: bull,
 	}
 
-	horse := Animal{
-		ID:     1,
+	bigHorse := Animal{
 		Name:   "Okl",
-		Specie: "horse",
+		Specie: horse,
+	}
+
+	smallHorse := Animal{
+		Name:   "Willy",
+		Specie: horse,
+	}
+
+	cat := Animal{
+		Name:   "Anna",
+		Specie: 100,
 	}
 
 	zone := FeedingZone{
-		ID:      1,
 		Animals: make([]Animal, 0),
 	}
-	zone.addAnimal(cow)
-	zone.addAnimal(horse)
+	zone.AddAnimal(bigCow)
+	zone.AddAnimal(bigHorse)
+	zone.AddAnimal(smallHorse)
+	zone.AddAnimal(cat)
 
 	zoneAnalyzer := ZoneAnalyzer{}
-	result := zoneAnalyzer.analyze(zone)
-
-	food := NewFoodBracket(result)
+	result := zoneAnalyzer.Analyze(&zone)
 
 	feeder := AutomaticFeeder{}
-	feeder.feed(cow, food)
-	feeder.feed(horse, food)
+	foodBracket := feeder.pourOn(result)
+
+	for _, food := range foodBracket {
+		fmt.Printf("Poured on %s in amount of %d\n", food.Type, food.Amount)
+	}
 }

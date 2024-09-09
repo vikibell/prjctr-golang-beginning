@@ -1,53 +1,48 @@
 package main
 
-import "fmt"
+type Specie int
 
-type Specie string
+const (
+	bull Specie = iota
+	horse
+	buffalo
+	elk
+)
 
 type Animal struct {
-	ID     int
 	Name   string
 	Specie Specie
 }
 
-type FoodBracket struct {
-	ID     int
-	Amount int
-	Type   string
-}
-
 type Zone interface {
-	getAnimals() []Animal
-	addAnimal(a Animal)
+	GetAnimals() []Animal
+	AddAnimal(a Animal)
 }
 
 type FeedingZone struct {
-	ID      int
 	Animals []Animal
 }
 
-func (fz FeedingZone) getAnimals() []Animal {
-	return fz.getAnimals()
+func (fz *FeedingZone) GetAnimals() []Animal {
+	return fz.Animals
 }
 
-func (fz FeedingZone) addAnimal(a Animal) {
+func (fz *FeedingZone) AddAnimal(a Animal) {
 	fz.Animals = append(fz.Animals, a)
 }
 
 type AnalyzerResult struct {
 	AnimalsInZone bool
-	Species       []Specie
-	Count         int
+	Species       map[Specie]int // Map with specie type as index and count as key
 }
 
 type ZoneAnalyzer struct{}
 
-func (za ZoneAnalyzer) analyze(zone Zone) AnalyzerResult {
-	animals := zone.getAnimals()
+func (za ZoneAnalyzer) Analyze(zone Zone) AnalyzerResult {
+	animals := zone.GetAnimals()
 	result := AnalyzerResult{
 		AnimalsInZone: false,
-		Species:       make([]Specie, 0),
-		Count:         0,
+		Species:       make(map[Specie]int),
 	}
 
 	if len(animals) == 0 {
@@ -55,28 +50,47 @@ func (za ZoneAnalyzer) analyze(zone Zone) AnalyzerResult {
 	}
 
 	result.AnimalsInZone = true
-	for i, animal := range animals {
-		result.Count += 1
-		result.Species[i] = animal.Specie
+	for _, animal := range animals {
+		result.Species[animal.Specie] += 1
 	}
 
 	return result
 }
 
+type FoodBracket struct {
+	Amount int
+	Type   string
+}
+
 type Feeder interface {
-	feed(a Animal, fb FoodBracket)
+	pourOn(ar AnalyzerResult) []FoodBracket
 }
 
 type AutomaticFeeder struct{}
 
-func (f AutomaticFeeder) feed(a Animal, fb FoodBracket) {
-	fmt.Printf("Animal %s is eating %s.", a.Name, fb.Type)
-}
-
-func NewFoodBracket(ar AnalyzerResult) FoodBracket {
-	return FoodBracket{
-		ID:     0,
-		Amount: 0,
-		Type:   "",
+func (f AutomaticFeeder) pourOn(ar AnalyzerResult) []FoodBracket {
+	if !ar.AnimalsInZone {
+		return nil
 	}
+
+	var brackets []FoodBracket
+
+	for specie, count := range ar.Species {
+		fb := FoodBracket{
+			Amount: count,
+		}
+		switch specie {
+		case bull, buffalo:
+			fb.Type = "gross"
+		case horse:
+			fb.Type = "apples"
+		case elk:
+			fb.Type = "eggs"
+		default:
+			fb.Type = "dry food"
+		}
+		brackets = append(brackets, fb)
+	}
+
+	return brackets
 }
