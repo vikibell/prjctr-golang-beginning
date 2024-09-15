@@ -45,6 +45,10 @@ func generateFeeders(n int) []Feeder {
 }
 
 func main() {
+	run()
+}
+
+func run() {
 	animals := generateAnimals(8)
 	feeders := generateFeeders(5)
 	enclosures := generateEnclosures(5)
