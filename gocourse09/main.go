@@ -2,38 +2,32 @@ package main
 
 import (
 	"fmt"
+	"math/rand/v2"
+	"strconv"
 
 	"gocourse09/analyzer"
 	"gocourse09/feeder"
 	"gocourse09/zone"
 )
 
+func generateAnimals(n int) []zone.Animal {
+	animals := make([]zone.Animal, n)
+	for i := range animals {
+		animals[i] = zone.Animal{
+			Name:   "Name" + strconv.Itoa(i),
+			Specie: zone.Specie(rand.IntN(10)),
+		}
+	}
+
+	return animals
+}
+
 func main() {
-	bigCow := zone.Animal{
-		Name:   "Milka",
-		Specie: zone.Bull,
-	}
-
-	bigHorse := zone.Animal{
-		Name:   "Okl",
-		Specie: zone.Horse,
-	}
-
-	smallHorse := zone.Animal{
-		Name:   "Willy",
-		Specie: zone.Horse,
-	}
-
-	cat := zone.Animal{
-		Name:   "Anna",
-		Specie: 100,
-	}
-
+	animals := generateAnimals(100)
 	z := zone.FeedingZone{}
-	z.AddAnimal(bigCow)
-	z.AddAnimal(bigHorse)
-	z.AddAnimal(smallHorse)
-	z.AddAnimal(cat)
+	for _, animal := range animals {
+		z.AddAnimal(animal)
+	}
 
 	zoneAnalyzer := analyzer.ZoneAnalyzer{}
 	result := zoneAnalyzer.Analyze(&z)
