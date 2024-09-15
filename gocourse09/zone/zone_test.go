@@ -7,7 +7,8 @@ func TestFeedingZone_GetAnimals(t *testing.T) {
 		Name:   "Milka",
 		Specie: Bull,
 	}
-	feedingZone := FeedingZone{Animals: []Animal{bigCow}}
+	feedingZone := FeedingZone{}
+	feedingZone.AddAnimal(bigCow)
 
 	animals := feedingZone.GetAnimals()
 	if len(animals) != 1 {

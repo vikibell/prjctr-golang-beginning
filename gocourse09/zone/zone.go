@@ -20,13 +20,13 @@ type Zone interface {
 }
 
 type FeedingZone struct {
-	Animals []Animal
+	animals []Animal
 }
 
 func (fz *FeedingZone) GetAnimals() []Animal {
-	return fz.Animals
+	return fz.animals
 }
 
 func (fz *FeedingZone) AddAnimal(a Animal) {
-	fz.Animals = append(fz.Animals, a)
+	fz.animals = append(fz.animals, a)
 }

@@ -1,8 +1,9 @@
 package feeder
 
 import (
-	a "gocourse09/analyzer"
-	z "gocourse09/zone"
+	"gocourse09/analyzer"
+	"gocourse09/zone"
+	"sort"
 )
 
 type FoodBracket struct {
@@ -11,34 +12,35 @@ type FoodBracket struct {
 }
 
 type Feeder interface {
-	PourOn(ar a.Result) SortedFoodBrackets
+	PourOn(ar analyzer.Result) SortedFoodBrackets
 }
 
 type AutomaticFeeder struct{}
 
-func (f AutomaticFeeder) PourOn(ar a.Result) SortedFoodBrackets {
+func (f AutomaticFeeder) PourOn(ar analyzer.Result) SortedFoodBrackets {
 	if !ar.AnimalsInZone {
 		return nil
 	}
 
-	var brackets []FoodBracket
+	var brackets SortedFoodBrackets
 
 	for specie, count := range ar.Species {
 		fb := FoodBracket{
 			Amount: count,
 		}
 		switch specie {
-		case z.Bull, z.Buffalo:
+		case zone.Bull, zone.Buffalo:
 			fb.Type = "gross"
-		case z.Horse:
+		case zone.Horse:
 			fb.Type = "apples"
-		case z.Elk:
+		case zone.Elk:
 			fb.Type = "eggs"
 		default:
 			fb.Type = "dry food"
 		}
 		brackets = append(brackets, fb)
 	}
+	sort.Sort(brackets)
 
 	return brackets
 }

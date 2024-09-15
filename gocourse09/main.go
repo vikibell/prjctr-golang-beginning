@@ -3,45 +3,43 @@ package main
 import (
 	"fmt"
 
-	a "gocourse09/analyzer"
-	f "gocourse09/feeder"
-	z "gocourse09/zone"
+	"gocourse09/analyzer"
+	"gocourse09/feeder"
+	"gocourse09/zone"
 )
 
 func main() {
-	bigCow := z.Animal{
+	bigCow := zone.Animal{
 		Name:   "Milka",
-		Specie: z.Bull,
+		Specie: zone.Bull,
 	}
 
-	bigHorse := z.Animal{
+	bigHorse := zone.Animal{
 		Name:   "Okl",
-		Specie: z.Horse,
+		Specie: zone.Horse,
 	}
 
-	smallHorse := z.Animal{
+	smallHorse := zone.Animal{
 		Name:   "Willy",
-		Specie: z.Horse,
+		Specie: zone.Horse,
 	}
 
-	cat := z.Animal{
+	cat := zone.Animal{
 		Name:   "Anna",
 		Specie: 100,
 	}
 
-	zone := z.FeedingZone{
-		Animals: make([]z.Animal, 0),
-	}
-	zone.AddAnimal(bigCow)
-	zone.AddAnimal(bigHorse)
-	zone.AddAnimal(smallHorse)
-	zone.AddAnimal(cat)
+	z := zone.FeedingZone{}
+	z.AddAnimal(bigCow)
+	z.AddAnimal(bigHorse)
+	z.AddAnimal(smallHorse)
+	z.AddAnimal(cat)
 
-	zoneAnalyzer := a.ZoneAnalyzer{}
-	result := zoneAnalyzer.Analyze(&zone)
+	zoneAnalyzer := analyzer.ZoneAnalyzer{}
+	result := zoneAnalyzer.Analyze(&z)
 
-	feeder := f.AutomaticFeeder{}
-	foodBracket := feeder.PourOn(result)
+	f := feeder.AutomaticFeeder{}
+	foodBracket := f.PourOn(result)
 
 	for _, food := range foodBracket {
 		fmt.Printf("Poured on %s in amount of %d\n", food.Type, food.Amount)

@@ -1,16 +1,16 @@
 package feeder
 
 import (
-	a "gocourse09/analyzer"
-	z "gocourse09/zone"
-	"reflect"
+	"github.com/google/go-cmp/cmp"
+	"gocourse09/analyzer"
+	"gocourse09/zone"
 	"sort"
 	"testing"
 )
 
 func TestAutomaticFeeder_PourOn(t *testing.T) {
-	feedingZone := z.FeedingZone{}
-	zoneAnalyzer := a.ZoneAnalyzer{}
+	feedingZone := zone.FeedingZone{}
+	zoneAnalyzer := analyzer.ZoneAnalyzer{}
 	feeder := AutomaticFeeder{}
 
 	t.Run("No animals in zone", func(t *testing.T) {
@@ -23,17 +23,17 @@ func TestAutomaticFeeder_PourOn(t *testing.T) {
 	})
 
 	t.Run("Animals in zone", func(t *testing.T) {
-		bigCow := z.Animal{
+		bigCow := zone.Animal{
 			Name:   "Milka",
-			Specie: z.Bull,
+			Specie: zone.Bull,
 		}
-		smallCow := z.Animal{
+		smallCow := zone.Animal{
 			Name:   "Milka",
-			Specie: z.Bull,
+			Specie: zone.Bull,
 		}
-		smallHorse := z.Animal{
+		smallHorse := zone.Animal{
 			Name:   "Willy",
-			Specie: z.Horse,
+			Specie: zone.Horse,
 		}
 		feedingZone.AddAnimal(bigCow)
 		feedingZone.AddAnimal(smallCow)
@@ -53,13 +53,8 @@ func TestAutomaticFeeder_PourOn(t *testing.T) {
 			},
 		}
 		sort.Sort(want)
-		sort.Sort(got)
 
-		if len(got) != len(want) {
-			t.Fatalf("Analyze() should return slice with 2 items.")
-		}
-
-		if !reflect.DeepEqual(got, want) {
+		if !cmp.Equal(got, want) {
 			t.Errorf("Unexpected data: got=%+v, want=%+v", got, want)
 		}
 	})
