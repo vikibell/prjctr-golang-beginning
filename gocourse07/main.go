@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+func main() {
+	run()
+}
+
 func generateLightSensors(n int) []Sensor {
 	sensors := make([]Sensor, n)
 	for i := range sensors {
@@ -40,23 +44,22 @@ func generateTemperatureSensors(n int) []Sensor {
 	return sensors
 }
 
-func main() {
+func run() {
 	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 	defer cancel()
 
-	dataChannel := make(chan Data, 4)
+	dataChannel := make(chan Data, 36)
 
 	var wg sync.WaitGroup
 
-	lightSensors := generateLightSensors(1)
-	wetnessSensors := generateWetnessSensors(2)
-	temperatureSensors := generateTemperatureSensors(3)
+	lightSensors := generateLightSensors(10)
+	wetnessSensors := generateWetnessSensors(15)
+	temperatureSensors := generateTemperatureSensors(11)
 
 	wg.Add(4)
 	go measureSensors(lightSensors, dataChannel, &wg)
 	go measureSensors(wetnessSensors, dataChannel, &wg)
 	go measureSensors(temperatureSensors, dataChannel, &wg)
 	go centralSystem(ctx, dataChannel, &wg)
-
 	wg.Wait()
 }

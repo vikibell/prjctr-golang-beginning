@@ -61,10 +61,7 @@ func centralSystem(ctx context.Context, dataCh <-chan Data, wg *sync.WaitGroup) 
 		case <-ctx.Done():
 			fmt.Println("Central system is shutting down.")
 			return
-		case data, ok := <-dataCh:
-			if !ok {
-				return
-			}
+		case data := <-dataCh:
 			fmt.Printf("Central system processing data: %+v\n", data)
 			time.Sleep(2 * time.Second)
 		}
