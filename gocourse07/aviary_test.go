@@ -81,10 +81,7 @@ func Test_measureSensors(t *testing.T) {
 		received[data.SensorID] = data.Measurement
 	}
 
-	want := make([]int, 4)
-	want[1] = 20
-	want[2] = 40
-	want[3] = 10
+	want := []int{0, 20, 40, 10}
 
 	for i, got := range received {
 		if got != want[i] {
