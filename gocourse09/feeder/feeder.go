@@ -1,7 +1,6 @@
 package feeder
 
 import (
-	"gocourse09/analyzer"
 	"gocourse09/zone"
 	"sort"
 )
@@ -12,12 +11,12 @@ type FoodBracket struct {
 }
 
 type Feeder interface {
-	PourOn(ar analyzer.Result) SortedFoodBrackets
+	PourOn(ar zone.Result) SortedFoodBrackets
 }
 
 type AutomaticFeeder struct{}
 
-func (f AutomaticFeeder) PourOn(ar analyzer.Result) SortedFoodBrackets {
+func (f AutomaticFeeder) PourOn(ar zone.Result) SortedFoodBrackets {
 	if !ar.AnimalsInZone {
 		return nil
 	}

@@ -5,7 +5,6 @@ import (
 	"math/rand/v2"
 	"strconv"
 
-	"gocourse09/analyzer"
 	"gocourse09/feeder"
 	"gocourse09/zone"
 )
@@ -29,8 +28,8 @@ func main() {
 		z.AddAnimal(animal)
 	}
 
-	zoneAnalyzer := analyzer.ZoneAnalyzer{}
-	result := zoneAnalyzer.Analyze(&z)
+	animalsAnalyzer := zone.AnimalsAnalyzer{}
+	result := animalsAnalyzer.Analyze(&z)
 
 	f := feeder.AutomaticFeeder{}
 	foodBracket := f.PourOn(result)

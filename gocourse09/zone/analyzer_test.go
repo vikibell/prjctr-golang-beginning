@@ -1,17 +1,16 @@
-package analyzer
+package zone
 
 import (
 	"github.com/google/go-cmp/cmp"
-	"gocourse09/zone"
 	"testing"
 )
 
-func TestZoneAnalyzer_Analyze(t *testing.T) {
-	feedingZone := zone.FeedingZone{}
-	zoneAnalyzer := ZoneAnalyzer{}
+func TestAnimalsAnalyzer_Analyze(t *testing.T) {
+	feedingZone := FeedingZone{}
+	animalsAnalyzer := AnimalsAnalyzer{}
 
 	t.Run("No animals in zone", func(t *testing.T) {
-		got := zoneAnalyzer.Analyze(&feedingZone)
+		got := animalsAnalyzer.Analyze(&feedingZone)
 
 		want := Result{
 			AnimalsInZone: false,
@@ -24,22 +23,22 @@ func TestZoneAnalyzer_Analyze(t *testing.T) {
 	})
 
 	t.Run("Animals in zone", func(t *testing.T) {
-		bigCow := zone.Animal{
+		bigCow := Animal{
 			Name:   "Milka",
-			Specie: zone.Bull,
+			Specie: Bull,
 		}
-		smallCow := zone.Animal{
+		smallCow := Animal{
 			Name:   "Milka",
-			Specie: zone.Bull,
+			Specie: Bull,
 		}
 		feedingZone.AddAnimal(bigCow)
 		feedingZone.AddAnimal(smallCow)
 
-		got := zoneAnalyzer.Analyze(&feedingZone)
+		got := animalsAnalyzer.Analyze(&feedingZone)
 		want := Result{
 			AnimalsInZone: true,
-			Species: map[zone.Specie]int{
-				zone.Bull: 2,
+			Species: map[Specie]int{
+				Bull: 2,
 			},
 		}
 

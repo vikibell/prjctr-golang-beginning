@@ -2,7 +2,6 @@ package feeder
 
 import (
 	"github.com/google/go-cmp/cmp"
-	"gocourse09/analyzer"
 	"gocourse09/zone"
 	"sort"
 	"testing"
@@ -10,11 +9,11 @@ import (
 
 func TestAutomaticFeeder_PourOn(t *testing.T) {
 	feedingZone := zone.FeedingZone{}
-	zoneAnalyzer := analyzer.ZoneAnalyzer{}
+	animalsAnalyzer := zone.AnimalsAnalyzer{}
 	feeder := AutomaticFeeder{}
 
 	t.Run("No animals in zone", func(t *testing.T) {
-		result := zoneAnalyzer.Analyze(&feedingZone)
+		result := animalsAnalyzer.Analyze(&feedingZone)
 
 		got := feeder.PourOn(result)
 		if got != nil {
@@ -39,7 +38,7 @@ func TestAutomaticFeeder_PourOn(t *testing.T) {
 		feedingZone.AddAnimal(smallCow)
 		feedingZone.AddAnimal(smallHorse)
 
-		result := zoneAnalyzer.Analyze(&feedingZone)
+		result := animalsAnalyzer.Analyze(&feedingZone)
 		got := feeder.PourOn(result)
 
 		want := SortedFoodBrackets{
