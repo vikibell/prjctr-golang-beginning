@@ -23,6 +23,11 @@ func (la *LizardAquariumBuilder) SetSaltLevel(level int) Builder {
 	return la
 }
 
+func (la *LizardAquariumBuilder) SetPollutionLevel(pLevel int) Builder {
+	la.aquarium.pollutionLevel = pLevel
+	return la
+}
+
 func (la *LizardAquariumBuilder) Build() *Aquarium {
 	return la.aquarium
 }

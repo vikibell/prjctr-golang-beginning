@@ -23,6 +23,11 @@ func (ta *TurtleAquariumBuilder) SetSaltLevel(level int) Builder {
 	return ta
 }
 
+func (ta *TurtleAquariumBuilder) SetPollutionLevel(pLevel int) Builder {
+	ta.aquarium.pollutionLevel = pLevel
+	return ta
+}
+
 func (ta *TurtleAquariumBuilder) Build() *Aquarium {
 	return ta.aquarium
 }

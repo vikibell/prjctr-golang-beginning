@@ -14,12 +14,17 @@ func (sa *SnakeAquariumBuilder) SetSize(size int) Builder {
 }
 
 func (sa *SnakeAquariumBuilder) SetAnimal(animalName string) Builder {
-	sa.aquarium.aimalName = "Snake " + animalName
+	sa.aquarium.animalName = "Snake " + animalName
 	return sa
 }
 
 func (sa *SnakeAquariumBuilder) SetSaltLevel(level int) Builder {
 	sa.aquarium.saltLevel = level
+	return sa
+}
+
+func (sa *SnakeAquariumBuilder) SetPollutionLevel(pLevel int) Builder {
+	sa.aquarium.pollutionLevel = pLevel
 	return sa
 }
 

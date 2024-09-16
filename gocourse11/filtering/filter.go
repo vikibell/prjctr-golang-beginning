@@ -1,29 +1,41 @@
 package filtering
 
-type cleanerLevel int
+type CleanerLevel int
 
 const (
-	No cleanerLevel = iota
+	No CleanerLevel = iota
 	Low
 	Middle
 	High
 )
 
 type Filter struct {
-	cleanLevel    cleanerLevel
+	cleanLevel    CleanerLevel
 	absorber      string
 	waterImprover string
 }
 
+func (f Filter) CleanLevel() CleanerLevel {
+	return f.cleanLevel
+}
+
+func (f Filter) Absorber() string {
+	return f.absorber
+}
+
+func (f Filter) WaterImprover() string {
+	return f.waterImprover
+}
+
 type option struct {
-	cleanLevel    cleanerLevel
+	cleanLevel    CleanerLevel
 	absorber      string
 	waterImprover string
 }
 
 type Option func(opt *option)
 
-func WithCleanLevel(cleanLevel cleanerLevel) Option {
+func WithCleanLevel(cleanLevel CleanerLevel) Option {
 	return func(o *option) {
 		o.cleanLevel = cleanLevel
 	}
@@ -51,32 +63,4 @@ func NewFilter(options ...Option) Filter {
 		absorber:      o.absorber,
 		waterImprover: o.waterImprover,
 	}
-}
-
-func GetFilter(cleanerLevel cleanerLevel) Filter {
-	if cleanerLevel == Low {
-		return NewFilter(
-			WithCleanLevel(Low),
-			WithAbsorber("sand"),
-			WithWaterImprover("t2w"),
-		)
-	}
-
-	if cleanerLevel == Middle {
-		return NewFilter(
-			WithCleanLevel(Middle),
-			WithAbsorber("coal"),
-			WithWaterImprover("cn2"),
-		)
-	}
-
-	if cleanerLevel == High {
-		return NewFilter(
-			WithCleanLevel(High),
-			WithAbsorber("vibranium"),
-			WithWaterImprover("yy78"),
-		)
-	}
-
-	return NewFilter(WithCleanLevel(No))
 }
