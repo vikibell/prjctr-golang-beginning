@@ -43,6 +43,6 @@ func run(aquariums []terrarium.Aquarium) {
 	pl := t.CalculatePollutionLevel()
 	t.SetFilter(filtering.SelectFilter(pl))
 
-	fmt.Printf("Based on pollution level %d filter with such characteristics was selected:\n cleaner level: %d, absorber type: %s, water improver: %s\n",
+	fmt.Printf("Based on pollution level %d filter with such characteristics was selected:\ncleaner level: %d, absorber type: %s, water improver: %s\n",
 		pl, t.Filter().CleanLevel(), t.Filter().Absorber(), t.Filter().WaterImprover())
 }
