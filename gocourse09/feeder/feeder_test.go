@@ -3,7 +3,6 @@ package feeder
 import (
 	"github.com/google/go-cmp/cmp"
 	"gocourse09/zone"
-	"sort"
 	"testing"
 )
 
@@ -41,17 +40,16 @@ func TestAutomaticFeeder_PourOn(t *testing.T) {
 		result := animalsAnalyzer.Analyze(&feedingZone)
 		got := feeder.PourOn(result)
 
-		want := SortedFoodBrackets{
-			{
-				Amount: 2,
-				Type:   "gross",
-			},
+		want := []FoodBracket{
 			{
 				Amount: 1,
 				Type:   "apples",
 			},
+			{
+				Amount: 2,
+				Type:   "gross",
+			},
 		}
-		sort.Sort(want)
 
 		if !cmp.Equal(got, want) {
 			t.Errorf("Unexpected data: got=%+v, want=%+v", got, want)

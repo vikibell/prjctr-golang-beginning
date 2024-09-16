@@ -1,8 +1,9 @@
 package feeder
 
 import (
+	"cmp"
 	"gocourse09/zone"
-	"sort"
+	"slices"
 )
 
 type FoodBracket struct {
@@ -11,17 +12,17 @@ type FoodBracket struct {
 }
 
 type Feeder interface {
-	PourOn(ar zone.Result) SortedFoodBrackets
+	PourOn(ar zone.Result) []FoodBracket
 }
 
 type AutomaticFeeder struct{}
 
-func (f AutomaticFeeder) PourOn(ar zone.Result) SortedFoodBrackets {
+func (f AutomaticFeeder) PourOn(ar zone.Result) []FoodBracket {
 	if !ar.AnimalsInZone {
 		return nil
 	}
 
-	var brackets SortedFoodBrackets
+	var brackets []FoodBracket
 
 	for specie, count := range ar.Species {
 		fb := FoodBracket{
@@ -39,15 +40,10 @@ func (f AutomaticFeeder) PourOn(ar zone.Result) SortedFoodBrackets {
 		}
 		brackets = append(brackets, fb)
 	}
-	sort.Sort(brackets)
+
+	slices.SortFunc(brackets, func(a, b FoodBracket) int {
+		return cmp.Compare(a.Amount, b.Amount)
+	})
 
 	return brackets
-}
-
-type SortedFoodBrackets []FoodBracket
-
-func (fb SortedFoodBrackets) Len() int      { return len(fb) }
-func (fb SortedFoodBrackets) Swap(i, j int) { fb[i], fb[j] = fb[j], fb[i] }
-func (fb SortedFoodBrackets) Less(i, j int) bool {
-	return fb[i].Amount > fb[j].Amount
 }
