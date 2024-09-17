@@ -1,13 +1,13 @@
-package filtering
+package filter
 
 import (
 	"reflect"
 	"testing"
 )
 
-func TestCreateFilter(t *testing.T) {
+func TestCreate(t *testing.T) {
 	type args struct {
-		cleanerLevel CleanerLevel
+		cleanLevel CleanLevel
 	}
 	tests := []struct {
 		name string
@@ -16,30 +16,30 @@ func TestCreateFilter(t *testing.T) {
 	}{
 		{
 			name: "Low pollution",
-			args: args{cleanerLevel: Low},
+			args: args{cleanLevel: Low},
 			want: Filter{cleanLevel: Low, absorber: "sand", waterImprover: "t2w"},
 		},
 		{
 			name: "Middle pollution",
-			args: args{cleanerLevel: Middle},
+			args: args{cleanLevel: Middle},
 			want: Filter{cleanLevel: Middle, absorber: "coal", waterImprover: "cn2"},
 		},
 		{
 			name: "High pollution",
-			args: args{cleanerLevel: High},
+			args: args{cleanLevel: High},
 			want: Filter{cleanLevel: High, absorber: "vibranium", waterImprover: "yy78"},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := CreateFilter(tt.args.cleanerLevel); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("CreateFilter(): got = %v, want = %v", got, tt.want)
+			if got := Create(tt.args.cleanLevel); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Create(): got = %v, want = %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestSelectFilter(t *testing.T) {
+func TestSelect(t *testing.T) {
 	type args struct {
 		pollutionLevel int
 	}
@@ -66,8 +66,8 @@ func TestSelectFilter(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := SelectFilter(tt.args.pollutionLevel); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SelectFilter(): got = %v, want = %v", got, tt.want)
+			if got := Select(tt.args.pollutionLevel); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Select(): got = %v, want = %v", got, tt.want)
 			}
 		})
 	}

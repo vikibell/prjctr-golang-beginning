@@ -1,17 +1,17 @@
 package terrarium
 
-import "gocourse11/filtering"
+import "github.com/vikibell/prjctr-golang-beginning/gocourse11/filter"
 
 type Terrarium struct {
 	aquariums []Aquarium
-	filter    filtering.Filter
+	filter    filter.Filter
 }
 
-func (t *Terrarium) Filter() filtering.Filter {
+func (t *Terrarium) Filter() filter.Filter {
 	return t.filter
 }
 
-func (t *Terrarium) SetFilter(filter filtering.Filter) {
+func (t *Terrarium) SetFilter(filter filter.Filter) {
 	t.filter = filter
 }
 
@@ -30,7 +30,7 @@ func (t *Terrarium) SetAquariums(aquariums []Aquarium) {
 func NewTerrarium() *Terrarium {
 	return &Terrarium{
 		aquariums: make([]Aquarium, 0),
-		filter:    filtering.CreateFilter(filtering.No),
+		filter:    filter.Create(filter.No),
 	}
 }
 

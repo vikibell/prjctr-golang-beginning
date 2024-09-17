@@ -1,4 +1,4 @@
-package filtering
+package filter
 
 import (
 	"reflect"
@@ -19,6 +19,6 @@ func TestNewFilter(t *testing.T) {
 	}
 
 	if got := filter; !reflect.DeepEqual(got, want) {
-		t.Errorf("TestNewFilter(): got = %v, want %v", got, want)
+		t.Errorf("NewFilter(): got = %v, want %v", got, want)
 	}
 }

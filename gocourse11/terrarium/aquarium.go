@@ -7,27 +7,15 @@ type Aquarium struct {
 	pollutionLevel int
 }
 
-func (a Aquarium) AnimalName() string {
-	return a.animalName
-}
-
-func (a Aquarium) SaltLevel() int {
-	return a.saltLevel
-}
-
 func (a Aquarium) PollutionLevel() int {
 	return a.pollutionLevel
-}
-
-func (a Aquarium) Size() int {
-	return a.size
 }
 
 type Builder interface {
 	SetSize(size int) Builder
 	SetAnimal(animalName string) Builder
 	SetSaltLevel(level int) Builder
-	SetPollutionLevel(pLevel int) Builder
+	SetPollutionLevel(level int) Builder
 	Build() *Aquarium
 }
 
@@ -39,11 +27,11 @@ func NewDirector(builder Builder) *Director {
 	return &Director{builder: builder}
 }
 
-func (d *Director) Construct(size int, animalName string, level int, pLevel int) *Aquarium {
+func (d *Director) Construct(size int, animalName string, saltLevel int, pollutionLevel int) *Aquarium {
 	return d.builder.
 		SetSize(size).
 		SetAnimal(animalName).
-		SetSaltLevel(level).
-		SetPollutionLevel(pLevel).
+		SetSaltLevel(saltLevel).
+		SetPollutionLevel(pollutionLevel).
 		Build()
 }

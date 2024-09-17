@@ -1,21 +1,21 @@
-package filtering
+package filter
 
-type CleanerLevel int
+type CleanLevel int
 
 const (
-	No CleanerLevel = iota
+	No CleanLevel = iota
 	Low
 	Middle
 	High
 )
 
 type Filter struct {
-	cleanLevel    CleanerLevel
+	cleanLevel    CleanLevel
 	absorber      string
 	waterImprover string
 }
 
-func (f Filter) CleanLevel() CleanerLevel {
+func (f Filter) CleanLevel() CleanLevel {
 	return f.cleanLevel
 }
 
@@ -28,14 +28,14 @@ func (f Filter) WaterImprover() string {
 }
 
 type option struct {
-	cleanLevel    CleanerLevel
+	cleanLevel    CleanLevel
 	absorber      string
 	waterImprover string
 }
 
 type Option func(opt *option)
 
-func WithCleanLevel(cleanLevel CleanerLevel) Option {
+func WithCleanLevel(cleanLevel CleanLevel) Option {
 	return func(o *option) {
 		o.cleanLevel = cleanLevel
 	}

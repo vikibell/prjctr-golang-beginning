@@ -1,7 +1,7 @@
-package filtering
+package filter
 
-func CreateFilter(cleanerLevel CleanerLevel) Filter {
-	if cleanerLevel == Low {
+func Create(cleanLevel CleanLevel) Filter {
+	if cleanLevel == Low {
 		return NewFilter(
 			WithCleanLevel(Low),
 			WithAbsorber("sand"),
@@ -9,7 +9,7 @@ func CreateFilter(cleanerLevel CleanerLevel) Filter {
 		)
 	}
 
-	if cleanerLevel == Middle {
+	if cleanLevel == Middle {
 		return NewFilter(
 			WithCleanLevel(Middle),
 			WithAbsorber("coal"),
@@ -17,7 +17,7 @@ func CreateFilter(cleanerLevel CleanerLevel) Filter {
 		)
 	}
 
-	if cleanerLevel == High {
+	if cleanLevel == High {
 		return NewFilter(
 			WithCleanLevel(High),
 			WithAbsorber("vibranium"),
@@ -28,15 +28,15 @@ func CreateFilter(cleanerLevel CleanerLevel) Filter {
 	return NewFilter(WithCleanLevel(No))
 }
 
-func SelectFilter(pollutionLevel int) Filter {
+func Select(pollutionLevel int) Filter {
 	switch {
 	case pollutionLevel >= 100 && pollutionLevel <= 500:
-		return CreateFilter(Low)
+		return Create(Low)
 	case pollutionLevel > 500 && pollutionLevel < 1000:
-		return CreateFilter(Middle)
+		return Create(Middle)
 	case pollutionLevel >= 1000:
-		return CreateFilter(High)
+		return Create(High)
 	default:
-		return CreateFilter(No)
+		return Create(No)
 	}
 }
