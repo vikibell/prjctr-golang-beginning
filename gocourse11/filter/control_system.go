@@ -1,31 +1,28 @@
 package filter
 
 func Create(cleanLevel CleanLevel) Filter {
-	if cleanLevel == Low {
+	switch cleanLevel {
+	case Low:
 		return NewFilter(
-			WithCleanLevel(Low),
+			WithCleanLevel(cleanLevel),
 			WithAbsorber("sand"),
 			WithWaterImprover("t2w"),
 		)
-	}
-
-	if cleanLevel == Middle {
+	case Middle:
 		return NewFilter(
-			WithCleanLevel(Middle),
+			WithCleanLevel(cleanLevel),
 			WithAbsorber("coal"),
 			WithWaterImprover("cn2"),
 		)
-	}
-
-	if cleanLevel == High {
+	case High:
 		return NewFilter(
-			WithCleanLevel(High),
+			WithCleanLevel(cleanLevel),
 			WithAbsorber("vibranium"),
 			WithWaterImprover("yy78"),
 		)
+	default:
+		return NewFilter(WithCleanLevel(No))
 	}
-
-	return NewFilter(WithCleanLevel(No))
 }
 
 func Select(pollutionLevel int) Filter {
