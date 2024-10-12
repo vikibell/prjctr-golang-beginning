@@ -1,7 +1,6 @@
 package user
 
 import (
-	"github.com/vikibell/prjctr-golang-beginning/gocourse18/domains/user/model"
 	"gorm.io/gorm"
 )
 
@@ -13,11 +12,11 @@ func NewUserRepository(db *gorm.DB) *Repository {
 	return &Repository{db: db}
 }
 
-func (r *Repository) FindAll(page int, limit int) (users []model.User, total int64, err error) {
+func (r *Repository) FindAll(page int, limit int) (users []User, total int64, err error) {
 	offset := (page - 1) * limit
 
 	err = r.db.
-		Model(&model.User{}).
+		Model(&User{}).
 		Count(&total).
 		Limit(limit).
 		Offset(offset).
@@ -26,9 +25,9 @@ func (r *Repository) FindAll(page int, limit int) (users []model.User, total int
 	return
 }
 
-func (r *Repository) FindOneById(id int) (user model.User, err error) {
+func (r *Repository) FindOneById(id int) (user User, err error) {
 	err = r.db.
-		Model(&model.User{}).
+		Model(&User{}).
 		First(&user, id).Error
 
 	return

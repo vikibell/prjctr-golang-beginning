@@ -1,7 +1,6 @@
 package statistic
 
 import (
-	model2 "github.com/vikibell/prjctr-golang-beginning/gocourse18/domains/statistic/model"
 	"gorm.io/gorm"
 )
 
@@ -13,11 +12,11 @@ func NewStatisticsRepository(db *gorm.DB) *Repository {
 	return &Repository{db: db}
 }
 
-func (r *Repository) FindAll(page int, limit int) (statistics []model2.Statistics, total int64, err error) {
+func (r *Repository) FindAll(page int, limit int) (statistics []Statistic, total int64, err error) {
 	offset := (page - 1) * limit
 
 	err = r.db.
-		Model(&model2.Statistics{}).
+		Model(&Statistic{}).
 		Count(&total).
 		Limit(limit).
 		Offset(offset).
@@ -26,9 +25,9 @@ func (r *Repository) FindAll(page int, limit int) (statistics []model2.Statistic
 	return
 }
 
-func (r *Repository) FindOneById(id int) (statistic model2.Statistics, err error) {
+func (r *Repository) FindOneById(id int) (statistic Statistic, err error) {
 	err = r.db.
-		Model(&model2.Statistics{}).
+		Model(&Statistic{}).
 		First(&statistic, id).Error
 
 	return
