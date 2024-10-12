@@ -131,19 +131,34 @@ func populateStatistics(db *sqlx.DB) {
 		return
 	}
 
-	var cities []string
-	err := db.Select(&cities, "SELECT DISTINCT city FROM users")
+	var statisticsResult []statistic.Statistic
+	err := db.Select(&statisticsResult, `
+		SELECT city,
+		  CASE
+           WHEN age BETWEEN 1 AND 8 THEN 1
+           WHEN age BETWEEN 9 AND 21 THEN 2
+           WHEN age BETWEEN 22 AND 40 THEN 3
+           WHEN age BETWEEN 41 AND 60 THEN 4
+           WHEN age BETWEEN 61 AND 100 THEN 5
+          END AS age_range,
+		  round(avg(taxi_count), 0) as average_trips
+		FROM users
+		GROUP BY city, age_range
+		ORDER BY city;
+       `)
 	if err != nil {
 		fmt.Printf("Failed to select: %v\n", err)
 		return
 	}
 
 	tx := db.MustBegin()
-	for _, city := range cities {
-		_, insertErr := tx.NamedExec(`INSERT INTO statistics (city) VALUES (:city)`, statistic.Statistic{City: city})
-		if insertErr != nil {
-			fmt.Printf("Failed to insert into table: %v\n", insertErr)
-		}
+
+	_, insertErr := tx.NamedExec(`
+		INSERT INTO statistics (city, average_trips, age_range) 
+		VALUES (:city, :average_trips, :age_range)`,
+		statisticsResult)
+	if insertErr != nil {
+		fmt.Printf("Failed to insert into table: %v\n", insertErr)
 	}
 
 	commitErr := tx.Commit()
