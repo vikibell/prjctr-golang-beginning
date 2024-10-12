@@ -7,22 +7,18 @@ type GPRSTransmitter struct {
 	Buffer          []AnimalData
 }
 
-// TODO rework
-func (g *GPRSTransmitter) TransmitData(data AnimalData) error {
+func (g *GPRSTransmitter) TransmitData(data AnimalData) {
 	if g.SignalAvailable {
 		fmt.Println("Передача даних на сервер:", data)
 	} else {
 		g.Buffer = append(g.Buffer, data)
 	}
-	return nil
 }
 
-// TODO rework
 func (g *GPRSTransmitter) SendBufferedData() {
-	if g.SignalAvailable && len(g.Buffer) > 0 {
-		fmt.Println("Передача накопичених даних на сервер:")
+	if len(g.Buffer) > 0 {
 		for _, data := range g.Buffer {
-			fmt.Println(data)
+			fmt.Println("Передача буферизованих даних на сервер:", data)
 		}
 		g.Buffer = nil
 	}

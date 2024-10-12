@@ -1,10 +1,9 @@
 package sensor
 
-import "math/rand"
+import "math/rand/v2"
 
 type TemperatureSensor struct{}
 
-func (s *TemperatureSensor) ReadData() (int, float64) {
-	// Генерація випадкових значень для прикладу
-	return rand.Intn(40) + 60, rand.Float64()*5 + 35
+func (s *TemperatureSensor) ReadData() float64 {
+	return rand.Float64()
 }

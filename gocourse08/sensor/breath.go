@@ -1,7 +1,9 @@
 package sensor
 
+import "math/rand/v2"
+
 type BreathSensor struct{}
 
 func (s *BreathSensor) ReadData() int {
-	return rand.Float64() * 10
+	return rand.Int() * 10
 }

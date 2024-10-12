@@ -1,8 +1,9 @@
 package sensor
 
+import "math/rand/v2"
+
 type SoundSensor struct{}
 
 func (s *SoundSensor) ReadData() float64 {
-	// Генерація випадкових значень для прикладу
-	return rand.Float64() * 100
+	return rand.Float64() * 4
 }

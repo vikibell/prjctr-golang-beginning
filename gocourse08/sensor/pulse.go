@@ -1,9 +1,9 @@
 package sensor
 
-import "math/rand"
+import "math/rand/v2"
 
 type PulseSensor struct{}
 
-func (s *PulseSensor) ReadData() (int, float64) {
-	return rand.Intn(40) + 60, rand.Float64()*5 + 35
+func (s *PulseSensor) ReadData() int {
+	return rand.IntN(100)
 }

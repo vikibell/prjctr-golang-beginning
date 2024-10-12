@@ -8,6 +8,6 @@ type AnimalData struct {
 }
 
 type DataTransmitter interface {
-	TransmitData(data AnimalData) error
+	TransmitData(data AnimalData)
 	SendBufferedData()
 }
