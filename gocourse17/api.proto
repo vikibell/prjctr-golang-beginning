@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package review;
+
+option go_package = "github.com/vikibell/prjctr-golang-beginning/gocourse17";
+
+service Review {
+  rpc GetHistory(HistoryRequest) returns (HistoryResponse) {}
+  rpc SendReview(ReviewRequest) returns (ReviewResponse) {}
+}
+
+message HistoryRequest {
+  int32 driver_id = 1;
+}
+
+message HistoryResponse {
+  repeated ReviewData history = 1;
+}
+
+message ReviewRequest {
+  int32 driver_id = 1;
+  ReviewData review = 2;
+}
+
+message ReviewResponse {
+  string message = 1;
+}
+
+message ReviewData {
+  int32 cargo_state = 1;
+  int32 service_quality = 2;
+  int32 fulfillment_speed = 3;
+}
