@@ -49,8 +49,14 @@ func (s *server) SendReview(_ context.Context, request *pb.ReviewRequest) (*pb.R
 	}
 
 	review := request.GetReview()
-	//TODO check that each point from 0 to 5 and not empty
-	newReview := service.NewReview(review.GetCargoState(), review.GetServiceQuality(), review.GetFulfillmentSpeed())
+	cs := review.GetCargoState()
+	sq := review.GetServiceQuality()
+	fs := review.GetFulfillmentSpeed()
+	if !service.IsValidRating(cs) || !service.IsValidRating(sq) || !service.IsValidRating(fs) {
+		return &pb.ReviewResponse{Message: "Fail"}, errors.New("invalid review id")
+	}
+
+	newReview := service.NewReview(cs, sq, fs)
 	s.history.AddReview(driverId, newReview)
 
 	return &pb.ReviewResponse{Message: "Success"}, nil

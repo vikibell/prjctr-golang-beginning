@@ -14,6 +14,10 @@ func NewReview(cs, sq, fs int32) Review {
 	}
 }
 
+func IsValidRating(rating int32) bool {
+	return rating >= 1 && rating <= 5
+}
+
 type ReviewHistory map[int32][]Review
 
 func NewReviewHistory() ReviewHistory {
