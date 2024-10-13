@@ -3,6 +3,7 @@ module github.com/vikibell/prjctr-golang-beginning/gocourse17
 go 1.23.0
 
 require (
+	github.com/google/go-cmp v0.6.0
 	google.golang.org/grpc v1.67.1
 	google.golang.org/protobuf v1.35.1
 )
