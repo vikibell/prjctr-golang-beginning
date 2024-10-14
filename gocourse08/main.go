@@ -6,20 +6,20 @@ import (
 )
 
 func main() {
-	temperature := &sensor.TemperatureSensor{}
-	breath := &sensor.BreathSensor{}
-	sound := &sensor.SoundSensor{}
-	pulse := &sensor.PulseSensor{}
+	temperature := &sensor.Temperature{}
+	breath := &sensor.Breath{}
+	sound := &sensor.Sound{}
+	pulse := &sensor.Pulse{}
 
-	gps := &transmitter.GPRSTransmitter{SignalAvailable: true}
+	gprs := &transmitter.GPRS{SignalAvailable: true}
 	for range 5 {
-		gps.TransmitData(transmitter.CollectData(pulse, temperature, breath, sound))
+		gprs.Transmit(transmitter.Collect(pulse, temperature, breath, sound))
 	}
 
-	gps.SignalAvailable = false
+	gprs.SignalAvailable = false
 	for range 5 {
-		gps.TransmitData(transmitter.CollectData(pulse, temperature, breath, sound))
+		gprs.Transmit(transmitter.Collect(pulse, temperature, breath, sound))
 	}
 
-	gps.SendBufferedData()
+	gprs.SendBufferedData()
 }

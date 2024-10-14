@@ -2,8 +2,8 @@ package sensor
 
 import "math/rand/v2"
 
-type SoundSensor struct{}
+type Sound struct{}
 
-func (s *SoundSensor) ReadData() float64 {
+func (s *Sound) ReadData() float64 {
 	return rand.Float64() * 4
 }

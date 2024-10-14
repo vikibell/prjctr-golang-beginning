@@ -2,8 +2,8 @@ package sensor
 
 import "math/rand/v2"
 
-type BreathSensor struct{}
+type Breath struct{}
 
-func (s *BreathSensor) ReadData() int {
+func (s *Breath) ReadData() int {
 	return rand.IntN(200)
 }

@@ -7,12 +7,12 @@ import (
 )
 
 func TestCollectData(t *testing.T) {
-	temperature := &sensor.TemperatureSensor{}
-	breath := &sensor.BreathSensor{}
-	sound := &sensor.SoundSensor{}
-	pulse := &sensor.PulseSensor{}
+	temperature := &sensor.Temperature{}
+	breath := &sensor.Breath{}
+	sound := &sensor.Sound{}
+	pulse := &sensor.Pulse{}
 
-	animalData := CollectData(pulse, temperature, breath, sound)
+	animalData := Collect(pulse, temperature, breath, sound)
 
 	assert.NotEmpty(t, animalData.Temperature)
 	assert.NotEmpty(t, animalData.Pulse)

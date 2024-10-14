@@ -2,8 +2,8 @@ package sensor
 
 import "math/rand/v2"
 
-type PulseSensor struct{}
+type Pulse struct{}
 
-func (s *PulseSensor) ReadData() int {
+func (s *Pulse) ReadData() int {
 	return rand.IntN(100)
 }

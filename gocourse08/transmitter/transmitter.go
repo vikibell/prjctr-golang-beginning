@@ -10,11 +10,11 @@ type AnimalData struct {
 }
 
 type DataTransmitter interface {
-	TransmitData(data AnimalData)
+	Transmit(data AnimalData)
 	SendBufferedData()
 }
 
-func CollectData(pulse sensor.Sensor[int], temperature sensor.Sensor[float64], breath sensor.Sensor[int], sound sensor.Sensor[float64]) AnimalData {
+func Collect(pulse sensor.Sensor[int], temperature sensor.Sensor[float64], breath sensor.Sensor[int], sound sensor.Sensor[float64]) AnimalData {
 	pulseRate := pulse.ReadData()
 	temperatureLevel := temperature.ReadData()
 	breathRate := breath.ReadData()
