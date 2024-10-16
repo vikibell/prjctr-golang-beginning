@@ -51,7 +51,7 @@ func TestFindOneById(t *testing.T) {
 		WithArgs(1, 1).
 		WillReturnRows(rows)
 
-	user, err := repo.FindOneById(1)
+	user, err := repo.FindOneByID(1)
 	assert.NoError(t, err)
 	assert.Equal(t, expectedUser, user)
 

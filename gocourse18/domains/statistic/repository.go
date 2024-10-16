@@ -25,7 +25,7 @@ func (r *Repository) FindAll(page int, limit int) (statistics []Statistic, total
 	return
 }
 
-func (r *Repository) FindOneById(id int) (statistic Statistic, err error) {
+func (r *Repository) FindOneByID(id int) (statistic Statistic, err error) {
 	err = r.db.
 		Model(&Statistic{}).
 		First(&statistic, id).Error

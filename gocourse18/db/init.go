@@ -61,7 +61,7 @@ func getUsersFromFile() []user.User {
 		return users
 	}
 
-	file, errOpen := os.Open(filepath.Join(currentDir, "/db/users_another.json"))
+	file, errOpen := os.Open(filepath.Join(currentDir, "/assets/users_another.json"))
 	if errOpen != nil {
 		fmt.Printf("Failed to open file: %v\n", errOpen)
 		return users

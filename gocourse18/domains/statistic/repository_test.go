@@ -46,7 +46,7 @@ func TestFindOneById(t *testing.T) {
 		WithArgs(1, 1).
 		WillReturnRows(rows)
 
-	statistic, err := repo.FindOneById(1)
+	statistic, err := repo.FindOneByID(1)
 	assert.NoError(t, err)
 	assert.Equal(t, expectedStatistic, statistic)
 

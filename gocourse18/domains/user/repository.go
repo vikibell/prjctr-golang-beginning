@@ -25,7 +25,7 @@ func (r *Repository) FindAll(page int, limit int) (users []User, total int64, er
 	return
 }
 
-func (r *Repository) FindOneById(id int) (user User, err error) {
+func (r *Repository) FindOneByID(id int) (user User, err error) {
 	err = r.db.
 		Model(&User{}).
 		First(&user, id).Error
