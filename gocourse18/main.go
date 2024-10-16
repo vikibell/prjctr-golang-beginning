@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	database := mysql.GetConnection()
+	database := mysql.NewDB(mysql.DSN).Connection
 
 	usersRepository := user.NewUserRepository(database)
 	users, totalUsers, err := usersRepository.FindAll(1, 10)

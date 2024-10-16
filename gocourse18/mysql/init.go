@@ -10,7 +10,7 @@ import (
 	"log/slog"
 )
 
-const dsn = "vika:123@tcp(127.0.0.1:3320)/db?parseTime=true"
+const DSN = "vika:123@tcp(127.0.0.1:3320)/db?parseTime=true"
 
 var usersSchema = `
 CREATE TABLE IF NOT EXISTS users
@@ -35,21 +35,27 @@ CREATE TABLE IF NOT EXISTS statistics
     age_range     int    default 0 null
 );`
 
-func init() {
-	populateDB()
+type DB struct {
+	Connection *gorm.DB
 }
 
-func GetConnection() *gorm.DB {
+func NewDB(dsn string) *DB {
 	gormdb, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
 
-	return gormdb
+	return &DB{
+		Connection: gormdb,
+	}
+}
+
+func init() {
+	populateDB()
 }
 
 func populateDB() {
-	db, err := sqlx.Connect("mysql", dsn)
+	db, err := sqlx.Connect("mysql", DSN)
 	if err != nil {
 		panic("Failed to connect database")
 	}
