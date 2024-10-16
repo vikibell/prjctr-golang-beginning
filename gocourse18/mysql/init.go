@@ -1,8 +1,7 @@
-package db
+package mysql
 
 import (
 	"encoding/json"
-	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/vikibell/prjctr-golang-beginning/gocourse18/domains/statistic"
@@ -10,6 +9,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"io"
+	"log/slog"
 	"os"
 	"path/filepath"
 )
@@ -57,13 +57,13 @@ func getUsersFromFile() []user.User {
 
 	currentDir, err := os.Getwd()
 	if err != nil {
-		fmt.Printf("Failed to get current directory: %v\n", err)
+		slog.Error("Failed to get current directory", "error", err)
 		return users
 	}
 
 	file, errOpen := os.Open(filepath.Join(currentDir, "/assets/users_another.json"))
 	if errOpen != nil {
-		fmt.Printf("Failed to open file: %v\n", errOpen)
+		slog.Error("Failed to open file", "error", err)
 		return users
 	}
 
@@ -71,13 +71,13 @@ func getUsersFromFile() []user.User {
 
 	byteValue, errRead := io.ReadAll(file)
 	if errRead != nil {
-		fmt.Printf("Failed to read file: %v\n", errRead)
+		slog.Error("Failed to read file", "error", errRead)
 		return users
 	}
 
 	errUnm := json.Unmarshal(byteValue, &users)
 	if errUnm != nil {
-		fmt.Printf("Failed to unmarshal json: %v\n", errUnm)
+		slog.Error("Failed to unmarshal json", "error", errRead)
 		return users
 	}
 
@@ -101,7 +101,7 @@ func populateUsers(db *sqlx.DB) {
 	query := `TRUNCATE TABLE users`
 	_, trancErr := db.Exec(query)
 	if trancErr != nil {
-		fmt.Printf("Failed to truncate table: %v\n", trancErr)
+		slog.Error("Failed to truncate table", "error", trancErr)
 		return
 	}
 
@@ -113,12 +113,12 @@ func populateUsers(db *sqlx.DB) {
 		VALUES (:name, :surname, :email, :age, :sex, :city, :taxi_count, :profession)`,
 		users)
 	if insertErr != nil {
-		fmt.Printf("Failed to insert into table: %v\n", insertErr)
+		slog.Error("Failed to insert into table", "error", insertErr)
 	}
 
 	commitErr := tx.Commit()
 	if commitErr != nil {
-		fmt.Printf("Failed to commit: %v\n", commitErr)
+		slog.Error("Failed to commit changes", "error", commitErr)
 		return
 	}
 }
@@ -127,7 +127,7 @@ func populateStatistics(db *sqlx.DB) {
 	query := `TRUNCATE TABLE statistics`
 	_, trancErr := db.Exec(query)
 	if trancErr != nil {
-		fmt.Printf("Failed to truncate table: %v\n", trancErr)
+		slog.Error("Failed to truncate table", "error", trancErr)
 		return
 	}
 
@@ -147,7 +147,7 @@ func populateStatistics(db *sqlx.DB) {
 		ORDER BY city;
        `)
 	if err != nil {
-		fmt.Printf("Failed to select: %v\n", err)
+		slog.Error("Failed to select", "error", err)
 		return
 	}
 
@@ -158,12 +158,12 @@ func populateStatistics(db *sqlx.DB) {
 		VALUES (:city, :average_trips, :age_range)`,
 		statisticsResult)
 	if insertErr != nil {
-		fmt.Printf("Failed to insert into table: %v\n", insertErr)
+		slog.Error("Failed to insert into table", "error", insertErr)
 	}
 
 	commitErr := tx.Commit()
 	if commitErr != nil {
-		fmt.Printf("Failed to commit: %v\n", commitErr)
+		slog.Error("Failed to commit changes", "error", commitErr)
 		return
 	}
 }

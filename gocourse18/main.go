@@ -1,34 +1,36 @@
 package main
 
 import (
-	"fmt"
-	"github.com/vikibell/prjctr-golang-beginning/gocourse18/db"
 	"github.com/vikibell/prjctr-golang-beginning/gocourse18/domains/statistic"
 	"github.com/vikibell/prjctr-golang-beginning/gocourse18/domains/user"
+	"github.com/vikibell/prjctr-golang-beginning/gocourse18/mysql"
+	"log/slog"
 )
 
 func main() {
-	database := db.GetConnection()
+	database := mysql.GetConnection()
 
 	usersRepository := user.NewUserRepository(database)
 	users, totalUsers, err := usersRepository.FindAll(1, 10)
 	if err != nil {
+		slog.Error("Failed to find users", "error", err)
 		return
 	}
 
 	for _, selectedUser := range users {
-		fmt.Printf("User: %v\n", selectedUser)
+		slog.Info("User", "details", selectedUser)
 	}
-	fmt.Printf("Total users: %v\n", totalUsers)
+	slog.Info("Total users", "count", totalUsers)
 
 	statisticRepository := statistic.NewStatisticsRepository(database)
-	statisticsList, totalStat, errStatFetch := statisticRepository.FindAll(1, 10)
-	if errStatFetch != nil {
+	statisticsList, totalStat, err := statisticRepository.FindAll(1, 10)
+	if err != nil {
+		slog.Error("Failed to find statistics", "error", err)
 		return
 	}
 
 	for _, stat := range statisticsList {
-		fmt.Printf("Statistics: %v\n", stat)
+		slog.Info("Statistics", "details", stat)
 	}
-	fmt.Printf("Total statistic records: %v\n", totalStat)
+	slog.Info("Total statistic records", "count", totalStat)
 }
