@@ -3,30 +3,32 @@ package user
 import (
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"testing"
 )
 
-func setupMockDB() (*gorm.DB, sqlmock.Sqlmock, error) {
+func setupMockDB(t *testing.T) (*gorm.DB, sqlmock.Sqlmock) {
+	t.Helper()
+
 	sqlDB, mock, err := sqlmock.New()
-	if err != nil {
-		return nil, nil, err
-	}
+	require.NoError(t, err)
 
 	mock.ExpectQuery("SELECT VERSION()").WillReturnRows(sqlmock.NewRows([]string{"VERSION()"}).AddRow("8.0.23"))
 	gormDB, err := gorm.Open(mysql.New(mysql.Config{Conn: sqlDB}), &gorm.Config{})
-	if err != nil {
-		return nil, nil, err
-	}
-	return gormDB, mock, nil
+	require.NoError(t, err)
+
+	t.Cleanup(func() {
+		err := mock.ExpectationsWereMet()
+		assert.NoError(t, err)
+	})
+
+	return gormDB, mock
 }
 
-func TestFindOneById(t *testing.T) {
-	db, mock, err := setupMockDB()
-	if err != nil {
-		t.Fatalf("failed to set up mock database: %v", err)
-	}
+func TestFindOneByID(t *testing.T) {
+	db, mock := setupMockDB(t)
 	repo := &Repository{db: db}
 
 	expectedUser := User{
@@ -52,18 +54,15 @@ func TestFindOneById(t *testing.T) {
 		WillReturnRows(rows)
 
 	user, err := repo.FindOneByID(1)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, expectedUser, user)
 
 	err = mock.ExpectationsWereMet()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 }
 
 func TestFindAll(t *testing.T) {
-	db, mock, err := setupMockDB()
-	if err != nil {
-		t.Fatalf("failed to set up mock database: %v", err)
-	}
+	db, mock := setupMockDB(t)
 	repo := &Repository{db: db}
 
 	page := 2
@@ -88,10 +87,10 @@ func TestFindAll(t *testing.T) {
 		WillReturnRows(rows)
 
 	users, total, err := repo.FindAll(page, limit)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, expectedTotal, total)
 	assert.Equal(t, expectedUsers, users)
 
 	err = mock.ExpectationsWereMet()
-	assert.NoError(t, err)
+	require.NoError(t, err)
 }
