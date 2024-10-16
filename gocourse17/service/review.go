@@ -24,11 +24,11 @@ func NewReviewHistory() ReviewHistory {
 	return make(ReviewHistory)
 }
 
-func (rh ReviewHistory) AddReview(driverId int32, review Review) {
-	rh[driverId] = append(rh[driverId], review)
+func (rh ReviewHistory) AddReview(driverID int32, review Review) {
+	rh[driverID] = append(rh[driverID], review)
 }
 
-func (rh ReviewHistory) GerReviews(driverId int32) ([]Review, bool) {
-	a, exists := rh[driverId]
+func (rh ReviewHistory) GerReviews(driverID int32) ([]Review, bool) {
+	a, exists := rh[driverID]
 	return a, exists
 }

@@ -43,13 +43,13 @@ func TestReviewHistory_AddGet(t *testing.T) {
 	cs := int32(2)
 	sq := int32(3)
 	fs := int32(4)
-	driverId := int32(1)
+	driverID := int32(1)
 
 	review := NewReview(cs, sq, fs)
 	history := NewReviewHistory()
-	history.AddReview(driverId, review)
+	history.AddReview(driverID, review)
 
-	got, _ := history.GerReviews(driverId)
+	got, _ := history.GerReviews(driverID)
 
 	want := []Review{
 		{

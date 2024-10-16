@@ -17,6 +17,7 @@ func sendReview(client pb.ReviewClient, reviewRequest *pb.ReviewRequest) {
 	response, err := client.SendReview(ctx, reviewRequest)
 	if err != nil {
 		fmt.Printf("client.SendReview failed: %v\n", err)
+		return
 	}
 	fmt.Println(response)
 }
@@ -27,6 +28,7 @@ func getHistory(client pb.ReviewClient, historyRequest *pb.HistoryRequest) {
 	response, err := client.GetHistory(ctx, historyRequest)
 	if err != nil {
 		fmt.Printf("client.GetHistory failed: %v\n", err)
+		return
 	}
 	fmt.Println(response)
 }
@@ -42,13 +44,13 @@ func main() {
 	_, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	driverFirstId := int32(1)
-	driverSecondId := int32(2)
+	driverFirstID := int32(1)
+	driverSecondID := int32(2)
 
 	for range 3 {
 		sendReview(client,
 			&pb.ReviewRequest{
-				DriverId: driverFirstId,
+				DriverId: driverFirstID,
 				Review: &pb.ReviewData{
 					CargoState:       rand.Int32N(5),
 					ServiceQuality:   rand.Int32N(5),
@@ -61,7 +63,7 @@ func main() {
 	for range 2 {
 		sendReview(client,
 			&pb.ReviewRequest{
-				DriverId: driverSecondId,
+				DriverId: driverSecondID,
 				Review: &pb.ReviewData{
 					CargoState:       rand.Int32N(5),
 					ServiceQuality:   rand.Int32N(5),
@@ -71,6 +73,6 @@ func main() {
 		)
 	}
 
-	getHistory(client, &pb.HistoryRequest{DriverId: driverFirstId})
-	getHistory(client, &pb.HistoryRequest{DriverId: driverSecondId})
+	getHistory(client, &pb.HistoryRequest{DriverId: driverFirstID})
+	getHistory(client, &pb.HistoryRequest{DriverId: driverSecondID})
 }

@@ -25,10 +25,7 @@ func (s *server) GetHistory(_ context.Context, request *pb.HistoryRequest) (*pb.
 		return &pb.HistoryResponse{}, errors.New("invalid driver id")
 	}
 
-	history, exists := s.history.GerReviews(driverId)
-	if !exists {
-		return &pb.HistoryResponse{}, errors.New("there is no history for this driver")
-	}
+	history, _ := s.history.GerReviews(driverId)
 
 	var response []*pb.ReviewData
 	for _, review := range history {
