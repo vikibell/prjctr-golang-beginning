@@ -25,6 +25,7 @@ func sendReview(client pb.ReviewClient, reviewRequest *pb.SendReviewRequest) {
 func getHistory(client pb.ReviewClient, historyRequest *pb.GetHistoryRequest) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+
 	response, err := client.GetHistory(ctx, historyRequest)
 	if err != nil {
 		fmt.Printf("client.GetHistory failed: %v\n", err)
@@ -40,9 +41,6 @@ func main() {
 	}
 	defer conn.Close()
 	client := pb.NewReviewClient(conn)
-
-	_, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
 
 	driverFirstID := int32(1)
 	driverSecondID := int32(2)

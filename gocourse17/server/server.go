@@ -2,11 +2,12 @@ package main
 
 import (
 	"context"
-	"errors"
 	"flag"
 	"fmt"
 	"github.com/vikibell/prjctr-golang-beginning/gocourse17/service"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"log"
 	"net"
 
@@ -21,8 +22,9 @@ type server struct {
 
 func (s *server) GetHistory(_ context.Context, request *pb.GetHistoryRequest) (*pb.GetHistoryResponse, error) {
 	driverId := request.GetDriverId()
+
 	if driverId <= 0 {
-		return nil, errors.New("invalid driver id")
+		return nil, status.Errorf(codes.InvalidArgument, "invalid driver id")
 	}
 
 	history, _ := s.history.GerReviews(driverId)
@@ -42,7 +44,7 @@ func (s *server) GetHistory(_ context.Context, request *pb.GetHistoryRequest) (*
 func (s *server) SendReview(_ context.Context, request *pb.SendReviewRequest) (*pb.SendReviewResponse, error) {
 	driverId := request.GetDriverId()
 	if driverId <= 0 {
-		return &pb.SendReviewResponse{Message: "Fail"}, errors.New("invalid driver id")
+		return &pb.SendReviewResponse{Message: "Fail"}, status.Errorf(codes.InvalidArgument, "invalid driver id")
 	}
 
 	review := request.GetReview()
@@ -50,7 +52,7 @@ func (s *server) SendReview(_ context.Context, request *pb.SendReviewRequest) (*
 	sq := review.GetServiceQuality()
 	fs := review.GetFulfillmentSpeed()
 	if !service.IsValidRating(cs) || !service.IsValidRating(sq) || !service.IsValidRating(fs) {
-		return &pb.SendReviewResponse{Message: "Fail"}, errors.New("invalid review id")
+		return &pb.SendReviewResponse{Message: "Fail"}, status.Errorf(codes.InvalidArgument, "invalid review id")
 	}
 
 	newReview := service.NewReview(cs, sq, fs)
