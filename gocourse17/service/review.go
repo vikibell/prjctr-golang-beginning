@@ -1,5 +1,13 @@
 package service
 
+const (
+	poor int = iota + 1
+	fair
+	good
+	great
+	excellent
+)
+
 type Review struct {
 	CargoState       int
 	ServiceQuality   int
@@ -15,7 +23,7 @@ func NewReview(cs, sq, fs int) Review {
 }
 
 func IsValidRating(rating int) bool {
-	return rating >= 1 && rating <= 5
+	return rating >= poor && rating <= excellent
 }
 
 type ReviewHistory map[int][]Review

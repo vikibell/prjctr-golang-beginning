@@ -32,9 +32,9 @@ func (s *server) GetHistory(_ context.Context, request *pb.GetHistoryRequest) (*
 	var response []*pb.ReviewData
 	for _, review := range history {
 		response = append(response, &pb.ReviewData{
-			CargoState:       int32(review.CargoState),
-			ServiceQuality:   int32(review.ServiceQuality),
-			FulfillmentSpeed: int32(review.FulfillmentSpeed),
+			CargoState:       pb.Rating(review.CargoState),
+			ServiceQuality:   pb.Rating(review.ServiceQuality),
+			FulfillmentSpeed: pb.Rating(review.FulfillmentSpeed),
 		})
 	}
 

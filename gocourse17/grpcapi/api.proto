@@ -26,8 +26,17 @@ message SendReviewResponse {
   string message = 1;
 }
 
+enum Rating {
+  UNDEFINED = 0;
+  POOR = 1;
+  FAIR = 2;
+  GOOD = 3;
+  GREAT = 4;
+  EXCELLENT = 5;
+}
+
 message ReviewData {
-  int32 cargo_state = 1;
-  int32 service_quality = 2;
-  int32 fulfillment_speed = 3;
+  Rating cargo_state = 1;
+  Rating service_quality = 2;
+  Rating fulfillment_speed = 3;
 }

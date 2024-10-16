@@ -50,9 +50,9 @@ func main() {
 			&pb.SendReviewRequest{
 				DriverId: driverFirstID,
 				Review: &pb.ReviewData{
-					CargoState:       rand.Int32N(5),
-					ServiceQuality:   rand.Int32N(5),
-					FulfillmentSpeed: rand.Int32N(5),
+					CargoState:       pb.Rating(rand.IntN(5)),
+					ServiceQuality:   pb.Rating(rand.Int32N(5)),
+					FulfillmentSpeed: pb.Rating(rand.Int32N(5)),
 				},
 			},
 		)
@@ -63,9 +63,9 @@ func main() {
 			&pb.SendReviewRequest{
 				DriverId: driverSecondID,
 				Review: &pb.ReviewData{
-					CargoState:       rand.Int32N(5),
-					ServiceQuality:   rand.Int32N(5),
-					FulfillmentSpeed: rand.Int32N(5),
+					CargoState:       pb.Rating(rand.Int32N(5)),
+					ServiceQuality:   pb.Rating(rand.Int32N(5)),
+					FulfillmentSpeed: pb.Rating(rand.Int32N(5)),
 				},
 			},
 		)
