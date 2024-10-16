@@ -7,9 +7,9 @@ import (
 )
 
 func TestNewReview(t *testing.T) {
-	cs := int32(2)
-	sq := int32(3)
-	fs := int32(4)
+	cs := 2
+	sq := 3
+	fs := 4
 
 	review := NewReview(cs, sq, fs)
 	want := Review{
@@ -24,8 +24,8 @@ func TestNewReview(t *testing.T) {
 }
 
 func TestIsValidRating(t *testing.T) {
-	cs := int32(2)
-	sq := int32(6)
+	cs := 2
+	sq := 6
 
 	t.Run("Valid", func(t *testing.T) {
 		if got := IsValidRating(cs); !cmp.Equal(got, true) {
@@ -40,10 +40,10 @@ func TestIsValidRating(t *testing.T) {
 }
 
 func TestReviewHistory_AddGet(t *testing.T) {
-	cs := int32(2)
-	sq := int32(3)
-	fs := int32(4)
-	driverID := int32(1)
+	cs := 2
+	sq := 3
+	fs := 4
+	driverID := 1
 
 	review := NewReview(cs, sq, fs)
 	history := NewReviewHistory()

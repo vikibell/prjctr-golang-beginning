@@ -1,12 +1,12 @@
 package service
 
 type Review struct {
-	CargoState       int32
-	ServiceQuality   int32
-	FulfillmentSpeed int32
+	CargoState       int
+	ServiceQuality   int
+	FulfillmentSpeed int
 }
 
-func NewReview(cs, sq, fs int32) Review {
+func NewReview(cs, sq, fs int) Review {
 	return Review{
 		CargoState:       cs,
 		ServiceQuality:   sq,
@@ -14,21 +14,21 @@ func NewReview(cs, sq, fs int32) Review {
 	}
 }
 
-func IsValidRating(rating int32) bool {
+func IsValidRating(rating int) bool {
 	return rating >= 1 && rating <= 5
 }
 
-type ReviewHistory map[int32][]Review
+type ReviewHistory map[int][]Review
 
 func NewReviewHistory() ReviewHistory {
 	return make(ReviewHistory)
 }
 
-func (rh ReviewHistory) AddReview(driverID int32, review Review) {
+func (rh ReviewHistory) AddReview(driverID int, review Review) {
 	rh[driverID] = append(rh[driverID], review)
 }
 
-func (rh ReviewHistory) GerReviews(driverID int32) ([]Review, bool) {
+func (rh ReviewHistory) GerReviews(driverID int) ([]Review, bool) {
 	a, exists := rh[driverID]
 	return a, exists
 }

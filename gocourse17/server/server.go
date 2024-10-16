@@ -21,7 +21,7 @@ type server struct {
 }
 
 func (s *server) GetHistory(_ context.Context, request *pb.GetHistoryRequest) (*pb.GetHistoryResponse, error) {
-	driverId := request.GetDriverId()
+	driverId := int(request.GetDriverId())
 
 	if driverId <= 0 {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid driver id")
@@ -32,9 +32,9 @@ func (s *server) GetHistory(_ context.Context, request *pb.GetHistoryRequest) (*
 	var response []*pb.ReviewData
 	for _, review := range history {
 		response = append(response, &pb.ReviewData{
-			CargoState:       review.CargoState,
-			ServiceQuality:   review.ServiceQuality,
-			FulfillmentSpeed: review.FulfillmentSpeed,
+			CargoState:       int32(review.CargoState),
+			ServiceQuality:   int32(review.ServiceQuality),
+			FulfillmentSpeed: int32(review.FulfillmentSpeed),
 		})
 	}
 
@@ -42,15 +42,15 @@ func (s *server) GetHistory(_ context.Context, request *pb.GetHistoryRequest) (*
 }
 
 func (s *server) SendReview(_ context.Context, request *pb.SendReviewRequest) (*pb.SendReviewResponse, error) {
-	driverId := request.GetDriverId()
+	driverId := int(request.GetDriverId())
 	if driverId <= 0 {
 		return &pb.SendReviewResponse{Message: "Fail"}, status.Errorf(codes.InvalidArgument, "invalid driver id")
 	}
 
 	review := request.GetReview()
-	cs := review.GetCargoState()
-	sq := review.GetServiceQuality()
-	fs := review.GetFulfillmentSpeed()
+	cs := int(review.GetCargoState())
+	sq := int(review.GetServiceQuality())
+	fs := int(review.GetFulfillmentSpeed())
 	if !service.IsValidRating(cs) || !service.IsValidRating(sq) || !service.IsValidRating(fs) {
 		return &pb.SendReviewResponse{Message: "Fail"}, status.Errorf(codes.InvalidArgument, "invalid review id")
 	}

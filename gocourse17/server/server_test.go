@@ -22,7 +22,7 @@ func init() {
 	lis = bufconn.Listen(bufSize)
 	s := grpc.NewServer()
 	reviewHistory := service.NewReviewHistory()
-	reviewHistory.AddReview(int32(1), service.NewReview(int32(1), int32(2), int32(3)))
+	reviewHistory.AddReview(1, service.NewReview(1, 2, 3))
 	pb.RegisterReviewServer(s, &server{history: reviewHistory})
 
 	go func() {
