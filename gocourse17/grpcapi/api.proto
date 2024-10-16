@@ -5,24 +5,24 @@ package review;
 option go_package = "github.com/vikibell/prjctr-golang-beginning/gocourse17";
 
 service Review {
-  rpc GetHistory(HistoryRequest) returns (HistoryResponse) {}
-  rpc SendReview(ReviewRequest) returns (ReviewResponse) {}
+  rpc GetHistory(GetHistoryRequest) returns (GetHistoryResponse) {}
+  rpc SendReview(SendReviewRequest) returns (SendReviewResponse) {}
 }
 
-message HistoryRequest {
+message GetHistoryRequest {
   int32 driver_id = 1;
 }
 
-message HistoryResponse {
-  repeated ReviewData history = 1;
+message GetHistoryResponse {
+  repeated ReviewData reviews = 1;
 }
 
-message ReviewRequest {
+message SendReviewRequest {
   int32 driver_id = 1;
   ReviewData review = 2;
 }
 
-message ReviewResponse {
+message SendReviewResponse {
   string message = 1;
 }
 

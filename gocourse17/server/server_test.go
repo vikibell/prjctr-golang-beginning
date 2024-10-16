@@ -48,13 +48,13 @@ func TestGetHistory(t *testing.T) {
 
 	client := pb.NewReviewClient(conn)
 
-	req := &pb.HistoryRequest{DriverId: int32(1)}
+	req := &pb.GetHistoryRequest{DriverId: int32(1)}
 	history, err := client.GetHistory(ctx, req)
 	if err != nil {
 		t.Fatalf("GetHistory failed: %v", err)
 	}
 
-	got := history.GetHistory()
+	got := history.GetReviews()
 	want := []*pb.ReviewData{{CargoState: int32(1), ServiceQuality: int32(2), FulfillmentSpeed: int32(3)}}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("GetHistory(): got = %v, want %v", got, want)
@@ -73,7 +73,7 @@ func TestSendReview(t *testing.T) {
 
 	client := pb.NewReviewClient(conn)
 
-	req := &pb.ReviewRequest{DriverId: int32(1), Review: &pb.ReviewData{CargoState: int32(1), ServiceQuality: int32(2), FulfillmentSpeed: int32(3)}}
+	req := &pb.SendReviewRequest{DriverId: int32(1), Review: &pb.ReviewData{CargoState: int32(1), ServiceQuality: int32(2), FulfillmentSpeed: int32(3)}}
 	resp, err := client.SendReview(ctx, req)
 	if err != nil {
 		t.Fatalf("SendReview failed: %v", err)

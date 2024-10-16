@@ -27,8 +27,8 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ReviewClient interface {
-	GetHistory(ctx context.Context, in *HistoryRequest, opts ...grpc.CallOption) (*HistoryResponse, error)
-	SendReview(ctx context.Context, in *ReviewRequest, opts ...grpc.CallOption) (*ReviewResponse, error)
+	GetHistory(ctx context.Context, in *GetHistoryRequest, opts ...grpc.CallOption) (*GetHistoryResponse, error)
+	SendReview(ctx context.Context, in *SendReviewRequest, opts ...grpc.CallOption) (*SendReviewResponse, error)
 }
 
 type reviewClient struct {
@@ -39,9 +39,9 @@ func NewReviewClient(cc grpc.ClientConnInterface) ReviewClient {
 	return &reviewClient{cc}
 }
 
-func (c *reviewClient) GetHistory(ctx context.Context, in *HistoryRequest, opts ...grpc.CallOption) (*HistoryResponse, error) {
+func (c *reviewClient) GetHistory(ctx context.Context, in *GetHistoryRequest, opts ...grpc.CallOption) (*GetHistoryResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(HistoryResponse)
+	out := new(GetHistoryResponse)
 	err := c.cc.Invoke(ctx, Review_GetHistory_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -49,9 +49,9 @@ func (c *reviewClient) GetHistory(ctx context.Context, in *HistoryRequest, opts 
 	return out, nil
 }
 
-func (c *reviewClient) SendReview(ctx context.Context, in *ReviewRequest, opts ...grpc.CallOption) (*ReviewResponse, error) {
+func (c *reviewClient) SendReview(ctx context.Context, in *SendReviewRequest, opts ...grpc.CallOption) (*SendReviewResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ReviewResponse)
+	out := new(SendReviewResponse)
 	err := c.cc.Invoke(ctx, Review_SendReview_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -63,8 +63,8 @@ func (c *reviewClient) SendReview(ctx context.Context, in *ReviewRequest, opts .
 // All implementations must embed UnimplementedReviewServer
 // for forward compatibility.
 type ReviewServer interface {
-	GetHistory(context.Context, *HistoryRequest) (*HistoryResponse, error)
-	SendReview(context.Context, *ReviewRequest) (*ReviewResponse, error)
+	GetHistory(context.Context, *GetHistoryRequest) (*GetHistoryResponse, error)
+	SendReview(context.Context, *SendReviewRequest) (*SendReviewResponse, error)
 	mustEmbedUnimplementedReviewServer()
 }
 
@@ -75,10 +75,10 @@ type ReviewServer interface {
 // pointer dereference when methods are called.
 type UnimplementedReviewServer struct{}
 
-func (UnimplementedReviewServer) GetHistory(context.Context, *HistoryRequest) (*HistoryResponse, error) {
+func (UnimplementedReviewServer) GetHistory(context.Context, *GetHistoryRequest) (*GetHistoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetHistory not implemented")
 }
-func (UnimplementedReviewServer) SendReview(context.Context, *ReviewRequest) (*ReviewResponse, error) {
+func (UnimplementedReviewServer) SendReview(context.Context, *SendReviewRequest) (*SendReviewResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendReview not implemented")
 }
 func (UnimplementedReviewServer) mustEmbedUnimplementedReviewServer() {}
@@ -103,7 +103,7 @@ func RegisterReviewServer(s grpc.ServiceRegistrar, srv ReviewServer) {
 }
 
 func _Review_GetHistory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HistoryRequest)
+	in := new(GetHistoryRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -115,13 +115,13 @@ func _Review_GetHistory_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: Review_GetHistory_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReviewServer).GetHistory(ctx, req.(*HistoryRequest))
+		return srv.(ReviewServer).GetHistory(ctx, req.(*GetHistoryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Review_SendReview_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ReviewRequest)
+	in := new(SendReviewRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -133,7 +133,7 @@ func _Review_SendReview_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: Review_SendReview_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReviewServer).SendReview(ctx, req.(*ReviewRequest))
+		return srv.(ReviewServer).SendReview(ctx, req.(*SendReviewRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

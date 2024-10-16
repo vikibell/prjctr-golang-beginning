@@ -19,10 +19,10 @@ type server struct {
 	history service.ReviewHistory
 }
 
-func (s *server) GetHistory(_ context.Context, request *pb.HistoryRequest) (*pb.HistoryResponse, error) {
+func (s *server) GetHistory(_ context.Context, request *pb.GetHistoryRequest) (*pb.GetHistoryResponse, error) {
 	driverId := request.GetDriverId()
 	if driverId <= 0 {
-		return &pb.HistoryResponse{}, errors.New("invalid driver id")
+		return nil, errors.New("invalid driver id")
 	}
 
 	history, _ := s.history.GerReviews(driverId)
@@ -36,13 +36,13 @@ func (s *server) GetHistory(_ context.Context, request *pb.HistoryRequest) (*pb.
 		})
 	}
 
-	return &pb.HistoryResponse{History: response}, nil
+	return &pb.GetHistoryResponse{Reviews: response}, nil
 }
 
-func (s *server) SendReview(_ context.Context, request *pb.ReviewRequest) (*pb.ReviewResponse, error) {
+func (s *server) SendReview(_ context.Context, request *pb.SendReviewRequest) (*pb.SendReviewResponse, error) {
 	driverId := request.GetDriverId()
 	if driverId <= 0 {
-		return &pb.ReviewResponse{Message: "Fail"}, errors.New("invalid driver id")
+		return &pb.SendReviewResponse{Message: "Fail"}, errors.New("invalid driver id")
 	}
 
 	review := request.GetReview()
@@ -50,13 +50,13 @@ func (s *server) SendReview(_ context.Context, request *pb.ReviewRequest) (*pb.R
 	sq := review.GetServiceQuality()
 	fs := review.GetFulfillmentSpeed()
 	if !service.IsValidRating(cs) || !service.IsValidRating(sq) || !service.IsValidRating(fs) {
-		return &pb.ReviewResponse{Message: "Fail"}, errors.New("invalid review id")
+		return &pb.SendReviewResponse{Message: "Fail"}, errors.New("invalid review id")
 	}
 
 	newReview := service.NewReview(cs, sq, fs)
 	s.history.AddReview(driverId, newReview)
 
-	return &pb.ReviewResponse{Message: "Success"}, nil
+	return &pb.SendReviewResponse{Message: "Success"}, nil
 }
 
 func main() {

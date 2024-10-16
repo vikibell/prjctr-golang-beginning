@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func sendReview(client pb.ReviewClient, reviewRequest *pb.ReviewRequest) {
+func sendReview(client pb.ReviewClient, reviewRequest *pb.SendReviewRequest) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	response, err := client.SendReview(ctx, reviewRequest)
@@ -22,7 +22,7 @@ func sendReview(client pb.ReviewClient, reviewRequest *pb.ReviewRequest) {
 	fmt.Println(response)
 }
 
-func getHistory(client pb.ReviewClient, historyRequest *pb.HistoryRequest) {
+func getHistory(client pb.ReviewClient, historyRequest *pb.GetHistoryRequest) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	response, err := client.GetHistory(ctx, historyRequest)
@@ -49,7 +49,7 @@ func main() {
 
 	for range 3 {
 		sendReview(client,
-			&pb.ReviewRequest{
+			&pb.SendReviewRequest{
 				DriverId: driverFirstID,
 				Review: &pb.ReviewData{
 					CargoState:       rand.Int32N(5),
@@ -62,7 +62,7 @@ func main() {
 
 	for range 2 {
 		sendReview(client,
-			&pb.ReviewRequest{
+			&pb.SendReviewRequest{
 				DriverId: driverSecondID,
 				Review: &pb.ReviewData{
 					CargoState:       rand.Int32N(5),
@@ -73,6 +73,6 @@ func main() {
 		)
 	}
 
-	getHistory(client, &pb.HistoryRequest{DriverId: driverFirstID})
-	getHistory(client, &pb.HistoryRequest{DriverId: driverSecondID})
+	getHistory(client, &pb.GetHistoryRequest{DriverId: driverFirstID})
+	getHistory(client, &pb.GetHistoryRequest{DriverId: driverSecondID})
 }
