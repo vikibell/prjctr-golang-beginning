@@ -1,17 +1,13 @@
 package mysql
 
 import (
-	"encoding/json"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/vikibell/prjctr-golang-beginning/gocourse18/domains/statistic"
-	"github.com/vikibell/prjctr-golang-beginning/gocourse18/domains/user"
+	"github.com/vikibell/prjctr-golang-beginning/gocourse18/service"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"io"
 	"log/slog"
-	"os"
-	"path/filepath"
 )
 
 const dsn = "vika:123@tcp(127.0.0.1:3320)/db?parseTime=true"
@@ -52,38 +48,6 @@ func GetConnection() *gorm.DB {
 	return gormdb
 }
 
-func getUsersFromFile() []user.User {
-	var users []user.User
-
-	currentDir, err := os.Getwd()
-	if err != nil {
-		slog.Error("Failed to get current directory", "error", err)
-		return users
-	}
-
-	file, errOpen := os.Open(filepath.Join(currentDir, "/assets/users_another.json"))
-	if errOpen != nil {
-		slog.Error("Failed to open file", "error", err)
-		return users
-	}
-
-	defer file.Close()
-
-	byteValue, errRead := io.ReadAll(file)
-	if errRead != nil {
-		slog.Error("Failed to read file", "error", errRead)
-		return users
-	}
-
-	errUnm := json.Unmarshal(byteValue, &users)
-	if errUnm != nil {
-		slog.Error("Failed to unmarshal json", "error", errRead)
-		return users
-	}
-
-	return users
-}
-
 func populateDB() {
 	db, err := sqlx.Connect("mysql", dsn)
 	if err != nil {
@@ -105,7 +69,7 @@ func populateUsers(db *sqlx.DB) {
 		return
 	}
 
-	users := getUsersFromFile()
+	users := service.GetUsersFromFile()
 
 	tx := db.MustBegin()
 	_, insertErr := tx.NamedExec(`
