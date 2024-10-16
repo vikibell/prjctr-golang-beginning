@@ -18,7 +18,7 @@ const bufSize = 1024 * 1024
 
 var lis *bufconn.Listener
 
-func init() {
+func initServer() {
 	lis = bufconn.Listen(bufSize)
 	s := grpc.NewServer()
 	reviewHistory := service.NewReviewHistory()
@@ -37,6 +37,7 @@ func bufDialer(context.Context, string) (net.Conn, error) {
 }
 
 func TestGetHistory(t *testing.T) {
+	initServer()
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
@@ -62,6 +63,7 @@ func TestGetHistory(t *testing.T) {
 }
 
 func TestSendReview(t *testing.T) {
+	initServer()
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
