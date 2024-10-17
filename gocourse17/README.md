@@ -5,7 +5,7 @@
 2. In order to test how it works you can use client, for this run command in new terminal window:
    `go run client/client.go`
 
-If you want to recompile proto file, go to the grpcapi directory and run command:
-`protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative api.proto`
+If you want to recompile proto file, go to the api directory and run command:
+`protoc --go_out=../grpcapi --go_opt=paths=source_relative --go-grpc_out=../grpcapi --go-grpc_opt=paths=source_relative api.proto`
 
 See details here: https://grpc.io/docs/languages/go/quickstart/
