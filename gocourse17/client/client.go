@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	"fmt"
 	pb "github.com/vikibell/prjctr-golang-beginning/gocourse17/grpcapi"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
+	"log/slog"
 	"math/rand/v2"
 	"time"
 )
@@ -16,10 +16,10 @@ func sendReview(client pb.ReviewClient, reviewRequest *pb.SendReviewRequest) {
 	defer cancel()
 	response, err := client.SendReview(ctx, reviewRequest)
 	if err != nil {
-		fmt.Printf("client.SendReview failed: %v\n", err)
+		slog.Error("client.SendReview failed", "error", err)
 		return
 	}
-	fmt.Println(response)
+	slog.Info("client.SendReview", "response", response)
 }
 
 func getHistory(client pb.ReviewClient, historyRequest *pb.GetHistoryRequest) {
@@ -28,10 +28,10 @@ func getHistory(client pb.ReviewClient, historyRequest *pb.GetHistoryRequest) {
 
 	response, err := client.GetHistory(ctx, historyRequest)
 	if err != nil {
-		fmt.Printf("client.GetHistory failed: %v\n", err)
+		slog.Error("client.GetHistory failed", "error", err)
 		return
 	}
-	fmt.Println(response)
+	slog.Info("client.GetHistory", "response", response)
 }
 
 func main() {
