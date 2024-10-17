@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"github.com/google/go-cmp/cmp"
 	pb "github.com/vikibell/prjctr-golang-beginning/gocourse17/grpcapi"
 	"github.com/vikibell/prjctr-golang-beginning/gocourse17/service"
 	"google.golang.org/grpc"
@@ -76,14 +75,8 @@ func TestSendReview(t *testing.T) {
 	client := pb.NewReviewerClient(conn)
 
 	req := &pb.SendReviewRequest{DriverId: 1, Review: &pb.Review{CargoState: pb.Rating(1), ServiceQuality: pb.Rating(2), FulfillmentSpeed: pb.Rating(3)}}
-	resp, err := client.SendReview(ctx, req)
+	_, err = client.SendReview(ctx, req)
 	if err != nil {
 		t.Fatalf("SendReview failed: %v", err)
-	}
-
-	got := resp.GetMessage()
-	want := "Success"
-	if !cmp.Equal(got, want) {
-		t.Errorf("SendReview(): got = %v, want %v", got, want)
 	}
 }

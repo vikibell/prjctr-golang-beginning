@@ -23,7 +23,6 @@ message SendReviewRequest {
 }
 
 message SendReviewResponse {
-  string message = 1;
 }
 
 enum Rating {

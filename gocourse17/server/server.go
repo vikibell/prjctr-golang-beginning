@@ -58,7 +58,7 @@ func (s *server) SendReview(_ context.Context, request *pb.SendReviewRequest) (*
 	newReview := service.NewReview(cs, sq, fs)
 	s.history.AddReview(driverID, newReview)
 
-	return &pb.SendReviewResponse{Message: "Success"}, nil
+	return &pb.SendReviewResponse{}, nil
 }
 
 func main() {
