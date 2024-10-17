@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func sendReview(client pb.ReviewClient, reviewRequest *pb.SendReviewRequest) {
+func sendReview(client pb.ReviewerClient, reviewRequest *pb.SendReviewRequest) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	response, err := client.SendReview(ctx, reviewRequest)
@@ -22,7 +22,7 @@ func sendReview(client pb.ReviewClient, reviewRequest *pb.SendReviewRequest) {
 	slog.Info("client.SendReview", "response", response)
 }
 
-func getHistory(client pb.ReviewClient, historyRequest *pb.GetHistoryRequest) {
+func getHistory(client pb.ReviewerClient, historyRequest *pb.GetHistoryRequest) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -40,7 +40,7 @@ func main() {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	client := pb.NewReviewClient(conn)
+	client := pb.NewReviewerClient(conn)
 
 	driverFirstID := int32(1)
 	driverSecondID := int32(2)
@@ -49,7 +49,7 @@ func main() {
 		sendReview(client,
 			&pb.SendReviewRequest{
 				DriverId: driverFirstID,
-				Review: &pb.ReviewData{
+				Review: &pb.Review{
 					CargoState:       pb.Rating(rand.IntN(5)),
 					ServiceQuality:   pb.Rating(rand.Int32N(5)),
 					FulfillmentSpeed: pb.Rating(rand.Int32N(5)),
@@ -62,7 +62,7 @@ func main() {
 		sendReview(client,
 			&pb.SendReviewRequest{
 				DriverId: driverSecondID,
-				Review: &pb.ReviewData{
+				Review: &pb.Review{
 					CargoState:       pb.Rating(rand.Int32N(5)),
 					ServiceQuality:   pb.Rating(rand.Int32N(5)),
 					FulfillmentSpeed: pb.Rating(rand.Int32N(5)),

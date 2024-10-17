@@ -15,36 +15,36 @@ import (
 )
 
 type server struct {
-	pb.UnimplementedReviewServer
+	pb.UnimplementedReviewerServer
 
 	history service.ReviewHistory
 }
 
 func (s *server) GetHistory(_ context.Context, request *pb.GetHistoryRequest) (*pb.GetHistoryResponse, error) {
-	driverId := int(request.GetDriverId())
+	driverID := int(request.GetDriverId())
 
-	if driverId <= 0 {
-		return nil, status.Errorf(codes.InvalidArgument, "invalid driver id")
+	if driverID <= 0 {
+		return nil, status.Error(codes.InvalidArgument, "invalid driver id")
 	}
 
-	history, _ := s.history.GerReviews(driverId)
+	history, _ := s.history.GerReviews(driverID)
 
-	var response []*pb.ReviewData
+	reviews := make([]*pb.Review, 0, len(history))
 	for _, review := range history {
-		response = append(response, &pb.ReviewData{
+		reviews = append(reviews, &pb.Review{
 			CargoState:       pb.Rating(review.CargoState),
 			ServiceQuality:   pb.Rating(review.ServiceQuality),
 			FulfillmentSpeed: pb.Rating(review.FulfillmentSpeed),
 		})
 	}
 
-	return &pb.GetHistoryResponse{Reviews: response}, nil
+	return &pb.GetHistoryResponse{Reviews: reviews}, nil
 }
 
 func (s *server) SendReview(_ context.Context, request *pb.SendReviewRequest) (*pb.SendReviewResponse, error) {
-	driverId := int(request.GetDriverId())
-	if driverId <= 0 {
-		return &pb.SendReviewResponse{Message: "Fail"}, status.Errorf(codes.InvalidArgument, "invalid driver id")
+	driverID := int(request.GetDriverId())
+	if driverID <= 0 {
+		return nil, status.Error(codes.InvalidArgument, "invalid driver id")
 	}
 
 	review := request.GetReview()
@@ -52,11 +52,11 @@ func (s *server) SendReview(_ context.Context, request *pb.SendReviewRequest) (*
 	sq := int(review.GetServiceQuality())
 	fs := int(review.GetFulfillmentSpeed())
 	if !service.IsValidRating(cs) || !service.IsValidRating(sq) || !service.IsValidRating(fs) {
-		return &pb.SendReviewResponse{Message: "Fail"}, status.Errorf(codes.InvalidArgument, "invalid review id")
+		return nil, status.Error(codes.InvalidArgument, "invalid review id")
 	}
 
 	newReview := service.NewReview(cs, sq, fs)
-	s.history.AddReview(driverId, newReview)
+	s.history.AddReview(driverID, newReview)
 
 	return &pb.SendReviewResponse{Message: "Success"}, nil
 }
@@ -70,7 +70,7 @@ func main() {
 
 	s := grpc.NewServer()
 	reviewHistory := service.NewReviewHistory()
-	pb.RegisterReviewServer(s, &server{history: reviewHistory})
+	pb.RegisterReviewerServer(s, &server{history: reviewHistory})
 
 	log.Printf("server listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {

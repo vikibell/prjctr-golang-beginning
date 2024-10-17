@@ -23,7 +23,7 @@ func initServer() {
 	s := grpc.NewServer()
 	reviewHistory := service.NewReviewHistory()
 	reviewHistory.AddReview(1, service.NewReview(1, 2, 3))
-	pb.RegisterReviewServer(s, &server{history: reviewHistory})
+	pb.RegisterReviewerServer(s, &server{history: reviewHistory})
 
 	go func() {
 		if err := s.Serve(lis); err != nil {
@@ -47,7 +47,7 @@ func TestGetHistory(t *testing.T) {
 	}
 	defer conn.Close()
 
-	client := pb.NewReviewClient(conn)
+	client := pb.NewReviewerClient(conn)
 
 	req := &pb.GetHistoryRequest{DriverId: int32(1)}
 	history, err := client.GetHistory(ctx, req)
@@ -56,7 +56,7 @@ func TestGetHistory(t *testing.T) {
 	}
 
 	got := history.GetReviews()
-	want := []*pb.ReviewData{{CargoState: pb.Rating(1), ServiceQuality: pb.Rating(2), FulfillmentSpeed: pb.Rating(3)}}
+	want := []*pb.Review{{CargoState: pb.Rating(1), ServiceQuality: pb.Rating(2), FulfillmentSpeed: pb.Rating(3)}}
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("GetHistory(): got = %v, want %v", got, want)
 	}
@@ -73,9 +73,9 @@ func TestSendReview(t *testing.T) {
 	}
 	defer conn.Close()
 
-	client := pb.NewReviewClient(conn)
+	client := pb.NewReviewerClient(conn)
 
-	req := &pb.SendReviewRequest{DriverId: 1, Review: &pb.ReviewData{CargoState: pb.Rating(1), ServiceQuality: pb.Rating(2), FulfillmentSpeed: pb.Rating(3)}}
+	req := &pb.SendReviewRequest{DriverId: 1, Review: &pb.Review{CargoState: pb.Rating(1), ServiceQuality: pb.Rating(2), FulfillmentSpeed: pb.Rating(3)}}
 	resp, err := client.SendReview(ctx, req)
 	if err != nil {
 		t.Fatalf("SendReview failed: %v", err)

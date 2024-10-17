@@ -19,139 +19,139 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Review_GetHistory_FullMethodName = "/review.Review/GetHistory"
-	Review_SendReview_FullMethodName = "/review.Review/SendReview"
+	Reviewer_GetHistory_FullMethodName = "/review.Reviewer/GetHistory"
+	Reviewer_SendReview_FullMethodName = "/review.Reviewer/SendReview"
 )
 
-// ReviewClient is the client API for Review service.
+// ReviewerClient is the client API for Reviewer service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ReviewClient interface {
+type ReviewerClient interface {
 	GetHistory(ctx context.Context, in *GetHistoryRequest, opts ...grpc.CallOption) (*GetHistoryResponse, error)
 	SendReview(ctx context.Context, in *SendReviewRequest, opts ...grpc.CallOption) (*SendReviewResponse, error)
 }
 
-type reviewClient struct {
+type reviewerClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewReviewClient(cc grpc.ClientConnInterface) ReviewClient {
-	return &reviewClient{cc}
+func NewReviewerClient(cc grpc.ClientConnInterface) ReviewerClient {
+	return &reviewerClient{cc}
 }
 
-func (c *reviewClient) GetHistory(ctx context.Context, in *GetHistoryRequest, opts ...grpc.CallOption) (*GetHistoryResponse, error) {
+func (c *reviewerClient) GetHistory(ctx context.Context, in *GetHistoryRequest, opts ...grpc.CallOption) (*GetHistoryResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetHistoryResponse)
-	err := c.cc.Invoke(ctx, Review_GetHistory_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Reviewer_GetHistory_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *reviewClient) SendReview(ctx context.Context, in *SendReviewRequest, opts ...grpc.CallOption) (*SendReviewResponse, error) {
+func (c *reviewerClient) SendReview(ctx context.Context, in *SendReviewRequest, opts ...grpc.CallOption) (*SendReviewResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SendReviewResponse)
-	err := c.cc.Invoke(ctx, Review_SendReview_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Reviewer_SendReview_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ReviewServer is the server API for Review service.
-// All implementations must embed UnimplementedReviewServer
+// ReviewerServer is the server API for Reviewer service.
+// All implementations must embed UnimplementedReviewerServer
 // for forward compatibility.
-type ReviewServer interface {
+type ReviewerServer interface {
 	GetHistory(context.Context, *GetHistoryRequest) (*GetHistoryResponse, error)
 	SendReview(context.Context, *SendReviewRequest) (*SendReviewResponse, error)
-	mustEmbedUnimplementedReviewServer()
+	mustEmbedUnimplementedReviewerServer()
 }
 
-// UnimplementedReviewServer must be embedded to have
+// UnimplementedReviewerServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedReviewServer struct{}
+type UnimplementedReviewerServer struct{}
 
-func (UnimplementedReviewServer) GetHistory(context.Context, *GetHistoryRequest) (*GetHistoryResponse, error) {
+func (UnimplementedReviewerServer) GetHistory(context.Context, *GetHistoryRequest) (*GetHistoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetHistory not implemented")
 }
-func (UnimplementedReviewServer) SendReview(context.Context, *SendReviewRequest) (*SendReviewResponse, error) {
+func (UnimplementedReviewerServer) SendReview(context.Context, *SendReviewRequest) (*SendReviewResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendReview not implemented")
 }
-func (UnimplementedReviewServer) mustEmbedUnimplementedReviewServer() {}
-func (UnimplementedReviewServer) testEmbeddedByValue()                {}
+func (UnimplementedReviewerServer) mustEmbedUnimplementedReviewerServer() {}
+func (UnimplementedReviewerServer) testEmbeddedByValue()                  {}
 
-// UnsafeReviewServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ReviewServer will
+// UnsafeReviewerServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ReviewerServer will
 // result in compilation errors.
-type UnsafeReviewServer interface {
-	mustEmbedUnimplementedReviewServer()
+type UnsafeReviewerServer interface {
+	mustEmbedUnimplementedReviewerServer()
 }
 
-func RegisterReviewServer(s grpc.ServiceRegistrar, srv ReviewServer) {
-	// If the following call pancis, it indicates UnimplementedReviewServer was
+func RegisterReviewerServer(s grpc.ServiceRegistrar, srv ReviewerServer) {
+	// If the following call pancis, it indicates UnimplementedReviewerServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Review_ServiceDesc, srv)
+	s.RegisterService(&Reviewer_ServiceDesc, srv)
 }
 
-func _Review_GetHistory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Reviewer_GetHistory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetHistoryRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ReviewServer).GetHistory(ctx, in)
+		return srv.(ReviewerServer).GetHistory(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Review_GetHistory_FullMethodName,
+		FullMethod: Reviewer_GetHistory_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReviewServer).GetHistory(ctx, req.(*GetHistoryRequest))
+		return srv.(ReviewerServer).GetHistory(ctx, req.(*GetHistoryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Review_SendReview_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Reviewer_SendReview_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SendReviewRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ReviewServer).SendReview(ctx, in)
+		return srv.(ReviewerServer).SendReview(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Review_SendReview_FullMethodName,
+		FullMethod: Reviewer_SendReview_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReviewServer).SendReview(ctx, req.(*SendReviewRequest))
+		return srv.(ReviewerServer).SendReview(ctx, req.(*SendReviewRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Review_ServiceDesc is the grpc.ServiceDesc for Review service.
+// Reviewer_ServiceDesc is the grpc.ServiceDesc for Reviewer service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Review_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "review.Review",
-	HandlerType: (*ReviewServer)(nil),
+var Reviewer_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "review.Reviewer",
+	HandlerType: (*ReviewerServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetHistory",
-			Handler:    _Review_GetHistory_Handler,
+			Handler:    _Reviewer_GetHistory_Handler,
 		},
 		{
 			MethodName: "SendReview",
-			Handler:    _Review_SendReview_Handler,
+			Handler:    _Reviewer_SendReview_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

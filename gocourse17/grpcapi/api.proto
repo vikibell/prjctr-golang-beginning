@@ -4,7 +4,7 @@ package review;
 
 option go_package = "github.com/vikibell/prjctr-golang-beginning/gocourse17";
 
-service Review {
+service Reviewer {
   rpc GetHistory(GetHistoryRequest) returns (GetHistoryResponse) {}
   rpc SendReview(SendReviewRequest) returns (SendReviewResponse) {}
 }
@@ -14,12 +14,12 @@ message GetHistoryRequest {
 }
 
 message GetHistoryResponse {
-  repeated ReviewData reviews = 1;
+  repeated Review reviews = 1;
 }
 
 message SendReviewRequest {
   int32 driver_id = 1;
-  ReviewData review = 2;
+  Review review = 2;
 }
 
 message SendReviewResponse {
@@ -35,7 +35,7 @@ enum Rating {
   EXCELLENT = 5;
 }
 
-message ReviewData {
+message Review {
   Rating cargo_state = 1;
   Rating service_quality = 2;
   Rating fulfillment_speed = 3;
