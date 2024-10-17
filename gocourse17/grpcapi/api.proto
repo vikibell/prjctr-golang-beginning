@@ -27,12 +27,12 @@ message SendReviewResponse {
 }
 
 enum Rating {
-  UNDEFINED = 0;
-  POOR = 1;
-  FAIR = 2;
-  GOOD = 3;
-  GREAT = 4;
-  EXCELLENT = 5;
+  RATING_UNSPECIFIED = 0;
+  RATING_POOR = 1;
+  RATING_FAIR = 2;
+  RATING_GOOD = 3;
+  RATING_GREAT = 4;
+  RATING_EXCELLENT = 5;
 }
 
 message Review {

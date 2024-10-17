@@ -1,20 +1,22 @@
 package service
 
+type Rating int
+
 const (
-	poor int = iota + 1
-	fair
-	good
-	great
-	excellent
+	RatingPoor Rating = iota + 1
+	RatingFair
+	RatingGood
+	RatingGreat
+	RatingExcellent
 )
 
 type Review struct {
-	CargoState       int
-	ServiceQuality   int
-	FulfillmentSpeed int
+	CargoState       Rating
+	ServiceQuality   Rating
+	FulfillmentSpeed Rating
 }
 
-func NewReview(cs, sq, fs int) Review {
+func NewReview(cs, sq, fs Rating) Review {
 	return Review{
 		CargoState:       cs,
 		ServiceQuality:   sq,
@@ -22,8 +24,8 @@ func NewReview(cs, sq, fs int) Review {
 	}
 }
 
-func IsValidRating(rating int) bool {
-	return rating >= poor && rating <= excellent
+func IsValid(rating Rating) bool {
+	return rating >= RatingPoor && rating <= RatingExcellent
 }
 
 type ReviewHistory map[int][]Review
@@ -36,7 +38,6 @@ func (rh ReviewHistory) AddReview(driverID int, review Review) {
 	rh[driverID] = append(rh[driverID], review)
 }
 
-func (rh ReviewHistory) GerReviews(driverID int) ([]Review, bool) {
-	a, exists := rh[driverID]
-	return a, exists
+func (rh ReviewHistory) GetReviews(driverID int) []Review {
+	return rh[driverID]
 }

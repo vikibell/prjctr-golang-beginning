@@ -27,7 +27,7 @@ func (s *server) GetHistory(_ context.Context, request *pb.GetHistoryRequest) (*
 		return nil, status.Error(codes.InvalidArgument, "invalid driver id")
 	}
 
-	history, _ := s.history.GerReviews(driverID)
+	history := s.history.GetReviews(driverID)
 
 	reviews := make([]*pb.Review, 0, len(history))
 	for _, review := range history {
@@ -48,10 +48,10 @@ func (s *server) SendReview(_ context.Context, request *pb.SendReviewRequest) (*
 	}
 
 	review := request.GetReview()
-	cs := int(review.GetCargoState())
-	sq := int(review.GetServiceQuality())
-	fs := int(review.GetFulfillmentSpeed())
-	if !service.IsValidRating(cs) || !service.IsValidRating(sq) || !service.IsValidRating(fs) {
+	cs := service.Rating(review.GetCargoState())
+	sq := service.Rating(review.GetServiceQuality())
+	fs := service.Rating(review.GetFulfillmentSpeed())
+	if !service.IsValid(cs) || !service.IsValid(sq) || !service.IsValid(fs) {
 		return nil, status.Error(codes.InvalidArgument, "invalid review id")
 	}
 
