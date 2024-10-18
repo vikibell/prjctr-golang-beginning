@@ -18,8 +18,8 @@ func GetUsersFromFile() []user.User {
 		return users
 	}
 
-	file, errOpen := os.Open(filepath.Join(currentDir, "/assets/users_another.json"))
-	if errOpen != nil {
+	file, err := os.Open(filepath.Join(currentDir, "assets", "users_another.json"))
+	if err != nil {
 		slog.Error("Failed to open file", "error", err)
 		return users
 	}

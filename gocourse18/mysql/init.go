@@ -61,48 +61,57 @@ func populateDB() {
 	}
 
 	db.MustExec(usersSchema)
-	populateUsers(db)
+	err = populateUsers(db)
+	if err != nil {
+		slog.Error("Failed to populate users table", "error", err)
+		return
+	}
+
 	db.MustExec(statisticsSchema)
-	populateStatistics(db)
+	err = populateStatistics(db)
+	if err != nil {
+		slog.Error("Failed to populate statistics table", "error", err)
+		return
+	}
+
 	db.Close()
 }
 
-func populateUsers(db *sqlx.DB) {
+func populateUsers(db *sqlx.DB) error {
 	query := `TRUNCATE TABLE users`
-	_, trancErr := db.Exec(query)
-	if trancErr != nil {
-		slog.Error("Failed to truncate table", "error", trancErr)
-		return
+	_, err := db.Exec(query)
+	if err != nil {
+		return err
 	}
 
 	users := service.GetUsersFromFile()
 
 	tx := db.MustBegin()
-	_, insertErr := tx.NamedExec(`
+	_, err = tx.NamedExec(`
 		INSERT INTO users (name, surname, email, age, sex, city, taxi_count, profession) 
 		VALUES (:name, :surname, :email, :age, :sex, :city, :taxi_count, :profession)`,
 		users)
-	if insertErr != nil {
-		slog.Error("Failed to insert into table", "error", insertErr)
+	if err != nil {
+		return err
 	}
 
-	commitErr := tx.Commit()
-	if commitErr != nil {
-		slog.Error("Failed to commit changes", "error", commitErr)
-		return
+	err = tx.Commit()
+	if err != nil {
+		return err
 	}
+
+	return nil
 }
 
-func populateStatistics(db *sqlx.DB) {
+func populateStatistics(db *sqlx.DB) error {
 	query := `TRUNCATE TABLE statistics`
-	_, trancErr := db.Exec(query)
-	if trancErr != nil {
-		slog.Error("Failed to truncate table", "error", trancErr)
-		return
+	_, err := db.Exec(query)
+	if err != nil {
+		return err
 	}
 
 	var statisticsResult []statistic.Statistic
-	err := db.Select(&statisticsResult, `
+	err = db.Select(&statisticsResult, `
 		SELECT city,
 		  CASE
            WHEN age BETWEEN 1 AND 8 THEN 1
@@ -117,23 +126,23 @@ func populateStatistics(db *sqlx.DB) {
 		ORDER BY city;
        `)
 	if err != nil {
-		slog.Error("Failed to select", "error", err)
-		return
+		return err
 	}
 
 	tx := db.MustBegin()
 
-	_, insertErr := tx.NamedExec(`
+	_, err = tx.NamedExec(`
 		INSERT INTO statistics (city, average_trips, age_range) 
 		VALUES (:city, :average_trips, :age_range)`,
 		statisticsResult)
-	if insertErr != nil {
-		slog.Error("Failed to insert into table", "error", insertErr)
+	if err != nil {
+		return err
 	}
 
-	commitErr := tx.Commit()
-	if commitErr != nil {
-		slog.Error("Failed to commit changes", "error", commitErr)
-		return
+	err = tx.Commit()
+	if err != nil {
+		return err
 	}
+
+	return nil
 }

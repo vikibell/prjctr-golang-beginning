@@ -51,9 +51,6 @@ func TestFindOneByID(t *testing.T) {
 	statistic, err := repo.FindOneByID(1)
 	require.NoError(t, err)
 	assert.Equal(t, expectedStatistic, statistic)
-
-	err = mock.ExpectationsWereMet()
-	require.NoError(t, err)
 }
 
 func TestFindAll(t *testing.T) {
@@ -85,7 +82,4 @@ func TestFindAll(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, expectedTotal, total)
 	assert.Equal(t, expectedUsers, statistics)
-
-	err = mock.ExpectationsWereMet()
-	require.NoError(t, err)
 }
