@@ -17,7 +17,7 @@ const bufSize = 1024 * 1024
 
 var lis *bufconn.Listener
 
-func initServer() {
+func createClient(t *testing.T) pb.ReviewerClient {
 	lis = bufconn.Listen(bufSize)
 	s := grpc.NewServer()
 	reviewHistory := service.NewReviewHistory()
@@ -29,6 +29,15 @@ func initServer() {
 			panic(err)
 		}
 	}()
+
+	conn, err := grpc.Dial("bufnet", grpc.WithContextDialer(bufDialer), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		t.Fatalf("Failed to create client connection: %v", err)
+	}
+
+	t.Cleanup(func() { conn.Close() })
+
+	return pb.NewReviewerClient(conn)
 }
 
 func bufDialer(context.Context, string) (net.Conn, error) {
@@ -36,18 +45,10 @@ func bufDialer(context.Context, string) (net.Conn, error) {
 }
 
 func TestGetHistory(t *testing.T) {
-	initServer()
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	conn, err := grpc.Dial("bufnet", grpc.WithContextDialer(bufDialer), grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		t.Fatalf("Failed to create client connection: %v", err)
-	}
-	defer conn.Close()
-
-	client := pb.NewReviewerClient(conn)
-
+	client := createClient(t)
 	req := &pb.GetHistoryRequest{DriverId: int32(1)}
 	history, err := client.GetHistory(ctx, req)
 	if err != nil {
@@ -62,20 +63,12 @@ func TestGetHistory(t *testing.T) {
 }
 
 func TestSendReview(t *testing.T) {
-	initServer()
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	conn, err := grpc.Dial("bufnet", grpc.WithContextDialer(bufDialer), grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		t.Fatalf("Failed to create client connection: %v", err)
-	}
-	defer conn.Close()
-
-	client := pb.NewReviewerClient(conn)
-
+	client := createClient(t)
 	req := &pb.SendReviewRequest{DriverId: 1, Review: &pb.Review{CargoState: pb.Rating(1), ServiceQuality: pb.Rating(2), FulfillmentSpeed: pb.Rating(3)}}
-	_, err = client.SendReview(ctx, req)
+	_, err := client.SendReview(ctx, req)
 	if err != nil {
 		t.Fatalf("SendReview failed: %v", err)
 	}
