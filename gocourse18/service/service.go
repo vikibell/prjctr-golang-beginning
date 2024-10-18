@@ -4,39 +4,34 @@ import (
 	"encoding/json"
 	"github.com/vikibell/prjctr-golang-beginning/gocourse18/domains/user"
 	"io"
-	"log/slog"
 	"os"
 	"path/filepath"
 )
 
-func GetUsersFromFile() []user.User {
+func GetUsersFromFile(path, filename string) ([]user.User, error) {
 	var users []user.User
 
 	currentDir, err := os.Getwd()
 	if err != nil {
-		slog.Error("Failed to get current directory", "error", err)
-		return users
+		return nil, err
 	}
 
-	file, err := os.Open(filepath.Join(currentDir, "assets", "users_another.json"))
+	file, err := os.Open(filepath.Join(currentDir, path, filename))
 	if err != nil {
-		slog.Error("Failed to open file", "error", err)
-		return users
+		return nil, err
 	}
 
 	defer file.Close()
 
-	byteValue, errRead := io.ReadAll(file)
-	if errRead != nil {
-		slog.Error("Failed to read file", "error", errRead)
-		return users
+	byteValue, err := io.ReadAll(file)
+	if err != nil {
+		return nil, err
 	}
 
-	errUnm := json.Unmarshal(byteValue, &users)
-	if errUnm != nil {
-		slog.Error("Failed to unmarshal json", "error", errRead)
-		return users
+	err = json.Unmarshal(byteValue, &users)
+	if err != nil {
+		return nil, err
 	}
 
-	return users
+	return users, nil
 }

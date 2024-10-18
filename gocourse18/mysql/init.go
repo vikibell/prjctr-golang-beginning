@@ -84,7 +84,10 @@ func populateUsers(db *sqlx.DB) error {
 		return err
 	}
 
-	users := service.GetUsersFromFile()
+	users, err := service.GetUsersFromFile("assets", "users_another.json")
+	if err != nil {
+		return err
+	}
 
 	tx := db.MustBegin()
 	_, err = tx.NamedExec(`
