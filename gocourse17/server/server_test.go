@@ -5,7 +5,9 @@ import (
 	pb "github.com/vikibell/prjctr-golang-beginning/gocourse17/grpcapi"
 	"github.com/vikibell/prjctr-golang-beginning/gocourse17/service"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/test/bufconn"
 	"net"
 	"reflect"
@@ -49,17 +51,32 @@ func TestGetHistory(t *testing.T) {
 	defer cancel()
 
 	client := createClient(t)
-	req := &pb.GetHistoryRequest{DriverId: int32(1)}
-	history, err := client.GetHistory(ctx, req)
-	if err != nil {
-		t.Fatalf("GetHistory failed: %v", err)
-	}
 
-	got := history.GetReviews()
-	want := []*pb.Review{{CargoState: pb.Rating(1), ServiceQuality: pb.Rating(2), FulfillmentSpeed: pb.Rating(3)}}
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("GetHistory(): got = %v, want %v", got, want)
-	}
+	t.Run("Success", func(t *testing.T) {
+		req := &pb.GetHistoryRequest{DriverId: int32(1)}
+		history, _ := client.GetHistory(ctx, req)
+		got := history.GetReviews()
+		want := []*pb.Review{{CargoState: pb.Rating(1), ServiceQuality: pb.Rating(2), FulfillmentSpeed: pb.Rating(3)}}
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("GetHistory(): got = %v, want %v", got, want)
+		}
+	})
+	t.Run("Fail", func(t *testing.T) {
+		req := &pb.GetHistoryRequest{DriverId: int32(-2)}
+		got, err := client.GetHistory(ctx, req)
+		if got != nil {
+			t.Errorf("GetHistory(): got=%+v, want=%+v", got, nil)
+		}
+		if err == nil {
+			t.Errorf("GetHistory(): should return error but got <nil>")
+		}
+		code, _ := status.FromError(err)
+		want := codes.InvalidArgument
+
+		if code.Code() != want {
+			t.Errorf("GetHistory() unexpected error code: got=%+v, want=%+v", code, want)
+		}
+	})
 }
 
 func TestSendReview(t *testing.T) {
